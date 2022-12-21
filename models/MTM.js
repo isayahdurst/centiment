@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('..config/connection');
 
-class Topic extends Model {}
+class MTM extends Model {}
 
-Topic.init(
+MTM.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -11,41 +11,42 @@ Topic.init(
             primaryKey: true,
             autoIncrement: true,
         },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        price: {
-            type: DataTypes.FLOAT,
-            allowNull: false,
-        },
-        category_id: {
+        user_id: {
             type: DataTypes.INTEGER,
+            allowNull: false,
             references: {
-                model: 'category',
+                model: 'user',
                 key: 'id',
             },
         },
-        description: {
-            type: DataTypes.TEXT,
-        },
-        date_created: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW,
-        },
-        total_shares: {
+        topic_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            defaultValue: 100000,
+            references: {
+                model: 'topic',
+                key: 'id',
+            },
+        },
+        admin: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+        },
+        shares: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        watching: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: 0,
         },
     },
     {
         sequelize,
         freezeTableName: true,
         underscored: true,
-        modelName: 'topic',
-    }
+        modelName: 'mtm',
+    },
 );
 
-module.exports = Topic;
+module.exports = MTM;

@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('..config/connection');
 
-class Topic extends Model {}
+class Listing extends Model {}
 
-Topic.init(
+Listing.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -11,41 +11,45 @@ Topic.init(
             primaryKey: true,
             autoIncrement: true,
         },
-        name: {
+        transaction_type: {
             type: DataTypes.STRING,
+        },
+        user_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'user',
+                key: 'id',
+            },
+        },
+        shares: {
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
         price: {
             type: DataTypes.FLOAT,
             allowNull: false,
         },
-        category_id: {
+        topic_id: {
             type: DataTypes.INTEGER,
+            allowNull: false,
             references: {
-                model: 'category',
+                model: 'topic',
                 key: 'id',
             },
         },
-        description: {
-            type: DataTypes.TEXT,
-        },
-        date_created: {
+        expiration_date: {
             type: DataTypes.DATE,
             allowNull: false,
-            defaultValue: DataTypes.NOW,
-        },
-        total_shares: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: 100000,
+            defaultValue: DataTypes.NOW + 604800000,
         },
     },
     {
         sequelize,
         freezeTableName: true,
         underscored: true,
-        modelName: 'topic',
-    }
+        modelName: 'listing',
+    },
 );
 
-module.exports = Topic;
+module.exports = Listing;
