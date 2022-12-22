@@ -46,6 +46,13 @@ User.init(
                 key: 'id',
             },
         },
+        transaction_id: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'transaction',
+                key: 'id',
+            },
+        },
     },
     {
         hooks: {
