@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require('sequelize');
-const sequelize = require('..config/connection');
+const sequelize = require('./../config/connection');
 
-class Topic extends Model {}
+class Post extends Model {}
 
-postMessage.init(
+Post.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -42,7 +42,7 @@ postMessage.init(
         date_created: {
             type: DataTypes.DATE,
             allowNull: false,
-            defaultValue: now(),
+            defaultValue: DataTypes.NOW,
         },
     },
     {

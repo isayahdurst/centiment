@@ -1,6 +1,6 @@
 const { Model, DataTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
-const sequelize = require('..config/connection');
+const sequelize = require('./../config/connection');
 
 class Topic extends Model {}
 
@@ -33,7 +33,7 @@ Topic.init(
         date_created: {
             type: DataTypes.DATE,
             allowNull: false,
-            defaultValue: now(),
+            defaultValue: DataTypes.NOW,
         },
         total_shares: {
             type: DataTypes.INTEGER,

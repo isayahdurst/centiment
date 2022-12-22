@@ -1,10 +1,9 @@
 const { Model, DataTypes } = require('sequelize');
-const bcrypt = require('bcrypt');
 const sequelize = require('./../config/connection');
 
-class Category extends Model {}
+class Wallet extends Model {}
 
-Category.init(
+Wallet.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -12,17 +11,24 @@ Category.init(
             primaryKey: true,
             autoIncrement: true,
         },
-        name: {
-            type: DataTypes.STRING,
+        balance: {
+            type: DataTypes.FLOAT,
             allowNull: false,
+        },
+        user_id: {
+          type: DataTypes.INTEGER,
+          references: {
+              model: 'user',
+              key: 'id',
+          },
         },
     },
     {
         sequelize,
         freezeTableName: true,
         underscored: true,
-        modelName: 'category',
+        modelName: 'wallet',
     }
 );
 
-module.exports = Category;
+module.exports = Wallet;
