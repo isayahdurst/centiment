@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require('sequelize');
-const sequelize = require('..config/connection');
+const sequelize = require('../config/connection');
 
 class Listing extends Model {}
 
@@ -41,7 +41,7 @@ Listing.init(
         expiration_date: {
             type: DataTypes.DATE,
             allowNull: false,
-            defaultValue: DataTypes.NOW + 604800000,
+            defaultValue: DataTypes.NOW,
         },
     },
     {

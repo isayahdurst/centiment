@@ -20,9 +20,11 @@
   "homepage": "https://github.com/isayahdurst/groupproject2#readme",
   "dependencies": {
     "bcrypt": "^5.1.0",
+    "config": "^3.3.8",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-handlebars": "^6.0.6",
     "handlebars": "^4.7.7",
     "jsonwebtoken": "^9.0.0",
     "mysql2": "^2.3.3",

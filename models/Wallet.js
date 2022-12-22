@@ -18,7 +18,6 @@ Wallet.init(
                 model: 'user',
                 key: 'id',
             },
-            allowNull: false,
         },
         balance: {
             type: DataTypes.FLOAT,

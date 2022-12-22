@@ -63,8 +63,7 @@ Topic.belongsTo(Listing, {
 });
 
 User.hasOne(Wallet, {
-    foreignKey: 'user_id',
-    onDelete: 'CASCASE',
+    foreignKey: 'user_id'
 });
 
 Wallet.belongsTo(User, {
