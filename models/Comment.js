@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('..config/connection');
 
-class Topic extends Model {}
+class Comment extends Model {}
 
-Topic.init(
+Comment.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -11,41 +11,43 @@ Topic.init(
             primaryKey: true,
             autoIncrement: true,
         },
-        name: {
-            type: DataTypes.STRING,
+        content: {
+            type: DataTypes.TEXT,
             allowNull: false,
         },
-        price: {
-            type: DataTypes.FLOAT,
-            allowNull: false,
-        },
-        category_id: {
+        up_vote: {
             type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
+        },
+        post_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
             references: {
-                model: 'category',
+                model: 'post',
+                key: 'id'
+            },
+        },
+        user_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'user',
                 key: 'id',
             },
         },
-        description: {
-            type: DataTypes.TEXT,
-        },
         date_created: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW,
-        },
-        total_shares: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            defaultValue: 100000,
+            defaultValue: DataTypes.NOW,
         },
     },
     {
         sequelize,
         freezeTableName: true,
         underscored: true,
-        modelName: 'topic',
-    }
+        modelName: 'comment',
+    },
 );
 
-module.exports = Topic;
+module.exports = Comment;
