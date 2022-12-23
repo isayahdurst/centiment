@@ -14,5 +14,7 @@ const walletRouter = require('./wallet');
 const apiRouter = new Router();
 
 apiRouter.use('/user', userRouter);
+apiRouter.use('/topic', topicRouter);
+
 
 module.exports = apiRouter;

@@ -92,4 +92,9 @@ User.hasMany(Transaction, {
     foreignKey: 'transaction_id',
 });
 
+User.hasMany(Topic, {
+    foreignKey: 'user_id',
+    onDelete: 'CASCADE',
+});
+
 module.exports = { Category, Comment, Listing, Mtm, Post, Topic, Transaction, User, Wallet };

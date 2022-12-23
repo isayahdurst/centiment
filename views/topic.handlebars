@@ -1,0 +1,19 @@
+<div>Create a topic</div>
+  <form id="topic_form">
+      <div>Title<br> <input type="text" id="topic_name" placeholder="Add an interesting title"/></div>
+      <div>Price<br> <input type="number" id="topic_price" placeholder="0.00"/></div>
+      <div>Description<br> <textarea placeholder="Add your text..." id="topic_description"></textarea></div>
+      <button type="submit" value="Submit">Create topic</button>
+  </form>
+</div>
+  <div>
+    <h3>my topics</h3>
+    {{#each topics as |topic|}}
+        <div>
+            <a href="/topic/{{topic.id}}">
+                <span>{{topic.name}}</span>
+            </a>
+        </div>
+    {{/each}}
+  </div>
+<script src="./js/topic.js"></script>
