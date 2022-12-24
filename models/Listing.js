@@ -43,6 +43,14 @@ Listing.init(
             allowNull: false,
             defaultValue: DataTypes.NOW,
         },
+        listed_date: {
+            type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: DataTypes.NOW
+        },
+        sold_date: {
+            type: DataTypes.DATE,
+        },
     },
     {
         sequelize,

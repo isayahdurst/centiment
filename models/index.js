@@ -97,13 +97,13 @@ User.hasMany(Topic, {
     onDelete: 'CASCADE',
 });
 
-Transaction.hasOne(User, {
-    foreignKey: 'buyer_id',
-});
+// Transaction.hasOne(User, {
+//     foreignKey: 'buyer_id',
+// });
 
-Transaction.hasOne(User, {
-    foreignKey: 'seller_id'
-});
+// Transaction.hasOne(User, {
+//     foreignKey: 'seller_id'
+// });
 
 //done using through reference
 

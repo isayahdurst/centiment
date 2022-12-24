@@ -11,7 +11,7 @@ Topic.init(
             primaryKey: true,
             autoIncrement: true,
         },
-        name: {
+        topic_name: {
             type: DataTypes.STRING,
             allowNull: false,
         },
