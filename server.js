@@ -1,11 +1,11 @@
-require("dotenv").config();
+require('dotenv').config();
 const path = require('path');
 const bcrypt = require('bcrypt');
-const express = require("express");
-const sequelize = require("./config/connection");
-const mainRouter = require("./controllers");
-const cookieParser = require("cookie-parser");
-const { engine } = require("express-handlebars");
+const express = require('express');
+const sequelize = require('./config/connection');
+const mainRouter = require('./controllers');
+const cookieParser = require('cookie-parser');
+const { engine } = require('express-handlebars');
 const PORT = process.env.PORT || 3001;
 
 const app = express();
@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 sequelize.sync().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Application is running on port ${PORT}`);
-  })
-})
+    app.listen(PORT, () => {
+        console.log(`Application is running on port ${PORT}`);
+    });
+});
