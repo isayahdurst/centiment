@@ -1,20 +1,51 @@
-<div>Create a topic</div>
-  <form id="topic_form">
-      <div>Title<br> <input type="text" id="topic_name" placeholder="Add an interesting title"/></div>
-      <div>Price<br> <input type="number" id="topic_price" placeholder="0.00"/></div>
-      <div>Description<br> <textarea placeholder="Add your text..." id="topic_description"></textarea></div>
-      <button type="submit" value="Submit">Create topic</button>
-  </form>
-</div>
-  <div>
-    <h3>my topics</h3>
-    {{#each topics as |topic|}}
-        <div>
-            <a href="/topic/{{topic.id}}">
-                <span>{{topic.name}}</span>
-            </a>
-        </div>
-    {{/each}}
+<div class="container is-fullhd">
+  <section class="hero ">
+    <div class="hero-body px-0">
+      <h1 class="title">
+        <p>Create a topic</p>
+      </h1>
+      <div class="subtitle">
+        <p class="is-4">Discover the Centiment...</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="columns">
+    <div class="column is-one-fifth">
+      <p class="notification is-primary">My Topics</p>
+      <div>
+        {{#each topics as |topic|}}
+            <div>
+                <a href="/topic/{{topic.id}}">
+                    <span class="is-size-5">{{topic.topic_name}}</span>
+                </a>
+            </div>
+        {{/each}}
+      </div>
+    </div>
+    <div class="column">
+      <p class="notification">New Topic</p>
+        <form id="topic_form">
+          <div class="field">
+            <label class="label">Name:</label>
+            <input type="text" class="input" id="topic_name">
+          </div>
+          <div class="field">
+            <label for="" class="label">Price</label>
+            <input type="text" class="input" id="topic_price">
+          </div>
+          <div class="field">
+            <label for="" class="label">Description</label>
+            <input type="text" class="input" id="topic_description">
+          </div>
+          <div class="control">
+            <button class="button is-primary" type="submit">Create Topic</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
+</div>
+
 <script src="./js/topic.js"></script>
-<script src="./js/login.js"></script>
+<script src="./js/logout.js"></script>

@@ -63,21 +63,7 @@
                     </div>
                 </div>
             </div>
-        {{else}}
-            <div class='navbar-end'>
-                <div class='navbar-item'>
-                    <div class='buttons'>
-                        <a class='button is-light' id='logout'>
-                            Logout
-                        </a>
-                    </div>
-                </div>
-            </div>
-        {{/unless}}
-    </div>
-</nav>
-
-<div class="modal" id="login-modal">
+            <div class="modal" id="login-modal">
   <div class="modal-background"></div>
   <div class="modal-card">
     <header class="modal-card-head">
@@ -219,7 +205,16 @@
     </footer>
   </div>
 </div>
-
-
-
-<script src="./js/login.js"></script>
+        {{else}}
+            <div class='navbar-end'>
+                <div class='navbar-item'>
+                    <div class='buttons'>
+                        <a class='button is-light' id='logout'>
+                            Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {{/unless}}
+    </div>
+</nav>
