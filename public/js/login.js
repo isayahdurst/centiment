@@ -11,8 +11,13 @@ const modalCloseBtns = document.querySelectorAll('.delete');
 const modalCancelBtns = document.querySelectorAll('.cancel');
 const modalOverlays = document.querySelectorAll('.modal-background');
 
+const firstName = document.getElementById('first_name_signup');
+const lastName = document.getElementById('last_name_signup');
+const username = document.getElementById('username_signup');
+const email = document.getElementById('email_signup');
+const password = document.getElementById('password_signup');
+
 const loginFormHander = async (event) => {
-    console.log('login attempt');
     event.preventDefault();
 
     let username = document.getElementById('username').value.trim();
@@ -93,6 +98,217 @@ const signupFormHandler = async (event) => {
     });
 };
 
+const clearForm = function () {
+    const firstName = document.getElementById('first_name_signup');
+    const firstNameCheck = document.getElementById('first-name-check');
+    const lastName = document.getElementById('last_name_signup');
+    const lastNameCheck = document.getElementById('last-name-check');
+    const username = document.getElementById('username_signup');
+    const usernameHelp = document.getElementById('username-help');
+    const usernameCheck = document.getElementById('username-check');
+    const email = document.getElementById('email_signup');
+    const emailHelp = document.getElementById('email-help');
+    const emailCheck = document.getElementById('email-check');
+    const password = document.getElementById('password_signup');
+    const passwordHelp = document.getElementById('password-help');
+    const passwordCheck = document.getElementById('password-check');
+
+    [
+        firstName,
+        lastName,
+        username,
+        usernameHelp,
+        email,
+        emailHelp,
+        password,
+        passwordHelp,
+    ].forEach((field) => {
+        field.value = '';
+        field.classList.remove('is-danger', 'is-success');
+        field.textContent = '';
+    });
+
+    [
+        firstNameCheck,
+        lastNameCheck,
+        usernameCheck,
+        emailCheck,
+        passwordCheck,
+    ].forEach((item) => item.classList.remove('fa-check'));
+};
+
+const validateForm = async function () {
+    document.getElementById('signup_info').textContent;
+    const firstName = document.getElementById('first_name_signup');
+    const firstNameCheck = document.getElementById('first-name-check');
+    const lastName = document.getElementById('last_name_signup');
+    const lastNameCheck = document.getElementById('last-name-check');
+    const username = document.getElementById('username_signup');
+    const usernameHelp = document.getElementById('username-help');
+    const usernameCheck = document.getElementById('username-check');
+    const email = document.getElementById('email_signup');
+    const emailHelp = document.getElementById('email-help');
+    const emailCheck = document.getElementById('email-check');
+    const password = document.getElementById('password_signup');
+    const passwordHelp = document.getElementById('password-help');
+    const passwordCheck = document.getElementById('password-check');
+
+    // Checks that first name has valid input
+    if (firstName.value) {
+        firstName.classList.add('is-success');
+        firstNameCheck.classList.add('fa-check');
+    } else {
+        firstName.classList.remove('is-success');
+        firstNameCheck.classList.remove('fa-check');
+    }
+
+    // Checks that last name has valid input
+    if (lastName.value) {
+        lastName.classList.add('is-success');
+        lastNameCheck.classList.add('fa-check');
+    } else {
+        lastName.classList.remove('is-success');
+        lastNameCheck.classList.remove('fa-check');
+    }
+
+    // Checks that a username isn't taken
+    if (username.value) {
+        const response = await fetch(`/api/user/check/${username.value}`);
+        const { usernameAvailable } = await response.json();
+
+        if (usernameAvailable) {
+            username.classList.add('is-success');
+            username.classList.remove('is-danger');
+            usernameHelp.classList.add('is-success');
+            usernameHelp.classList.remove('is-danger');
+
+            usernameCheck.classList.add('fa-check');
+            usernameHelp.textContent = 'Username is available.';
+        } else {
+            username.classList.add('is-danger');
+            username.classList.remove('is-success');
+            usernameHelp.classList.add('is-danger');
+            usernameHelp.classList.remove('is-success');
+            usernameCheck.classList.remove('fa-check');
+            usernameHelp.textContent = 'Username is unavailable.';
+        }
+    } else {
+        username.classList.remove('is-success', 'is-danger');
+        usernameHelp.classList.remove('is-success', 'is-danger');
+        usernameCheck.classList.remove('fa-check');
+        usernameHelp.textContent = '';
+    }
+
+    // Uses a regular expression to determine whether an email address is valid:
+    function isValidEmail(email) {
+        // Regular expression to check for a valid email address
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        // Check if the email address matches the regular expression
+        return emailRegex.test(email);
+    }
+
+    if (email.value) {
+        if (isValidEmail(email.value)) {
+            email.classList.remove('is-danger');
+            email.classList.add('is-success');
+            emailCheck.classList.add('fa-check');
+            emailHelp.textContent = '';
+        } else {
+            email.classList.remove('is-success');
+            email.classList.add('is-danger');
+            emailCheck.classList.remove('fa-check');
+            emailHelp.textContent = 'Email is invalid.';
+        }
+    } else {
+        email.classList.remove('is-danger');
+        emailHelp.textContent = '';
+    }
+
+    function checkPassword(password) {
+        // Regular expression to check for a valid password
+
+        const passwordRegex =
+            /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])(?=.{12,})/;
+
+        // TODO: REMOVE FOR PRODUCTION
+        if (password === 'test')
+            return {
+                valid: true,
+            };
+
+        // Check if the password is at least 12 characters long
+        if (password.length < 8) {
+            return {
+                valid: false,
+                message: 'Password must be at least 12 characters long',
+            };
+        }
+
+        // Check if the password contains any spaces
+        if (/\s/.test(password)) {
+            return {
+                valid: false,
+                message: 'Password must not contain any spaces',
+            };
+        }
+
+        // Check if the password contains at least one number
+        if (!/[0-9]/.test(password)) {
+            return {
+                valid: false,
+                message: 'Password must contain at least one number',
+            };
+        }
+
+        // Check if the password contains at least one lowercase letter
+        if (!/[a-z]/.test(password)) {
+            return {
+                valid: false,
+                message: 'Password must contain at least one lowercase letter',
+            };
+        }
+
+        // Check if the password contains at least one uppercase letter
+        if (!/[A-Z]/.test(password)) {
+            return {
+                valid: false,
+                message: 'Password must contain at least one uppercase letter',
+            };
+        }
+
+        // Check if the password contains at least one special character
+        if (!/[!@#$%^&*]/.test(password)) {
+            return {
+                valid: false,
+                message: 'Password must contain at least one special character',
+            };
+        }
+
+        // If the password passes all checks, return valid: true
+        return { valid: true };
+    }
+
+    if (password.value) {
+        const { valid, message } = checkPassword(password.value);
+        if (valid) {
+            password.classList.remove('is-danger');
+            password.classList.add('is-success');
+            passwordHelp.textContent = '';
+            passwordCheck.classList.add('fa-check');
+        } else {
+            password.classList.add('is-danger');
+            password.classList.remove('is-success');
+            passwordHelp.textContent = message;
+            passwordCheck.classList.remove('fa-check');
+        }
+    } else {
+        password.classList.remove('is-danger', 'is-success');
+        passwordHelp.textContent = '';
+        passwordCheck.classList.remove('fa-check');
+    }
+};
+
 const showLoginModal = function () {
     loginModal.classList.toggle('is-active');
 };
@@ -104,6 +320,7 @@ const showSignupModal = function () {
 const closeModal = function () {
     loginModal.classList.remove('is-active');
     signupModal.classList.remove('is-active');
+    clearForm();
 };
 
 loginButton.addEventListener('click', showLoginModal);
@@ -116,3 +333,7 @@ modalSignupBtn.addEventListener('click', signupFormHandler);
 [...modalCloseBtns, ...modalCancelBtns, ...modalOverlays].forEach((button) => {
     button.addEventListener('click', closeModal);
 });
+
+[firstName, lastName, username, email, password].forEach((field) =>
+    field.addEventListener('input', validateForm)
+);

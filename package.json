@@ -1,35 +1,36 @@
 {
-  "name": "groupproject2",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "seed": "node seed/categorySeed.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/isayahdurst/groupproject2.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/isayahdurst/groupproject2/issues"
-  },
-  "homepage": "https://github.com/isayahdurst/groupproject2#readme",
-  "dependencies": {
-    "bcrypt": "^5.1.0",
-    "config": "^3.3.8",
-    "cookie-parser": "^1.4.6",
-    "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "express-handlebars": "^6.0.6",
-    "handlebars": "^4.7.7",
-    "jsonwebtoken": "^9.0.0",
-    "mysql2": "^2.3.3",
-    "path": "^0.12.7",
-    "sequelize": "^6.28.0"
-  }
+    "name": "groupproject2",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "nodemon server.js",
+        "seed": "node seed/categorySeed.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/isayahdurst/groupproject2.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/isayahdurst/groupproject2/issues"
+    },
+    "homepage": "https://github.com/isayahdurst/groupproject2#readme",
+    "dependencies": {
+        "bcrypt": "^5.1.0",
+        "config": "^3.3.8",
+        "cookie-parser": "^1.4.6",
+        "dotenv": "^16.0.3",
+        "express": "^4.18.2",
+        "express-handlebars": "^6.0.6",
+        "handlebars": "^4.7.7",
+        "jsonwebtoken": "^9.0.0",
+        "mysql2": "^2.3.3",
+        "nodemon": "^2.0.20",
+        "path": "^0.12.7",
+        "sequelize": "^6.28.0"
+    }
 }
