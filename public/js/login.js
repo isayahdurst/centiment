@@ -11,6 +11,8 @@ const modalCloseBtns = document.querySelectorAll('.delete');
 const modalCancelBtns = document.querySelectorAll('.cancel');
 const modalOverlays = document.querySelectorAll('.modal-background');
 
+const signupForm = document.getElementById('signup_form');
+const signupInfo = document.getElementById('signup_info');
 const firstName = document.getElementById('first_name_signup');
 const lastName = document.getElementById('last_name_signup');
 const username = document.getElementById('username_signup');
@@ -53,47 +55,18 @@ const loginFormHander = async (event) => {
 const signupFormHandler = async (event) => {
     event.preventDefault();
 
-    const first_name = document
-        .getElementById('first_name_signup')
-        .value.trim();
-    const last_name = document.getElementById('last_name_signup').value.trim();
-    // update username to save in lowercase
-    const username = document
-        .getElementById('username_signup')
-        .value.trim()
-        .toLowerCase();
-    const email = document.getElementById('email_signup').value.trim();
-    const password = document.getElementById('password_signup').value.trim();
-    const avatar = document.getElementById('avatar').value;
+    const formData = new FormData(signupForm);
 
-    // clean up the signup form when it's submitted
-    document.getElementById('signup_info').textContent = '';
-    document.getElementById('first_name_signup').value = '';
-    document.getElementById('last_name_signup').value = '';
-    document.getElementById('username_signup').value = '';
-    document.getElementById('email_signup').value = '';
-    document.getElementById('password_signup').value = '';
-
-    await fetch('/api/user', {
+    await fetch("/api/user/register", {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            first_name,
-            last_name,
-            username,
-            email,
-            password,
-            avatar,
-        }),
-    }).then((result) => {
+        body: formData,
+      })
+      .then((result) => {
+        console.log(result);
         if (!result.ok) {
-            document.getElementById('signup_info').textContent =
-                'Unable to create user';
+            signupInfo.textContent = 'Unable to create user.';
         } else {
-            document.getElementById('signup_info').textContent =
-                'User created, please login';
+            window.location.replace('/');
         }
     });
 };
@@ -337,3 +310,9 @@ modalSignupBtn.addEventListener('click', signupFormHandler);
 [firstName, lastName, username, email, password].forEach((field) =>
     field.addEventListener('input', validateForm)
 );
+
+// function to preview uploaded avatar image
+let loadFile = function(event) {
+	var image = document.getElementById('preview');
+	image.src = URL.createObjectURL(event.target.files[0]);
+};

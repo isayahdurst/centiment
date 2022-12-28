@@ -37,7 +37,7 @@ User.init(
             allowNull: false,
         },
         avatar: {
-            type: DataTypes.BLOB,
+            type: DataTypes.BLOB("long"),
         },
         wallet_id: {
             type: DataTypes.INTEGER,

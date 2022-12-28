@@ -19,7 +19,7 @@
 
     <div class='navbar-menu'>
         <div class='navbar-start'>
-            <a class='navbar-item'>
+            <a href="/" class='navbar-item'>
                 Home
             </a>
 
@@ -41,6 +41,9 @@
                     </a>
                     <a class='navbar-item'>
                         Contact
+                    </a>
+                    <a href="/user" class='navbar-item'>
+                        My profile
                     </a>
                     <hr class='navbar-divider' />
                     <a class='navbar-item'>
@@ -128,13 +131,12 @@
       <button class="delete" aria-label="close"></button>
     </header>
     <section class="modal-card-body">
-      <form id="signup_form">
-      {{!-- <h2 class="has-text-centered"><b>Join centiment today and be a part of the future of social media</b></h2> --}}
+      <form id="signup_form" enctype="multipart/form-data" action="/register" method="post">
 
         <div class="field">
           <label class="label">First Name</label>
           <div class="control has-icons-left has-icons-right">
-            <input class="input" id="first_name_signup" type="text" placeholder="John">
+            <input class="input" name="first_name" id="first_name_signup" type="text" placeholder="John">
             <span class="icon is-small is-left">
               <i class="fas fa-user"></i>
             </span>
@@ -147,7 +149,7 @@
         <div class="field">
           <label class="label">Last Name</label>
           <div class="control has-icons-left has-icons-right">
-            <input class="input" id="last_name_signup" type="text" placeholder="Smith">
+            <input class="input" name="last_name" id="last_name_signup" type="text" placeholder="Smith">
             <span class="icon is-small is-left">
               <i class="fas fa-user"></i>
             </span>
@@ -160,7 +162,7 @@
         <div class="field">
           <label class="label">Username</label>
           <div class="control has-icons-left has-icons-right">
-            <input class="input" id="username_signup" type="text" placeholder="Username">
+            <input class="input" name="username" id="username_signup" type="text" placeholder="Username">
             <span class="icon is-small is-left">
               <i class="fas fa-user"></i>
             </span>
@@ -174,7 +176,7 @@
         <div class="field">
           <label class="label">Email</label>
           <div class="control has-icons-left has-icons-right">
-            <input class="input" id="email_signup" type="text" placeholder="welcome@centiment.com">
+            <input class="input" name="email" id="email_signup" type="text" placeholder="welcome@centiment.com">
             <span class="icon is-small is-left">
               <i class="fa-solid fa-envelope"></i>
             </span>
@@ -188,7 +190,7 @@
         <div class="field">
           <label class="label">Password</label>
           <div class="control has-icons-left has-icons-right">
-            <input class="input" id="password_signup" type="password" placeholder="Super Secret Password">
+            <input class="input" name="password" id="password_signup" type="password" placeholder="Super Secret Password">
             <span class="icon is-small is-left">
               <i class="fa-solid fa-lock"></i>
             </span>
@@ -202,7 +204,10 @@
         <div class="field">
           <label class='label'>Select a file:</label>
           <div class="control has-icons-left has-icons-right">
-            <input type="file" id="avatar" name="avatar" accept=".jpg, .jpeg, .png">
+            {{!-- <input type="file" id="avatar" name="avatar" accept=".jpg, .jpeg, .png"> --}}
+            <label for="avatar" style="cursor: pointer;">Select a photo for your avatar</label>
+            <input type="file" id="avatar" name="avatar" accept=".jpg, .jpeg, .png" onchange="loadFile(event)">
+            <p><img id="preview" width="200"/></p>
         </div>
 
         <div class="field">

@@ -1,5 +1,8 @@
 const { Router } = require('express');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const upload = multer({dest: './public/data/uploads/'});
+const fs = require('fs');
 
 const { User } = require('./../../models');
 
@@ -7,9 +10,6 @@ const usersRouter = new Router();
 
 usersRouter.post('/login', async (req, res) => {
     const { username, password } = req.body;
-    console.log(
-        `validate user with username ${username} and password ${password}`
-    );
 
     const user = await User.findOne({
         where: {
@@ -33,10 +33,11 @@ usersRouter.post('/login', async (req, res) => {
     res.status(200).json(`User ${username} logged in succesfully`);
 });
 
-usersRouter.post('/', async (req, res) => {
-    const { first_name, last_name, username, email, password, avatar } =
+usersRouter.post('/register', upload.single('avatar'), async (req, res) => {
+    const { first_name, last_name, username, email, password } =
         req.body;
-
+    console.log(req.file, req.body);
+    
     const user = await User.findOne({
         where: {
             username,
@@ -47,19 +48,23 @@ usersRouter.post('/', async (req, res) => {
         res.status(409).end('User already exists');
         return;
     }
+    const pathToAvatar = req.file.destination.concat(req.file.filename);
+    const image = await fs.readFileSync(pathToAvatar);
 
-    const newUserObject = await User.create({
-        first_name,
-        last_name,
-        username,
-        email,
-        password,
-        avatar,
-    });
-
-    res.status(200).json({
-        id: newUserObject.id,
-    });
+    try {
+        const user = await User.create({
+            first_name,
+            last_name,
+            username,
+            email,
+            password,
+            avatar: image,
+        });
+        res.status(200).json({ id: user.id });
+    } catch(error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
 });
 
 usersRouter.get('/check/:username', async (req, res) => {
