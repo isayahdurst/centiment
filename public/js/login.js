@@ -128,6 +128,8 @@ const clearForm = function () {
         field.textContent = '';
     });
 
+    emailHelp.classList.add('is-danger');
+
     [
         firstNameCheck,
         lastNameCheck,
