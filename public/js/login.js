@@ -19,6 +19,15 @@ const username = document.getElementById('username_signup');
 const email = document.getElementById('email_signup');
 const password = document.getElementById('password_signup');
 
+// Mobile Menu
+const burger = document.querySelector('.navbar-burger');
+const mobileMenu = document.querySelector('.navbar-menu');
+
+const toggleMobileMenu = function () {
+    burger.classList.toggle('is-active');
+    mobileMenu.classList.toggle('is-active');
+};
+
 const loginFormHander = async (event) => {
     event.preventDefault();
 
@@ -57,11 +66,10 @@ const signupFormHandler = async (event) => {
 
     const formData = new FormData(signupForm);
 
-    await fetch("/api/user/register", {
+    await fetch('/api/user/register', {
         method: 'POST',
         body: formData,
-      })
-      .then((result) => {
+    }).then((result) => {
         console.log(result);
         if (!result.ok) {
             signupInfo.textContent = 'Unable to create user.';
@@ -311,8 +319,10 @@ modalSignupBtn.addEventListener('click', signupFormHandler);
     field.addEventListener('input', validateForm)
 );
 
+burger.addEventListener('click', toggleMobileMenu);
+
 // function to preview uploaded avatar image
-let loadFile = function(event) {
-	var image = document.getElementById('preview');
-	image.src = URL.createObjectURL(event.target.files[0]);
+let loadFile = function (event) {
+    var image = document.getElementById('preview');
+    image.src = URL.createObjectURL(event.target.files[0]);
 };
