@@ -1,22 +1,41 @@
-<div class="card">
-  <div class="card-content">
-    <div class="media-content">
-        <p class="title is-4">My profile</p>
-    </div>
-    <div class="media">
-      <div class="media-left">
-        <figure class="image is-128x128">
-          <img src={{imageURI}} alt="profile image" />
-        </figure>
-      </div>
+<section class='section'>
+    <div class='container'>
+        <div class='columns'>
+            <div class='column is-narrow'>
+                <figure class='image is-128x128 is-rounded'>
+                    <img src='{{imageURI}}' alt='Profile Picture' />
+                </figure>
+                <nav class='level py-4'>
+                    <div class='level-left'>
+                        <div class='level-item'>
+                            <button class='button edit-profile-button is-primary'>Edit</button>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class='column'>
+                <p class='title'>{{user.first_name}} {{user.last_name}}</p>
+                <p class='subtitle'>@{{user.username}}</p>
+                <p>
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                    Libero dolore reprehenderit in deleniti ullam commodi sequi.
+                    Et similique expedita quam, numquam, doloribus officia
+                    dolorum id, aperiam doloremque saepe rerum aspernatur est
+                    vero. Labore facilis debitis dolor eos libero ex quaerat
+                    necessitatibus dolores cupiditate beatae!</p>
+            </div>
+        </div>
+        <hr />
     </div>
 
-    <div class="content">
-      <p class="card-text">centiment id: {{user.id}}</p>
-      <p class="card-text">First name: {{user.first_name}}</p>
-      <p class="card-text">Last name: {{user.last_name}}</p>
-      <p class="card-text">Username: {{user.username}}</p>
-      <p class="card-text">Email: {{user.email}}</p>
-    </div>
-  </div>
-</div>
+</section>
+<section class='section is-large'>
+  {{#each topic as |portfolio-item|}}
+    {{>portfolio}}
+  {{/each}}
+
+</section>
+
+{{>edit-profile-modal}}
+
+<script src="./js/userProfile.js"></script>

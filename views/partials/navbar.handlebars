@@ -14,13 +14,16 @@
 
     <div class='navbar-menu'>
         <div class='navbar-start'>
-            <a href="/" class='navbar-item'>
-                Home
-            </a>
 
-            <a class='navbar-item'>
-                Pricing
-            </a>
+            {{#if user}}
+              <a href="/user" class='navbar-item'>
+                  My profile
+              </a>
+
+              <a href="" class="navbar-item">
+                  Explore
+              </a>
+            {{/if}}
 
             <div class='navbar-item has-dropdown is-hoverable'>
                 <a class='navbar-link'>
@@ -32,13 +35,7 @@
                         About
                     </a>
                     <a class='navbar-item'>
-                        Pricing
-                    </a>
-                    <a class='navbar-item'>
                         Contact
-                    </a>
-                    <a href="/user" class='navbar-item'>
-                        My profile
                     </a>
                     <hr class='navbar-divider' />
                     <a class='navbar-item'>
