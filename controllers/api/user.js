@@ -35,6 +35,17 @@ usersRouter.put('/', auth, async (req, res) => {
     res.end();
 });
 
+usersRouter.get('/logout', async (req, res) => {
+    console.log(req.cookies);
+    res.status(200)
+        .clearCookie('logintoken', {
+            path: '/',
+            domain: 'localhost',
+            expires: new Date(1),
+        })
+        .redirect('/login');
+});
+
 usersRouter.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
