@@ -1,0 +1,49 @@
+<div><h2>Edit this topic</h2>
+  <form id="edit_topic_form">
+      <div>Title<br> <input type="text" id="topic_name" placeholder="{{topic.name}}"/></div>
+      <div>Price<br> <input type="number" id="topic_price" placeholder="{{topic.price}}"/></div>
+      <div>Description<br> <textarea id="topic_description" placeholder="{{topic.description}}"></textarea></div>
+      <button type="submit" value="Submit">Submit</button>
+  </form>
+</div>
+
+
+{{!-- <script src="../js/edit-topic.js"></script> --}}
+<script>
+  
+  const id = window.location.toString().split('/')[
+  window.location.toString().split('/').length - 1 ];
+
+async function editTopicHandler(event) {
+  event.preventDefault();
+
+  const name = document.getElementById("topic_name").value;
+  const description = document.getElementById("topic_description").value;
+  let price = document.getElementById("topic_price").value;
+  price = parseInt(price);
+
+
+  const response = await fetch(`/api/topic/edit/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      name,
+      description,
+      price,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (response.ok) {
+    document.location.replace(`/topic/${id}`);
+  } else {
+    alert('Failed to edit topic');
+  }
+}
+
+document
+  .querySelector("#edit_topic_form")
+  .addEventListener("submit", editTopicHandler);
+
+</script>
