@@ -4,6 +4,7 @@ const multer = require('multer');
 const upload = multer({ dest: './public/data/uploads/' });
 const fs = require('fs');
 const auth = require('../../middleware/auth');
+const { Op } = require('sequelize');
 
 const { User } = require('./../../models');
 
@@ -22,7 +23,12 @@ usersRouter.put('/', auth, async (req, res) => {
             email: email || user.email,
             password: password || user.password,
         },
-        { where: { id: user.id } }
+        {
+            where: {
+                id: user.id,
+            },
+            individualHooks: true,
+        }
     );
 
     console.log(user);
@@ -38,20 +44,22 @@ usersRouter.post('/login', async (req, res) => {
         },
     });
 
+    console.log(user);
+
     if (!user) {
-        res.status(401).json('User not found');
+        res.status(400).json({ message: 'Bad Request, User Not Found' });
         return;
     }
 
     const correctPassword = user.checkPassword(password);
     if (!correctPassword) {
-        res.status(401).json('Bad password');
+        res.status(401).json({ message: 'Not Authorized, Bad Password' });
         return;
     }
 
     const token = jwt.sign({ id: username }, process.env.JWT_KEY);
     res.cookie('logintoken', token, { httpOnly: true });
-    res.status(200).json(`User ${username} logged in succesfully`);
+    res.status(200).json({ message: `User ${username} logged in succesfully` });
 });
 
 usersRouter.post('/register', upload.single('avatar'), async (req, res) => {
@@ -60,12 +68,15 @@ usersRouter.post('/register', upload.single('avatar'), async (req, res) => {
 
     const user = await User.findOne({
         where: {
-            username,
+            [Op.or]: [{ username: username }, { email: email }],
         },
     });
 
     if (user) {
-        res.status(409).end('User already exists');
+        res.status(409).json({
+            message:
+                'A user with this username or email already exists. Try logging in, instead.',
+        });
         return;
     }
     const pathToAvatar = req.file.destination.concat(req.file.filename);

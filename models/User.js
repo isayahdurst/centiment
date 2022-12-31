@@ -34,6 +34,7 @@ User.init(
         },
         bio: {
             type: DataTypes.STRING,
+            len: 140,
             allowNull: true,
         },
         password: {
@@ -66,6 +67,13 @@ User.init(
                     10
                 );
                 return newUserData;
+            },
+
+            async beforeUpdate(userData) {
+                console.log('Before Update...');
+                userData.password = await bcrypt.hash(userData.password, 10);
+                console.log(`Encrypted Password: ${userData.password}`);
+                return userData;
             },
         },
         sequelize,

@@ -36,7 +36,7 @@ const updateProfile = async function (event) {
             // Changing username breaks app. TODO: discover why
             bio: bio.value,
             email: email.value,
-            /* password: password.value, */
+            password: password.value,
             // TODO: encrypt password before changing
         }),
     });
