@@ -1,6 +1,390 @@
-Welcome
-{{user.username}}
+<section class="section is-large has-background-light pt-6">
+    <div class="container">
+        <h2 class="title mb-6 pb-6">Welcome Back, {{user.first_name}} 😀</h2>
+        <h2 class="title has-text-centered">Top Topics Today 🔥</h2>
+        <div class="box is-flex is-justify-content-center">
+        <table class="table">
+            <div class="thead">
+                <tr>
+                    <th>Rank</th>
+                    <th>Community</th>
+                    <th>Price</th>
+                    <th>24h volume</th>
+                    <th>Total volume</th>
+                    <th>Comments</th>
+                </tr>
+            </div>
+            <div class="tbody">
+                <tr class="is-selected">
+                    <th>1</th>
+                    <td><a>Pokemon Cards</a></td>
+                    <td>45 Cents</td>
+                    <td>3,459 Cents</td>
+                    <td>10,000 Cents</td>
+                    <td>52,345</td>
+                </tr>
+                <tr>
+                    <th>2</th>
+                    <td><a>Cars</a></td>
+                    <td>45 Cents</td>
+                    <td>3,459 Cents</td>
+                    <td>10,000 Cents</td>
+                    <td>52,345</td>
+                </tr>
+                <tr>
+                    <th>3</th>
+                    <td><a>Elon Musk</a></td>
+                    <td>45 Cents</td>
+                    <td>3,459 Cents</td>
+                    <td>10,000 Cents</td>
+                    <td>52,345</td>
+                </tr>
+                <tr>
+                    <th>4</th>
+                    <td><a>Taylor Schwifty</a></td>
+                    <td>45 Cents</td>
+                    <td>3,459 Cents</td>
+                    <td>10,000 Cents</td>
+                    <td>52,345</td>
+                </tr>
+                <tr>
+                    <th>5</th>
+                    <td><a>ChatGPT</a></td>
+                    <td>45 Cents</td>
+                    <td>3,459 Cents</td>
+                    <td>10,000 Cents</td>
+                    <td>52,345</td>
+                </tr>
+                <tr>
+                    <th>6</th>
+                    <td><a>UCB</a></td>
+                    <td>45 Cents</td>
+                    <td>3,459 Cents</td>
+                    <td>10,000 Cents</td>
+                    <td>52,345</td>
+                </tr>
+                <tr>
+                    <th>7</th>
+                    <td><a>Long Lists</a></td>
+                    <td>45 Cents</td>
+                    <td>3,459 Cents</td>
+                    <td>10,000 Cents</td>
+                    <td>52,345</td>
+                </tr>
+                <tr>
+                    <th>8</th>
+                    <td><a>Why Lorem exists...</a></td>
+                    <td>45 Cents</td>
+                    <td>3,459 Cents</td>
+                    <td>10,000 Cents</td>
+                    <td>52,345</td>
+                </tr>
+                <tr>
+                    <th>9</th>
+                    <td><a>I don't want to make any more lists, geez</a></td>
+                    <td>45 Cents</td>
+                    <td>3,459 Cents</td>
+                    <td>10,000 Cents</td>
+                    <td>52,345</td>
+                </tr>
+                <tr>
+                    <th>10</th>
+                    <td><a>Avatar: The Way of Water</a></td>
+                    <td>45 Cents</td>
+                    <td>3,459 Cents</td>
+                    <td>10,000 Cents</td>
+                    <td>52,345</td>
+                </tr>
+            </div>
+        </table>
+        </div>
+    </div>
+</section>
 
-<a href='http://localhost:3001/topic'>Create a topic</a>
+<section class='section is-large has-background-primary pt-6'>
+    <div class='container'>
+        <h2 class='title has-text-centered'>
+            New From Topics You Follow 📰
+        </h2>
+        <div class="box">
+            <h3 class="subtitle"><strong>/Pokemon Cards</strong></h3>
+            <div class='box'>
+                <article class='media'>
+                    <figure class='media-left'>
+                        <p class='image is-64x64 is-rounded'>
+                            <img
+                                src='https://bulma.io/images/placeholders/128x128.png'
+                                alt=''
+                                class='src'
+                            />
+                        </p>
+                    </figure>
+                    <div class='media-content'>
+                        <div class='content'>
+                            <p>
+                                <strong>Isayah Durst</strong>
+                                <small>@isayahdurst</small>
+                                <small>34m</small><br />
+                                Lorem ipsum dolor sit amet consectetur
+                                adipisicing elit. Obcaecati reiciendis
+                                inventore cum ab excepturi repellendus
+                                temporibus saepe, optio unde itaque beatae
+                                possimus omnis similique, natus provident
+                                suscipit voluptates ipsam illum?
+                            </p>
+                        </div>
+                        <nav class='level is-mobile'>
+                            <div class='level-left'>
+
+                                <a class='level-item mr-1'>
+                                    <span class='icon is-small'><i
+                                            class='fas fa-heart'
+                                        ></i></span>
+                                </a>
+                                <p class='level-item'><small>123</small></p>
+                                <a class='level-item'>
+                                    <span class='icon is-small'><i
+                                            class='fas fa-reply'
+                                        ></i></span>
+                                </a>
+                            </div>
+                        </nav>
+                    </div>
+                </article>
+                <article class="media is-hidden">
+                    <figure class="media-left">
+                        <p class="image is-64x64">
+                        <img src="https://bulma.io/images/placeholders/128x128.png">
+                        </p>
+                    </figure>
+                    <div class="media-content">
+                        <div class="field">
+                        <p class="control">
+                            <textarea class="textarea" placeholder="Add a comment..."></textarea>
+                        </p>
+                        </div>
+                        <nav class="level">
+                        <div class="level-left">
+                            <div class="level-item">
+                            <a class="button is-info">Submit</a>
+                            </div>
+                        </div>
+                        </nav>
+                    </div>
+                </article>
+
+                <article class='media'>
+                    <figure class='media-left'>
+                        <p class='image is-64x64 is-rounded'>
+                            <img
+                                src='https://bulma.io/images/placeholders/128x128.png'
+                                alt=''
+                                class='src'
+                            />
+                        </p>
+                    </figure>
+                    <div class='media-content'>
+                        <div class='content'>
+                            <p>
+                                <strong>Olga Gavrushenko</strong>
+                                <small>@OlgaGav</small>
+                                <small>34m</small><br />
+                                Lorem ipsum dolor sit amet consectetur
+                                adipisicing elit. Obcaecati reiciendis
+                                inventore cum ab excepturi repellendus
+                                temporibus saepe, optio unde itaque beatae
+                                possimus omnis similique, natus provident
+                                suscipit voluptates ipsam illum?
+                            </p>
+                        </div>
+                        <nav class='level is-mobile'>
+                            <div class='level-left'>
+
+                                <a class='level-item mr-1'>
+                                    <span class='icon is-small'><i
+                                            class='fas fa-heart'
+                                        ></i></span>
+                                </a>
+                                <p class='level-item'><small>123</small></p>
+                                <a class='level-item'>
+                                    <span class='icon is-small'><i
+                                            class='fas fa-reply'
+                                        ></i></span>
+                                </a>
+                            </div>
+                        </nav>
+                    </div>
+                </article>
+                <article class="media is-hidden">
+                    <figure class="media-left">
+                        <p class="image is-64x64">
+                        <img src="https://bulma.io/images/placeholders/128x128.png">
+                        </p>
+                    </figure>
+                    <div class="media-content">
+                        <div class="field">
+                        <p class="control">
+                            <textarea class="textarea" placeholder="Add a comment..."></textarea>
+                        </p>
+                        </div>
+                        <nav class="level">
+                        <div class="level-left">
+                            <div class="level-item">
+                            <a class="button is-info">Submit</a>
+                            </div>
+                        </div>
+                        </nav>
+                    </div>
+                </article>
+            </div>
+        </div>
+
+        <div class="box">
+            <h3 class="subtitle"><strong>/Elon Musk</strong></h3>
+            <div class='box'>
+                <article class='media'>
+                    <figure class='media-left'>
+                        <p class='image is-64x64 is-rounded'>
+                            <img
+                                src='https://bulma.io/images/placeholders/128x128.png'
+                                alt=''
+                                class='src'
+                            />
+                        </p>
+                    </figure>
+                    <div class='media-content'>
+                        <div class='content'>
+                            <p>
+                                <strong>Frank Nguyen</strong>
+                                <small>@franknguyen</small>
+                                <small>34m</small><br />
+                                Lorem ipsum dolor sit amet consectetur
+                                adipisicing elit. Obcaecati reiciendis
+                                inventore cum ab excepturi repellendus
+                                temporibus saepe, optio unde itaque beatae
+                                possimus omnis similique, natus provident
+                                suscipit voluptates ipsam illum?
+                            </p>
+                        </div>
+                        <nav class='level is-mobile'>
+                            <div class='level-left'>
+
+                                <a class='level-item mr-1'>
+                                    <span class='icon is-small'><i
+                                            class='fas fa-heart'
+                                        ></i></span>
+                                </a>
+                                <p class='level-item'><small>123</small></p>
+                                <a class='level-item'>
+                                    <span class='icon is-small'><i
+                                            class='fas fa-reply'
+                                        ></i></span>
+                                </a>
+                            </div>
+                        </nav>
+                    </div>
+                </article>
+                <article class="media is-hidden">
+                    <figure class="media-left">
+                        <p class="image is-64x64">
+                        <img src="https://bulma.io/images/placeholders/128x128.png">
+                        </p>
+                    </figure>
+                    <div class="media-content">
+                        <div class="field">
+                        <p class="control">
+                            <textarea class="textarea" placeholder="Add a comment..."></textarea>
+                        </p>
+                        </div>
+                        <nav class="level">
+                        <div class="level-left">
+                            <div class="level-item">
+                            <a class="button is-info">Submit</a>
+                            </div>
+                        </div>
+                        </nav>
+                    </div>
+            </div>
+        </div>
+
+        <div class="box">
+            <h3 class="subtitle"><strong>/ChatGPT</strong></h3>
+            <div class='box'>
+                <article class='media'>
+                    <figure class='media-left'>
+                        <p class='image is-64x64 is-rounded'>
+                            <img
+                                src='https://bulma.io/images/placeholders/128x128.png'
+                                alt=''
+                                class='src'
+                            />
+                        </p>
+                    </figure>
+                    <div class='media-content'>
+                        <div class='content'>
+                            <p>
+                                <strong>Anthony Li</strong>
+                                <small>@somethingAboutEatingLunch</small>
+                                <small>34m</small><br />
+                                Lorem ipsum dolor sit amet consectetur
+                                adipisicing elit. Obcaecati reiciendis
+                                inventore cum ab excepturi repellendus
+                                temporibus saepe, optio unde itaque beatae
+                                possimus omnis similique, natus provident
+                                suscipit voluptates ipsam illum?
+                            </p>
+                        </div>
+                        <nav class='level is-mobile'>
+                            <div class='level-left'>
+
+                                <a class='level-item mr-1'>
+                                    <span class='icon is-small'><i
+                                            class='fas fa-heart'
+                                        ></i></span>
+                                </a>
+                                <p class='level-item'><small>123</small></p>
+                                <a class='level-item'>
+                                    <span class='icon is-small'><i
+                                            class='fas fa-reply'
+                                        ></i></span>
+                                </a>
+                            </div>
+                        </nav>
+                    </div>
+                </article>
+                <article class="media is-hidden">
+                    <figure class="media-left">
+                        <p class="image is-64x64">
+                        <img src="https://bulma.io/images/placeholders/128x128.png">
+                        </p>
+                    </figure>
+                    <div class="media-content">
+                        <div class="field">
+                            <p class="control">
+                                <textarea class="textarea" placeholder="Add a comment..."></textarea>
+                            </p>
+                        </div>
+                        <nav class="level">
+                            <div class="level-left">
+                                <div class="level-item">
+                                <a class="button is-info">Submit</a>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class="has-text-centered"><button class="button is-large is-light">See All...</button></div>
+    </div>
+</section>
+
+<section class="section is-small">
+    <div class="container has-text-centered">
+        <h3 class="title">
+            <a href='http://localhost:3001/topic'>Create a topic</a>
+        </h3>
+    </div>
+</section>
 
 <script src='./js/logout.js'></script>
