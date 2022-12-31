@@ -24,7 +24,7 @@ const toggleProfileModal = function () {
 const updateProfile = async function (event) {
     event.preventDefault();
 
-    const response = await fetch('/api/user', {
+    await fetch('/api/user', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -41,8 +41,7 @@ const updateProfile = async function (event) {
         }),
     });
 
-    const text = await response.json();
-    console.log(text);
+    window.location.replace('/user');
 };
 
 const updateCharacterCount = function () {

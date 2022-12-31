@@ -11,7 +11,6 @@ const usersRouter = new Router();
 
 usersRouter.put('/', auth, async (req, res) => {
     const user = req.user.get({ plain: true });
-    console.log('update attempted');
     const { firstName, lastName, username, bio, email, password } = req.body;
 
     await User.update(
@@ -27,7 +26,7 @@ usersRouter.put('/', auth, async (req, res) => {
     );
 
     console.log(user);
-    res.json(user);
+    res.end();
 });
 
 usersRouter.post('/login', async (req, res) => {
