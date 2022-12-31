@@ -1,22 +1,137 @@
-<div class="card">
-  <div class="card-content">
-    <div class="media-content">
-        <p class="title is-4">My profile</p>
-    </div>
-    <div class="media">
-      <div class="media-left">
-        <figure class="image is-128x128">
-          <img src={{imageURI}} alt="profile image" />
-        </figure>
-      </div>
+<section class='section'>
+    <div class='container'>
+        <div class='columns'>
+            <div class='column is-narrow'>
+                <figure class='image is-128x128 is-rounded'>
+                    <img src='{{imageURI}}' alt='Profile Picture' />
+                </figure>
+                <nav class='level py-4'>
+                    <div class='level-left'>
+                        <div class='level-item'>
+                            <button class='button edit-profile-button is-primary'>Edit</button>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class='column is-half'>
+                <p class='title'>{{user.first_name}} {{user.last_name}}</p>
+                <p class='subtitle'>@{{user.username}}</p>
+                <p class="subtitle">
+                    {{user.bio}}</p>
+            </div>
+        </div>
+        <hr />
     </div>
 
-    <div class="content">
-      <p class="card-text">centiment id: {{user.id}}</p>
-      <p class="card-text">First name: {{user.first_name}}</p>
-      <p class="card-text">Last name: {{user.last_name}}</p>
-      <p class="card-text">Username: {{user.username}}</p>
-      <p class="card-text">Email: {{user.email}}</p>
-    </div>
+</section>
+
+<section class="section">
+  <div class="container">
+      <h2 class="title has-text-centered">Portfolio</h2>
+      <div class="box">
+        <div class="card is-primary">
+          <header class="card-header">
+            <p class="card-header-title">
+              Pokemon Cards
+            </p>
+            <button class="card-header-icon" aria-label="more options">
+              <span class="icon">
+                <i class="fas fa-angle-down" aria-hidden="true"></i>
+              </span>
+            </button>
+          </header>
+          <footer class="card-footer">
+            <a href="#" class="card-footer-item">Shares Owned 💼: </a>
+            <a href="#" class="card-footer-item">Price Per Share 💲: </a>
+            <a href="#" class="card-footer-item">Total Value 🤑:</a>
+            <a href="#" class="card-footer-item">P/L 💪:</a>
+          </footer>
+          <footer class="card-footer">
+            <div class="card-footer-item"><button class="button is-success mx-2">Buy</button><button class="button is-info mx-2">Go To Page</button><button class="button is-danger mx-2">Sell</button></div>
+          </footer>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="card is-primary">
+          <header class="card-header">
+            <p class="card-header-title">
+              Celebrity Scandals
+            </p>
+            <button class="card-header-icon" aria-label="more options">
+              <span class="icon">
+                <i class="fas fa-angle-down" aria-hidden="true"></i>
+              </span>
+            </button>
+          </header>
+          <footer class="card-footer">
+            <a href="#" class="card-footer-item"><b>Shares Owned 💼:</b> 321</a>
+            <a href="#" class="card-footer-item"><b>Price Per Share 💲:</b> 94 Cents</a>
+            <a href="#" class="card-footer-item"><b>Total Value 🤑: </b>30,174 Cents</a>
+            <a href="#" class="card-footer-item"><b>P/L 💪: +23,543 Cents</b></a>
+          </footer>
+          <footer class="card-footer">
+            <a href="#" class="card-footer-item"><button class="button is-success mx-2">Buy</button><button class="button is-info mx-2">Go To Page</button><button class="button is-danger mx-2">Sell</button></a>
+          </footer>
+        </div>
+      </div>
+      <div class="box">
+        <div class="card is-primary">
+          <header class="card-header">
+            <p class="card-header-title">
+              Elon Musk
+            </p>
+            <button class="card-header-icon" aria-label="more options">
+              <span class="icon">
+                <i class="fas fa-angle-down" aria-hidden="true"></i>
+              </span>
+            </button>
+          </header>
+          <footer class="card-footer">
+            <a href="#" class="card-footer-item">Shares Owned 💼: </a>
+            <a href="#" class="card-footer-item">Price Per Share 💲: </a>
+            <a href="#" class="card-footer-item">Total Value 🤑:</a>
+            <a href="#" class="card-footer-item">P/L 💪:</a>
+          </footer>
+          <footer class="card-footer">
+            <a href="#" class="card-footer-item"><button class="button is-success mx-2">Buy</button><button class="button is-info mx-2">Go To Page</button><button class="button is-danger mx-2">Sell</button></a>
+          </footer>
+        </div>
+      </div>
+      <div class="box">
+        <div class="card is-primary">
+          <header class="card-header">
+            <p class="card-header-title">
+              ChatGPT
+            </p>
+            <button class="card-header-icon" aria-label="more options">
+              <span class="icon">
+                <i class="fas fa-angle-down" aria-hidden="true"></i>
+              </span>
+            </button>
+          </header>
+          <footer class="card-footer">
+            <a href="#" class="card-footer-item">Shares Owned 💼: </a>
+            <a href="#" class="card-footer-item">Price Per Share 💲: </a>
+            <a href="#" class="card-footer-item">Total Value 🤑:</a>
+            <a href="#" class="card-footer-item">P/L 💪:</a>
+          </footer>
+          <footer class="card-footer">
+            <a href="#" class="card-footer-item"><button class="button is-success mx-2">Buy</button><button class="button is-info mx-2">Go To Page</button><button class="button is-danger mx-2">Sell</button></a>
+          </footer>
+        </div>
+      </div>
+
   </div>
-</div>
+</section>
+
+<section class='section is-large'>
+  {{#each topic as |portfolio-item|}}
+    {{>portfolio}}
+  {{/each}}
+
+</section>
+
+{{>edit-profile-modal}}
+
+<script src="./js/userProfile.js"></script>

@@ -1,0 +1,101 @@
+<div class="modal" id="edit-profile-modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Edit Profile</p>
+      <button class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+      <form action="" id="edit-profile-form">
+        <div class="field">
+          <label class="label">First Name</label>
+          <div class="control has-icons-left has-icons-right">
+            <input class="input" name="first_name" id="edit-profile-first-name" type="text" placeholder={{user.first_name}}>
+            <span class="icon is-small is-left">
+              <i class="fas fa-user"></i>
+            </span>
+            <span class="icon is-small is-right">
+              <i class="fas" id="first-name-check"></i>
+            </span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Last Name</label>
+          <div class="control has-icons-left has-icons-right">
+            <input class="input" name="last_name" id="edit-profile-last-name" type="text" placeholder={{user.last_name}}>
+            <span class="icon is-small is-left">
+              <i class="fas fa-user"></i>
+            </span>
+            <span class="icon is-small is-right">
+              <i class="fas" id="last-name-check"></i>
+            </span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Username</label>
+          <div class="control has-icons-left has-icons-right">
+            <input class="input" name="username" id="edit-profile-username" type="text" placeholder='@{{user.username}}'>
+            <span class="icon is-small is-left">
+              <i class="fas fa-user"></i>
+            </span>
+            <span class="icon is-small is-right">
+              <i class="fas" id="username-check"></i>
+            </span>
+          </div>
+          <p class="help" id="username-help"></p>
+        </div>
+
+        <div class="field">
+            <label for="" class="label">Bio</label>
+            <div class="control has-icons-left has-icons-right">
+                <textarea id="edit-profile-bio" class="textarea" placeholder="Tell the world something about you..." maxlength="140"></textarea>
+            </div>
+            <p class="help has-text-right" id="bio-character-count">0/140</p>
+        </div>
+
+        <div class="field">
+          <label class="label">Email</label>
+          <div class="control has-icons-left has-icons-right">
+            <input class="input" name="email" id="edit-profile-email" type="text" placeholder={{user.email}}>
+            <span class="icon is-small is-left">
+              <i class="fa-solid fa-envelope"></i>
+            </span>
+            <span class="icon is-small is-right">
+              <i class="fas" id="email-check"></i>
+            </span>
+          </div>
+          <p class="help is-danger" id="email-help"></p>
+        </div>
+
+        <div class="field">
+          <label class="label">Password</label>
+          <div class="control has-icons-left has-icons-right">
+            <input class="input" name="password" id="edit-profile-password" type="password" placeholder="Super Secret Password">
+            <span class="icon is-small is-left">
+              <i class="fa-solid fa-lock"></i>
+            </span>
+            <span class="icon is-small is-right">
+              <i class="fas" id="password-check"></i>
+            </span>
+          </div>
+          <p class="help is-danger" id="password-help"></p>
+        </div>
+
+        <div class="field">
+          <label class='label'>Select a file:</label>
+          <div class="control has-icons-left has-icons-right">
+            {{!-- <input type="file" id="avatar" name="avatar" accept=".jpg, .jpeg, .png"> --}}
+            <label for="avatar" style="cursor: pointer;">Select a photo for your avatar</label>
+            <input type="file" id="edit-profile-avatar" name="avatar" accept=".jpg, .jpeg, .png" onchange="loadFile(event)">
+            <p><img id="preview" width="200"/></p>
+        </div>
+
+        <div class="control">
+            <button class="button is-success" id="edit-profile-submit">Submit</button>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>

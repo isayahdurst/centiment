@@ -14,13 +14,20 @@
 
     <div class='navbar-menu'>
         <div class='navbar-start'>
-            <a href="/" class='navbar-item'>
-                Home
-            </a>
 
-            <a class='navbar-item'>
-                Pricing
-            </a>
+            {{#if user}}
+              <a href="/user" class='navbar-item'>
+                  My profile
+              </a>
+
+              <a href="" class="navbar-item">
+                  Explore
+              </a>
+            {{/if}}
+
+              <a class='navbar-item' href="/about">
+                        About
+              </a>
 
             <div class='navbar-item has-dropdown is-hoverable'>
                 <a class='navbar-link'>
@@ -29,16 +36,7 @@
 
                 <div class='navbar-dropdown'>
                     <a class='navbar-item'>
-                        About
-                    </a>
-                    <a class='navbar-item'>
-                        Pricing
-                    </a>
-                    <a class='navbar-item'>
                         Contact
-                    </a>
-                    <a href="/user" class='navbar-item'>
-                        My profile
                     </a>
                     <hr class='navbar-divider' />
                     <a class='navbar-item'>
@@ -84,7 +82,7 @@
         <div class="field">
           <label class="label">Password</label>
           <div class="control has-icons-left">
-            <input class="input" id="password" type="text" placeholder="Password">
+            <input class="input" id="password" type="password" placeholder="Password">
             <span class="icon is-small is-left">
               <i class="fa-solid fa-lock"></i>
             </span>

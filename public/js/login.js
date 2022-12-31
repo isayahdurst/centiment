@@ -42,23 +42,28 @@ const loginFormHander = async (event) => {
     document.getElementById('username').value = '';
     document.getElementById('password').value = '';
 
-    await fetch('/api/user/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            username,
-            password,
-        }),
-    }).then((result) => {
-        console.log(result);
-        if (!result.ok) {
-            login_info.textContent = 'Unable to login';
-        } else {
-            window.location.replace('/');
+    try {
+        const response = await fetch('/api/user/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username,
+                password,
+            }),
+        });
+
+        const { message } = await response.json();
+
+        if (!response.ok) {
+            throw new Error(`${response.status} ${message}`);
         }
-    });
+
+        window.location.replace('/');
+    } catch (error) {
+        login_info.textContent = error;
+    }
 };
 
 const signupFormHandler = async (event) => {
@@ -66,17 +71,23 @@ const signupFormHandler = async (event) => {
 
     const formData = new FormData(signupForm);
 
-    await fetch('/api/user/register', {
-        method: 'POST',
-        body: formData,
-    }).then((result) => {
-        console.log(result);
-        if (!result.ok) {
-            signupInfo.textContent = 'Unable to create user.';
-        } else {
-            window.location.replace('/');
+    try {
+        const response = await fetch('/api/user/register', {
+            method: 'POST',
+            body: formData,
+        });
+
+        const { message } = await response.json();
+
+        if (!response.ok) {
+            throw new Error(`(${response.status}): ${message}`);
         }
-    });
+
+        // TODO: Update this so the user is automatically logged in after signup.
+        window.location.replace('/');
+    } catch (error) {
+        signupInfo.textContent = error;
+    }
 };
 
 const clearForm = function () {

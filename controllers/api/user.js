@@ -1,12 +1,50 @@
 const { Router } = require('express');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
-const upload = multer({dest: './public/data/uploads/'});
+const upload = multer({ dest: './public/data/uploads/' });
 const fs = require('fs');
+const auth = require('../../middleware/auth');
+const { Op } = require('sequelize');
 
 const { User } = require('./../../models');
 
 const usersRouter = new Router();
+
+usersRouter.put('/', auth, async (req, res) => {
+    const user = req.user.get({ plain: true });
+    const { firstName, lastName, username, bio, email, password } = req.body;
+
+    await User.update(
+        {
+            first_name: firstName || user.first_name,
+            last_name: lastName || user.last_name,
+            username: username || user.username,
+            bio: bio || user.bio,
+            email: email || user.email,
+            password: password || user.password,
+        },
+        {
+            where: {
+                id: user.id,
+            },
+            individualHooks: true,
+        }
+    );
+
+    console.log(user);
+    res.end();
+});
+
+usersRouter.get('/logout', async (req, res) => {
+    console.log(req.cookies);
+    res.status(200)
+        .clearCookie('logintoken', {
+            path: '/',
+            domain: 'localhost',
+            expires: new Date(1),
+        })
+        .redirect('/login');
+});
 
 usersRouter.post('/login', async (req, res) => {
     const { username, password } = req.body;
@@ -17,35 +55,39 @@ usersRouter.post('/login', async (req, res) => {
         },
     });
 
+    console.log(user);
+
     if (!user) {
-        res.status(401).json('User not found');
+        res.status(400).json({ message: 'Bad Request, User Not Found' });
         return;
     }
 
     const correctPassword = user.checkPassword(password);
     if (!correctPassword) {
-        res.status(401).json('Bad password');
+        res.status(401).json({ message: 'Not Authorized, Bad Password' });
         return;
     }
 
     const token = jwt.sign({ id: username }, process.env.JWT_KEY);
     res.cookie('logintoken', token, { httpOnly: true });
-    res.status(200).json(`User ${username} logged in succesfully`);
+    res.status(200).json({ message: `User ${username} logged in succesfully` });
 });
 
 usersRouter.post('/register', upload.single('avatar'), async (req, res) => {
-    const { first_name, last_name, username, email, password } =
-        req.body;
+    const { first_name, last_name, username, email, password } = req.body;
     console.log(req.file, req.body);
-    
+
     const user = await User.findOne({
         where: {
-            username,
+            [Op.or]: [{ username: username }, { email: email }],
         },
     });
 
     if (user) {
-        res.status(409).end('User already exists');
+        res.status(409).json({
+            message:
+                'A user with this username or email already exists. Try logging in, instead.',
+        });
         return;
     }
     const pathToAvatar = req.file.destination.concat(req.file.filename);
@@ -61,7 +103,7 @@ usersRouter.post('/register', upload.single('avatar'), async (req, res) => {
             avatar: image,
         });
         res.status(200).json({ id: user.id });
-    } catch(error) {
+    } catch (error) {
         console.log(error);
         res.status(500).send(error);
     }
