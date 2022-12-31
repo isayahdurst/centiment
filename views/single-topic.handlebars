@@ -1,0 +1,38 @@
+<a href="http://localhost:3001/topic">Back to my topics</a>
+<br><br>
+<div>
+  {{!-- Topic details --}}
+  <h1>{{topic.topic_name}}</h1>
+  <p>About: {{topic.description}}</p>
+  <p>Current price: <span>{{topic.price}}</span></p>
+  <p>Total shares: <span>{{topic.total_shares}}</span></p>
+</div>
+
+<a href="http://localhost:3001/topic/edit/{{topic.id}}"><button type="submit" value="Submit">Edit this topic</button></a> 
+<button id="delete-topic" type="submit" value="Submit">Delete this topic</button>
+
+<h2>Posts</h2>
+<a href="http://localhost:3001/topic/{{topic.id}}/post/new">Create a post</a>
+
+<script>
+
+    const id = window.location.toString().split('/')[
+    window.location.toString().split('/').length - 1 ];
+
+async function deleteTopicHandler(event) {
+    const response = await fetch(`/api/topic/${id}`, {
+      method: 'DELETE',
+    });
+
+    if (response.ok) {
+      document.location.replace('/topic');
+    } else {
+      alert('Failed to delete topic');
+    }
+  };
+
+
+document
+  .querySelector("#delete-topic")
+  .addEventListener("click", deleteTopicHandler)
+</script> 
