@@ -1,12 +1,34 @@
 const { Router } = require('express');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
-const upload = multer({dest: './public/data/uploads/'});
+const upload = multer({ dest: './public/data/uploads/' });
 const fs = require('fs');
+const auth = require('../../middleware/auth');
 
 const { User } = require('./../../models');
 
 const usersRouter = new Router();
+
+usersRouter.put('/', auth, async (req, res) => {
+    const user = req.user.get({ plain: true });
+    console.log('update attempted');
+    const { firstName, lastName, username, bio, email, password } = req.body;
+
+    await User.update(
+        {
+            first_name: firstName || user.first_name,
+            last_name: lastName || user.last_name,
+            username: username || user.username,
+            bio: bio || user.bio,
+            email: email || user.email,
+            password: password || user.password,
+        },
+        { where: { id: user.id } }
+    );
+
+    console.log(user);
+    res.json(user);
+});
 
 usersRouter.post('/login', async (req, res) => {
     const { username, password } = req.body;
@@ -34,10 +56,9 @@ usersRouter.post('/login', async (req, res) => {
 });
 
 usersRouter.post('/register', upload.single('avatar'), async (req, res) => {
-    const { first_name, last_name, username, email, password } =
-        req.body;
+    const { first_name, last_name, username, email, password } = req.body;
     console.log(req.file, req.body);
-    
+
     const user = await User.findOne({
         where: {
             username,
@@ -61,7 +82,7 @@ usersRouter.post('/register', upload.single('avatar'), async (req, res) => {
             avatar: image,
         });
         res.status(200).json({ id: user.id });
-    } catch(error) {
+    } catch (error) {
         console.log(error);
         res.status(500).send(error);
     }

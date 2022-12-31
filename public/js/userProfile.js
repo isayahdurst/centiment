@@ -6,11 +6,43 @@ const editModalOverlay = document.querySelector('.modal-background');
 const editProfileModal = document.getElementById('edit-profile-modal');
 
 // Modal Fields
-const bio = document.getElementById('edit-profile-bio');
 const bioCount = document.getElementById('bio-character-count');
+const firstName = document.getElementById('edit-profile-first-name');
+const lastName = document.getElementById('edit-profile-last-name');
+const username = document.getElementById('edit-profile-username');
+const bio = document.getElementById('edit-profile-bio');
+const email = document.getElementById('edit-profile-email');
+const password = document.getElementById('edit-profile-password');
+
+// Submit Button
+const submitButton = document.getElementById('edit-profile-submit');
 
 const toggleProfileModal = function () {
     editProfileModal.classList.toggle('is-active');
+};
+
+const updateProfile = async function (event) {
+    event.preventDefault();
+
+    const response = await fetch('/api/user', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            firstName: firstName.value,
+            lastName: lastName.value,
+            /* username: username.value, */
+            // Changing username breaks app. TODO: discover why
+            bio: bio.value,
+            email: email.value,
+            /* password: password.value, */
+            // TODO: encrypt password before changing
+        }),
+    });
+
+    const text = await response.json();
+    console.log(text);
 };
 
 const updateCharacterCount = function () {
@@ -40,3 +72,5 @@ bio.addEventListener('input', updateCharacterCount);
 [editProfileBtn, closeEditProfileBtn, editModalOverlay].forEach((item) =>
     item.addEventListener('click', toggleProfileModal)
 );
+
+submitButton.addEventListener('click', updateProfile);

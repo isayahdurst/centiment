@@ -20,7 +20,7 @@ User.init(
             type: DataTypes.STRING,
         },
         last_name: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
         },
         username: {
             type: DataTypes.STRING,
@@ -32,12 +32,16 @@ User.init(
             unique: true,
             allowNull: false,
         },
+        bio: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
         password: {
             type: DataTypes.STRING,
             allowNull: false,
         },
         avatar: {
-            type: DataTypes.BLOB("long"),
+            type: DataTypes.BLOB('long'),
         },
         wallet_id: {
             type: DataTypes.INTEGER,
@@ -57,7 +61,10 @@ User.init(
     {
         hooks: {
             async beforeCreate(newUserData) {
-                newUserData.password = await bcrypt.hash(newUserData.password, 10);
+                newUserData.password = await bcrypt.hash(
+                    newUserData.password,
+                    10
+                );
                 return newUserData;
             },
         },
