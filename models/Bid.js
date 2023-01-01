@@ -42,7 +42,7 @@ Bid.init(
         },
         expiration_date: {
             type: DataTypes.DATE,
-            defaultValue: DataTypes.NOW, //will need to be validated to make sure this is 7 days in the future
+            defaultValue: new Date(new Date().NOW + 7 * 24 * 60 * 60 * 1000), //will need to be validated to make sure this is 7 days in the future
         },
     },
     {

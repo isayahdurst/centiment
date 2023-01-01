@@ -9,7 +9,7 @@ class User extends Model {
 
     decreaseBalance(amount) {
         if (this.balance - amount < 0) {
-            throw new Error('Insufficient Balance... Getcha 🍞 up, son');
+            throw new Error('Insufficient Balance... Getcha 🍞 up first');
         }
 
         this.balance -= amount;
