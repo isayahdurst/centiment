@@ -3,7 +3,7 @@ const sequelize = require('./../config/connection');
 
 class Bid extends Model {}
 
-Bid.init (
+Bid.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -32,8 +32,9 @@ Bid.init (
             references: {
                 model: 'topic',
                 key: 'id',
-            }
+            },
         },
+        // NOTE: Sequalize logs the createdAt time by default. This field may be unnecessary.
         bid_date: {
             type: DataTypes.DATE,
             allowNull: false,
@@ -49,7 +50,7 @@ Bid.init (
         freezeTableName: true,
         underscored: true,
         modelName: 'bid',
-    },
+    }
 );
 
 module.exports = Bid;

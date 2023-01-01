@@ -1,11 +1,25 @@
 const { Model, DataTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
 const sequelize = require('./../config/connection');
-const Wallet = require('./Wallet');
 
 class User extends Model {
     checkPassword(loginPw) {
         return bcrypt.compareSync(loginPw, this.password);
+    }
+
+    decreaseBalance(amount) {
+        if (this.balance - amount < 0) {
+            throw new Error('Insufficient Balance... Getcha 🍞 up, son');
+        }
+
+        this.balance -= amount;
+        console.log(this.balance);
+        return this.save();
+    }
+
+    increaseBalance(amount) {
+        this.balance += amount;
+        return this.save();
     }
 }
 
@@ -45,12 +59,9 @@ User.init(
         avatar: {
             type: DataTypes.BLOB('long'),
         },
-        wallet_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'wallet',
-                key: 'id',
-            },
+        balance: {
+            type: DataTypes.FLOAT,
+            allowNull: true,
         },
         transaction_id: {
             type: DataTypes.INTEGER,
@@ -70,22 +81,22 @@ User.init(
                 return newUserData;
             },
 
-            // After a user is created, this hook will create a wallet for that user.
-            async afterCreate(userData) {
-                const wallet = await Wallet.create({
-                    user_id: userData.id,
-                    balance: 1000,
-                });
+            // After a user is created, this hook will update their balance to a starting value of 1,000.
+            async afterCreate(user) {
+                user.balance = 1000;
+                await user.save({ fields: ['balance'] });
             },
 
-            async beforeUpdate(userData) {
-                console.log('Before Update...');
-                userData.password = await bcrypt.hash(userData.password, 10);
-                console.log(`Encrypted Password: ${userData.password}`);
-                return userData;
+            async beforeUpdate(user) {
+                if (user.changed('password')) {
+                    user.password = await bcrypt.hash(user.password, 10);
+                    return user;
+                }
+                return user;
             },
         },
         sequelize,
+        useIndividualHooks: true,
         timestamps: false,
         freezeTableName: true,
         underscored: true,

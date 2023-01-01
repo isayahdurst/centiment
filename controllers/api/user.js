@@ -7,7 +7,6 @@ const auth = require('../../middleware/auth');
 const { Op } = require('sequelize');
 
 const { User } = require('./../../models');
-const { Wallet } = require('../../models/Wallet');
 
 const usersRouter = new Router();
 
@@ -118,29 +117,12 @@ usersRouter.get('/check/:username', async (req, res) => {
         },
     });
 
+    /* user.increaseBalance(100); */
+
     if (!user) {
         res.json({ usernameAvailable: true });
     } else {
         res.json({ usernameAvailable: false });
-    }
-});
-
-usersRouter.get('/balance', auth, async (req, res) => {
-    const user = req.user;
-
-    try {
-        const wallet = await Wallet.findOne({
-            where: {
-                user_id: user.id,
-            },
-        });
-        if (!wallet) {
-            throw new Error('Could not find wallet matching user ID.');
-        }
-
-        res.json(wallet);
-    } catch (error) {
-        res.status(400).json({ message: error });
     }
 });
 

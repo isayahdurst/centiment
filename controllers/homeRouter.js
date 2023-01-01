@@ -19,20 +19,12 @@ homeRouter.get('/login', async (req, res) => {
 // router to display profile page
 homeRouter.get('/user', auth, async (req, res) => {
     const user = req.user.get({ plain: true });
-    const wallet = await Wallet.findOne({
-        where: {
-            user_id: user.id,
-        },
-        plain: true,
-    });
-
-    console.log(wallet);
 
     const Buffer = require('buffer').Buffer;
 
     const imageData = Buffer.from(user.avatar).toString('base64');
     const imageURI = `data:image/jpeg;base64,${imageData}`;
-    res.render('profile', { user, imageURI, wallet });
+    res.render('profile', { user, imageURI });
 });
 
 // Topic routes
