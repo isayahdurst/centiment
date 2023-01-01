@@ -1,6 +1,7 @@
 const { Model, DataTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
 const sequelize = require('./../config/connection');
+const Wallet = require('./Wallet');
 
 class User extends Model {
     checkPassword(loginPw) {
@@ -67,6 +68,14 @@ User.init(
                     10
                 );
                 return newUserData;
+            },
+
+            // After a user is created, this hook will create a wallet for that user.
+            async afterCreate(userData) {
+                const wallet = await Wallet.create({
+                    user_id: userData.id,
+                    balance: 1000,
+                });
             },
 
             async beforeUpdate(userData) {
