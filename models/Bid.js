@@ -2,7 +2,18 @@ const { Model, DataTypes } = require('sequelize');
 const sequelize = require('./../config/connection');
 const { User } = require('../models');
 
-class Bid extends Model {}
+class Bid extends Model {
+    async cancelBid() {
+        const user = await User.findByPk(this.user_id);
+        const totalBidCost = this.price * this.shares;
+
+        user.balance += totalBidCost;
+        await user.save();
+        await this.destroy();
+    }
+
+    async fulfilBid() {}
+}
 
 Bid.init(
     {

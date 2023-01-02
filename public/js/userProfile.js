@@ -78,6 +78,7 @@ bio.addEventListener('input', updateCharacterCount);
 submitButton.addEventListener('click', updateProfile);
 
 buyButton.addEventListener('click', async function () {
+    // Post Route
     console.log('tried buying');
     const response = await fetch('/api/bid', {
         method: 'POST',

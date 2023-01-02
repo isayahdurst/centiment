@@ -58,6 +58,7 @@ User.init(
         },
         avatar: {
             type: DataTypes.BLOB('long'),
+            allowNull: true,
         },
         balance: {
             type: DataTypes.FLOAT,

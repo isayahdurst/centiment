@@ -35,11 +35,27 @@ bidRouter.post('/', auth, async (req, res) => {
         });
 
         console.log(bid);
+        await bid.cancelBid();
+        console.log(bid);
         res.json(bid);
     } catch (error) {
         console.log(error);
         res.json({ message: error });
     }
 });
+
+// Will return all active bids made by a particular user.
+bidRouter.get('/:user_id', async (req, res) => {
+    const user_id = req.param;
+
+    const bids = await Bid.findAll({
+        where: {
+            user_id: user_id,
+        },
+    });
+    res.json(bids);
+});
+
+bidRouter.get('/');
 
 module.exports = bidRouter;

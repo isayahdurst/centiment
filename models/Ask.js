@@ -3,7 +3,7 @@ const sequelize = require('../config/connection');
 
 class Ask extends Model {}
 
-Ask.init (
+Ask.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -32,7 +32,7 @@ Ask.init (
             references: {
                 model: 'topic',
                 key: 'id',
-            }
+            },
         },
         ask_date: {
             type: DataTypes.DATE,
@@ -49,7 +49,7 @@ Ask.init (
         freezeTableName: true,
         underscored: true,
         modelName: 'ask',
-    },
+    }
 );
 
 module.exports = Ask;

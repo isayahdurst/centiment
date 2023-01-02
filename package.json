@@ -6,7 +6,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "nodemon server.js",
-        "seed": "node seed/categorySeed.js"
+        "seed": "sequelize db:seed:all"
     },
     "repository": {
         "type": "git",
@@ -33,5 +33,8 @@
         "nodemon": "^2.0.20",
         "path": "^0.12.7",
         "sequelize": "^6.28.0"
+    },
+    "devDependencies": {
+        "sequelize-cli": "^6.5.2"
     }
 }
