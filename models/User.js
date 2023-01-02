@@ -7,7 +7,7 @@ class User extends Model {
         return bcrypt.compareSync(loginPw, this.password);
     }
 
-    decreaseBalance(amount) {
+    async decreaseBalance(amount) {
         if (this.balance - amount < 0) {
             throw new Error('Insufficient Balance... Getcha 🍞 up first');
         }
@@ -81,9 +81,10 @@ User.init(
                 return newUserData;
             },
 
-            // After a user is created, this hook will update their balance to a starting value of 1,000.
+            // After a user is created, this hook will update their balance to a starting value of 100,000.
+
             async afterCreate(user) {
-                user.balance = 1000;
+                user.balance = 100_000;
                 await user.save({ fields: ['balance'] });
             },
 

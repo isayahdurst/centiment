@@ -5,34 +5,40 @@ const upload = multer({ dest: './public/data/uploads/' });
 const fs = require('fs');
 const auth = require('../../middleware/auth');
 const { Op } = require('sequelize');
-const { User, Topic, Bid } = require('../../models');
+const { User, Topic } = require('../../models');
+const Bid = require('../../models/Bid');
 
 const bidRouter = new Router();
 
 bidRouter.post('/', auth, async (req, res) => {
     const user = req.user;
-    const { topic_id, price, shares, bid_date, expiration_date } = req.body;
-
+    const { topic_id, price, shares } = req.body;
+    const user_id = user.id;
     try {
-        const topic = Topic.findOne({
+        const topic = await Topic.findOne({
             where: {
                 id: topic_id,
             },
         });
+
+        console.log(topic);
 
         if (!topic) {
             throw new Error("Topic Doesn't Exist");
         }
 
         const bid = await Bid.create({
-            topic_id,
             price,
             shares,
-            bid_date,
-            expiration_date,
+            user_id,
+            topic_id,
         });
+
+        console.log(bid);
+        res.json(bid);
     } catch (error) {
-        res.status(400).json({ message: error });
+        console.log(error);
+        res.json({ message: error });
     }
 });
 
