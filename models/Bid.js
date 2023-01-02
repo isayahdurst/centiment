@@ -2,6 +2,8 @@ const { Model, DataTypes } = require('sequelize');
 const sequelize = require('./../config/connection');
 const { User } = require('../models');
 
+const Ask = require('./Ask');
+
 class Bid extends Model {
     async cancelBid() {
         const user = await User.findByPk(this.user_id);
@@ -67,6 +69,12 @@ Bid.init(
                 const totalBidCost = bid.price * bid.shares;
 
                 await user.decreaseBalance(totalBidCost);
+            },
+            async afterCreate(bid) {
+                const bids = await Bid.findAll();
+                console.log(bids);
+
+                const possibleTrades = bids.filter(async (bid) => {});
             },
         },
         sequelize,

@@ -34,9 +34,6 @@ bidRouter.post('/', auth, async (req, res) => {
             topic_id,
         });
 
-        console.log(bid);
-        await bid.cancelBid();
-        console.log(bid);
         res.json(bid);
     } catch (error) {
         console.log(error);

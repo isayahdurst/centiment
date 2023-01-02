@@ -1,12 +1,8 @@
 const { Router } = require('express');
-const jwt = require('jsonwebtoken');
-const multer = require('multer');
-const upload = multer({ dest: './public/data/uploads/' });
-const fs = require('fs');
 const auth = require('../../middleware/auth');
 const { Op } = require('sequelize');
 const { User, Topic } = require('../../models');
-const ask = require('../../models/Ask');
+const Ask = require('../../models/Ask');
 
 const askRouter = new Router();
 
@@ -27,15 +23,13 @@ askRouter.post('/', auth, async (req, res) => {
             throw new Error("Topic Doesn't Exist");
         }
 
-        const ask = await ask.create({
+        const ask = await Ask.create({
             price,
             shares,
             user_id,
             topic_id,
         });
 
-        console.log(ask);
-        await ask.cancelask();
         console.log(ask);
         res.json(ask);
     } catch (error) {
