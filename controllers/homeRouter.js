@@ -17,7 +17,7 @@ homeRouter.get('/login', async (req, res) => {
 });
 
 // router to display profile page
-homeRouter.get('/user', auth, async (req, res) => {
+homeRouter.get('/:username', auth, async (req, res) => {
     const user = req.user.get({ plain: true });
 
     const Buffer = require('buffer').Buffer;
