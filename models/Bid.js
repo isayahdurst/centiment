@@ -70,6 +70,7 @@ Bid.init(
 
                 await user.decreaseBalance(totalBidCost);
             },
+
             async afterCreate(bid) {
                 const bids = await Bid.findAll();
                 console.log(bids);

@@ -46,7 +46,7 @@ MTM.init(
         freezeTableName: true,
         underscored: true,
         modelName: 'mtm',
-    },
+    }
 );
 
 module.exports = MTM;

@@ -41,11 +41,10 @@ const updateProfile = async function (event) {
             bio: bio.value,
             email: email.value,
             password: password.value,
-            // TODO: encrypt password before changing
         }),
     });
 
-    window.location.replace('/user');
+    window.location.reload();
 };
 
 const updateCharacterCount = function () {
@@ -93,8 +92,12 @@ buyButton.addEventListener('click', async function () {
             topic_id: 1,
         }),
     });
+
+    // TODO: return updated user balance to refresh balance info without reloading the entire page.
+
     const bid = await response.json();
     console.log(bid);
+    window.location.reload();
 });
 
 // TEST ROUTE
@@ -114,4 +117,5 @@ sellButton.addEventListener('click', async function () {
 
     const ask = await response.json();
     console.log(ask);
+    window.location.reload();
 });
