@@ -11,6 +11,7 @@ const { User } = require('./../../models');
 const usersRouter = new Router();
 
 usersRouter.put('/', auth, async (req, res) => {
+    //localhost:3001/api/user
     const user = req.user.get({ plain: true });
     const { firstName, lastName, username, bio, email, password } = req.body;
 
@@ -115,6 +116,8 @@ usersRouter.get('/check/:username', async (req, res) => {
             username: req.params.username,
         },
     });
+
+    /* user.increaseBalance(100); */
 
     if (!user) {
         res.json({ usernameAvailable: true });

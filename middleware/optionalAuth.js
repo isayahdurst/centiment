@@ -1,8 +1,7 @@
 const jwt = require('jsonwebtoken');
-
 const User = require('../models/User');
 
-module.exports = async (req, res, next) => {
+const optionalAuth = async (req, res, next) => {
     const { logintoken } = req.cookies;
 
     try {
@@ -15,21 +14,18 @@ module.exports = async (req, res, next) => {
             },
         });
         if (!user) {
-            res.redirect('/login');
-            return;
+            throw new Error(
+                'Could not authorize user. Proceeding without Authentication'
+            );
         }
 
         req.user = user;
         next();
     } catch (error) {
-        if (
-            error.message === 'invalid token' ||
-            error.message === 'jwt must be provided'
-        ) {
-            res.redirect('/login');
-        } else {
-            console.error(error);
-            res.status(500).end('Server Error');
-        }
+        req.user = null;
+        console.log(error);
+        next();
     }
 };
+
+module.exports = optionalAuth;

@@ -60,149 +60,150 @@
                 </div>
             </div>
             <div class="modal" id="login-modal">
-  <div class="modal-background"></div>
-  <div class="modal-card">
-    <header class="modal-card-head">
-      <p class="modal-card-title">Login</p>
-      <button class="delete" aria-label="close"></button>
-    </header>
-    <section class="modal-card-body">
-      <form id="login_form">
+              <div class="modal-background"></div>
+              <div class="modal-card">
+                <header class="modal-card-head">
+                  <p class="modal-card-title">Login</p>
+                  <button class="delete" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                  <form id="login_form">
 
-        <div class="field">
-          <label class="label">Username</label>
-          <div class="control has-icons-left">
-            <input class="input" id="username" type="text" placeholder="Username">
-            <span class="icon is-small is-left">
-              <i class="fas fa-user"></i>
-            </span>
-          </div>
-        </div>
+                    <div class="field">
+                      <label class="label">Username</label>
+                      <div class="control has-icons-left">
+                        <input class="input" id="username" type="text" placeholder="Username">
+                        <span class="icon is-small is-left">
+                          <i class="fas fa-user"></i>
+                        </span>
+                      </div>
+                    </div>
 
-        <div class="field">
-          <label class="label">Password</label>
-          <div class="control has-icons-left">
-            <input class="input" id="password" type="password" placeholder="Password">
-            <span class="icon is-small is-left">
-              <i class="fa-solid fa-lock"></i>
-            </span>
-          </div>
-        </div>
+                    <div class="field">
+                      <label class="label">Password</label>
+                      <div class="control has-icons-left">
+                        <input class="input" id="password" type="password" placeholder="Password">
+                        <span class="icon is-small is-left">
+                          <i class="fa-solid fa-lock"></i>
+                        </span>
+                      </div>
+                    </div>
 
-        <div class="field">
-          <p class="help is-danger" id="login_info"></p>
-        </div>
+                    <div class="field">
+                      <p class="help is-danger" id="login_info"></p>
+                    </div>
 
-      </form>
-    </section>
-    <footer class="modal-card-foot">
-      <button class="button is-success" id="submit-login">Login</button>
-      <button class="button cancel">Cancel</button>
-    </footer>
-  </div>
-</div>
+                  </form>
+                </section>
+                <footer class="modal-card-foot">
+                  <button class="button is-success" id="submit-login">Login</button>
+                  <button class="button cancel">Cancel</button>
+                </footer>
+              </div>
+            </div>
 
-<div class="modal" id="signup-modal">
-  <div class="modal-background"></div>
-  <div class="modal-card">
-    <header class="modal-card-head">
-      <p class="modal-card-title">Sign-Up</p>
-      <button class="delete" aria-label="close"></button>
-    </header>
-    <section class="modal-card-body">
-      <form id="signup_form" enctype="multipart/form-data" action="/register" method="post">
+            <div class="modal" id="signup-modal">
+              <div class="modal-background"></div>
+              <div class="modal-card">
+                <header class="modal-card-head">
+                  <p class="modal-card-title">Sign-Up</p>
+                  <button class="delete" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                  <form id="signup_form" enctype="multipart/form-data" action="/register" method="post">
 
-        <div class="field">
-          <label class="label">First Name</label>
-          <div class="control has-icons-left has-icons-right">
-            <input class="input" name="first_name" id="first_name_signup" type="text" placeholder="John">
-            <span class="icon is-small is-left">
-              <i class="fas fa-user"></i>
-            </span>
-            <span class="icon is-small is-right">
-              <i class="fas" id="first-name-check"></i>
-            </span>
-          </div>
-        </div>
+                    <div class="field">
+                      <label class="label">First Name</label>
+                      <div class="control has-icons-left has-icons-right">
+                        <input class="input" name="first_name" id="first_name_signup" type="text" placeholder="John">
+                        <span class="icon is-small is-left">
+                          <i class="fas fa-user"></i>
+                        </span>
+                        <span class="icon is-small is-right">
+                          <i class="fas" id="first-name-check"></i>
+                        </span>
+                      </div>
+                    </div>
 
-        <div class="field">
-          <label class="label">Last Name</label>
-          <div class="control has-icons-left has-icons-right">
-            <input class="input" name="last_name" id="last_name_signup" type="text" placeholder="Smith">
-            <span class="icon is-small is-left">
-              <i class="fas fa-user"></i>
-            </span>
-            <span class="icon is-small is-right">
-              <i class="fas" id="last-name-check"></i>
-            </span>
-          </div>
-        </div>
+                    <div class="field">
+                      <label class="label">Last Name</label>
+                      <div class="control has-icons-left has-icons-right">
+                        <input class="input" name="last_name" id="last_name_signup" type="text" placeholder="Smith">
+                        <span class="icon is-small is-left">
+                          <i class="fas fa-user"></i>
+                        </span>
+                        <span class="icon is-small is-right">
+                          <i class="fas" id="last-name-check"></i>
+                        </span>
+                      </div>
+                    </div>
 
-        <div class="field">
-          <label class="label">Username</label>
-          <div class="control has-icons-left has-icons-right">
-            <input class="input" name="username" id="username_signup" type="text" placeholder="Username">
-            <span class="icon is-small is-left">
-              <i class="fas fa-user"></i>
-            </span>
-            <span class="icon is-small is-right">
-              <i class="fas" id="username-check"></i>
-            </span>
-          </div>
-          <p class="help" id="username-help"></p>
-        </div>
+                    <div class="field">
+                      <label class="label">Username</label>
+                      <div class="control has-icons-left has-icons-right">
+                        <input class="input" name="username" id="username_signup" type="text" placeholder="Username">
+                        <span class="icon is-small is-left">
+                          <i class="fas fa-user"></i>
+                        </span>
+                        <span class="icon is-small is-right">
+                          <i class="fas" id="username-check"></i>
+                        </span>
+                      </div>
+                      <p class="help" id="username-help"></p>
+                    </div>
 
-        <div class="field">
-          <label class="label">Email</label>
-          <div class="control has-icons-left has-icons-right">
-            <input class="input" name="email" id="email_signup" type="text" placeholder="welcome@centiment.com">
-            <span class="icon is-small is-left">
-              <i class="fa-solid fa-envelope"></i>
-            </span>
-            <span class="icon is-small is-right">
-              <i class="fas" id="email-check"></i>
-            </span>
-          </div>
-          <p class="help is-danger" id="email-help"></p>
-        </div>
+                    <div class="field">
+                      <label class="label">Email</label>
+                      <div class="control has-icons-left has-icons-right">
+                        <input class="input" name="email" id="email_signup" type="text" placeholder="welcome@centiment.com">
+                        <span class="icon is-small is-left">
+                          <i class="fa-solid fa-envelope"></i>
+                        </span>
+                        <span class="icon is-small is-right">
+                          <i class="fas" id="email-check"></i>
+                        </span>
+                      </div>
+                      <p class="help is-danger" id="email-help"></p>
+                    </div>
 
-        <div class="field">
-          <label class="label">Password</label>
-          <div class="control has-icons-left has-icons-right">
-            <input class="input" name="password" id="password_signup" type="password" placeholder="Super Secret Password">
-            <span class="icon is-small is-left">
-              <i class="fa-solid fa-lock"></i>
-            </span>
-            <span class="icon is-small is-right">
-              <i class="fas" id="password-check"></i>
-            </span>
-          </div>
-          <p class="help is-danger" id="password-help"></p>
-        </div>
+                    <div class="field">
+                      <label class="label">Password</label>
+                      <div class="control has-icons-left has-icons-right">
+                        <input class="input" name="password" id="password_signup" type="password" placeholder="Super Secret Password">
+                        <span class="icon is-small is-left">
+                          <i class="fa-solid fa-lock"></i>
+                        </span>
+                        <span class="icon is-small is-right">
+                          <i class="fas" id="password-check"></i>
+                        </span>
+                      </div>
+                      <p class="help is-danger" id="password-help"></p>
+                    </div>
 
-        <div class="field">
-          <label class='label'>Select a file:</label>
-          <div class="control has-icons-left has-icons-right">
-            {{!-- <input type="file" id="avatar" name="avatar" accept=".jpg, .jpeg, .png"> --}}
-            <label for="avatar" style="cursor: pointer;">Select a photo for your avatar</label>
-            <input type="file" id="avatar" name="avatar" accept=".jpg, .jpeg, .png" onchange="loadFile(event)">
-            <p><img id="preview" width="200"/></p>
-        </div>
+                    <div class="field">
+                      <label class='label'>Select a file:</label>
+                      <div class="control has-icons-left has-icons-right">
+                        {{!-- <input type="file" id="avatar" name="avatar" accept=".jpg, .jpeg, .png"> --}}
+                        <label for="avatar" style="cursor: pointer;">Select a photo for your avatar</label>
+                        <input type="file" id="avatar" name="avatar" accept=".jpg, .jpeg, .png" onchange="loadFile(event)">
+                        <p><img id="preview" width="200"/></p>
+                    </div>
 
-        <div class="field">
-          <p class="help is-danger" id="signup_info"></p>
-        </div>
+                    <div class="field">
+                      <p class="help is-danger" id="signup_info"></p>
+                    </div>
 
 
-      </form>
+                  </form>
 
-    </section>
-    <footer class="modal-card-foot">
-      <button class="button is-success" id="submit-signup">Create Account</button>
-      <button class="button cancel">Cancel</button>
-    </footer>
-  </div>
-</div>
+                </section>
+                <footer class="modal-card-foot">
+                  <button class="button is-success" id="submit-signup">Create Account</button>
+                  <button class="button cancel">Cancel</button>
+                </footer>
+              </div>
+            </div>
+            <script src="./js/login.js"></script>
         {{else}}
             <div class='navbar-end'>
                 <div class='navbar-item'>
@@ -213,6 +214,7 @@
                     </div>
                 </div>
             </div>
+            <script src="./js/logout.js"></script>
         {{/unless}}
     </div>
 </nav>

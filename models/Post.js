@@ -29,7 +29,8 @@ Post.init(
                 key: 'id',
             },
         },
-        pending_review: {
+        // REMOVING FIELDS DUE TO COMPLEXITY
+        /* pending_review: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: true,
@@ -38,7 +39,7 @@ Post.init(
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false,
-        },
+        }, */
         date_created: {
             type: DataTypes.DATE,
             allowNull: false,
@@ -50,7 +51,7 @@ Post.init(
         freezeTableName: true,
         underscored: true,
         modelName: 'post',
-    },
+    }
 );
 
 module.exports = Post;

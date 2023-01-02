@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const auth = require('../middleware/auth');
-const { Topic } = require('../models');
+const optionalAuth = require('../middleware/optionalAuth');
+const { Topic, Wallet } = require('../models');
 
 const homeRouter = new Router();
 
@@ -18,6 +19,7 @@ homeRouter.get('/login', async (req, res) => {
 // router to display profile page
 homeRouter.get('/user', auth, async (req, res) => {
     const user = req.user.get({ plain: true });
+
     const Buffer = require('buffer').Buffer;
 
     const imageData = Buffer.from(user.avatar).toString('base64');
@@ -43,12 +45,15 @@ homeRouter.get('/topic', auth, async (req, res) => {
     });
 });
 
-homeRouter.get('/about', auth, async (req, res) => {
-    const user = req.user.get({ plain: true });
-
-    res.render('about', {
-        user: user,
-    });
+homeRouter.get('/about', optionalAuth, async (req, res) => {
+    if (req.user) {
+        const user = req.user.get({ plain: true });
+        res.render('about', {
+            user: user,
+        });
+    } else {
+        res.render('about');
+    }
 });
 
 // Get single topic

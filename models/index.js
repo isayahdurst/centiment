@@ -6,7 +6,6 @@ const Post = require('./Post');
 const Topic = require('./Topic');
 const Transaction = require('./Transaction');
 const User = require('./User');
-const Wallet = require('./Wallet');
 
 Category.hasMany(Topic, {
     foreignKey: 'category_id',
@@ -62,14 +61,6 @@ Topic.belongsTo(Listing, {
     foreignKey: 'topic_id',
 });
 
-User.hasOne(Wallet, {
-    foreignKey: 'user_id'
-});
-
-Wallet.belongsTo(User, {
-    foreignKey: 'user_id',
-});
-
 Transaction.hasOne(Topic, {
     foreignKey: 'topic_id',
 });
@@ -107,4 +98,13 @@ User.hasMany(Topic, {
 
 //done using through reference
 
-module.exports = { Category, Comment, Listing, Mtm, Post, Topic, Transaction, User, Wallet };
+module.exports = {
+    Category,
+    Comment,
+    Listing,
+    Mtm,
+    Post,
+    Topic,
+    Transaction,
+    User,
+};
