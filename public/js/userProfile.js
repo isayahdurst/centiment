@@ -97,7 +97,6 @@ buyButton.addEventListener('click', async function () {
 
     const bid = await response.json();
     console.log(bid);
-    window.location.reload();
 });
 
 // TEST ROUTE
@@ -117,7 +116,6 @@ sellButton.addEventListener('click', async function () {
 
     const ask = await response.json();
     console.log(ask);
-    window.location.reload();
 });
 
 // function to preview uploaded avatar image
