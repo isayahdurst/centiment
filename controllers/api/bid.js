@@ -17,8 +17,6 @@ bidRouter.post('/', auth, async (req, res) => {
             },
         });
 
-        console.log(topic);
-
         if (!topic) {
             throw new Error("Topic Doesn't Exist");
         }
@@ -33,7 +31,7 @@ bidRouter.post('/', auth, async (req, res) => {
         res.json(bid);
     } catch (error) {
         console.log(error);
-        res.json({ message: error });
+        res.send(error);
     }
 });
 

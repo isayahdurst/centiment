@@ -31,11 +31,7 @@ homeRouter.get('/user/:username', auth, async (req, res) => {
 homeRouter.get('/topic', auth, async (req, res) => {
     const plainUser = req.user.get({ plain: true });
 
-    const topics = await Topic.findAll({
-        where: {
-            user_id: req.user.id,
-        },
-    });
+    const topics = await Topic.findAll();
 
     const plainTopics = topics.map((topic) => topic.get({ plain: true }));
 
