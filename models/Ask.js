@@ -43,6 +43,12 @@ Ask.init(
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW, //will need to be validated to make sure this is 7 days in the future
         },
+        status: {
+            type: DataTypes.ENUM,
+            allowNull: false,
+            values: ['pending', 'fulfilled', 'canceled'],
+            defaultValue: 'pending',
+        },
     },
     {
         sequelize,

@@ -60,6 +60,12 @@ Bid.init(
                 new Date().getTime() + 7 * 24 * 60 * 60 * 1000
             ), // will need to be validated to make sure this is 7 days in the future
         },
+        status: {
+            type: DataTypes.ENUM,
+            allowNull: false,
+            values: ['pending', 'fulfilled', 'canceled'],
+            defaultValue: 'pending',
+        },
     },
     {
         hooks: {
