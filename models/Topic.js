@@ -39,6 +39,13 @@ Topic.init(
             allowNull: false,
             defaultValue: 100000,
         },
+        initial_shares: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: function () {
+                return this.total_shares;
+            },
+        },
     },
     {
         sequelize,

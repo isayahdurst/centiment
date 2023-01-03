@@ -1,38 +1,114 @@
-<a href="http://localhost:3001/topic">Back to my topics</a>
-<br><br>
+<section class='section is-medium'>
+    <div class='container'>
+        <div class='columns'>
+            <div class='column'>
+                <h1 class='title is-1'>{{topic.topic_name}}</h1>
+                <p class='subtitle'>{{topic.description}}</p>
+            </div>
+            <div class='column is-one-third'>
+                <p class='subtitle'><span><i class='fa-duotone fa-users'></i>
+                        1,234 Members</span></p>
+                <p class='subtitle'><span><i
+                            class='fa-solid fa-chart-simple'
+                        ></i>
+                        100,342 Total Volume</span></p>
+                <p class='subtitle'><span><i
+                            class='fa-solid fa-square-dollar'
+                        ></i>
+                        ${{topic.price}}
+                        Per Share (IPO)</span></p>
+                <p class='subtitle'><span><i class='fa-solid fa-warehouse'></i>
+                        {{topic.initial_shares}}
+                        Initial Shares Remaining</span></p>
+                <div class='dropdown is-hoverable' id='ipo-buy-dropdown'>
+                    <form>
+                        <div class='dropdown-trigger'>
+                            <button
+                                class='button has-background-success px-6'
+                                aria-haspopup='true'
+                                aria-controls='dropdown-menu2'
+                                id='ipo-buy-dropdown-btn'
+                            >
+                                <span><b>Buy</b></span>
+                                <span class='icon is-small'>
+                                    <i
+                                        class='fas fa-angle-down'
+                                        aria-hidden='true'
+                                    ></i>
+                                </span>
+                            </button>
+                        </div>
+                        <div
+                            class='dropdown-menu'
+                            id='dropdown-menu2'
+                            role='menu'
+                        >
+                            <div class='dropdown-content'>
+                                <div class='dropdown-item'>
+                                    <p class='py-2'><strong
+                                        >Quantity:</strong></p>
+                                    <input
+                                        type='number'
+                                        id='ipo-share-quantity'
+                                        {{! ADD MAXIMUM HERE!! }}
+                                    />
+                                </div>
+                                <hr class='dropdown-divider' />
+                                <div class='dropdown-item'>
+                                    <p><strong>Total Price:</strong>
+                                        <span
+                                            id='ipo-total-price'
+                                            data-price='{{topic.price}}'
+                                        >$333</span></p>
+                                </div>
+                                <hr class='dropdown-divider' />
+                                <div class='dropdown-item'>
+                                    <button
+                                        class='button'
+                                        id='ipo-confirm-btn'
+                                    >Confirm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src='../js/topic-details.js'></script>
+
+{{!-- <a href='http://localhost:3001/topic'>Back to all topics</a>
+<br /><br />
 <div>
-  {{!-- Topic details --}}
-  <h1>{{topic.topic_name}}</h1>
-  <p>About: {{topic.description}}</p>
-  <p>Current price: <span>{{topic.price}}</span></p>
-  <p>Total shares: <span>{{topic.total_shares}}</span></p>
+    {{! Topic details }}
+    <h1>{{topic.topic_name}}</h1>
+    <p>About: {{topic.description}}</p>
+    <p>Current price: <span>{{topic.price}}</span></p>
+    <p>Total shares: <span>{{topic.total_shares}}</span></p>
 </div>
 
-<a href="http://localhost:3001/topic/edit/{{topic.id}}"><button type="submit" value="Submit">Edit this topic</button></a> 
-<button id="delete-topic" type="submit" value="Submit">Delete this topic</button>
+<a href='http://localhost:3001/topic/edit/{{topic.id}}'><button
+        type='submit'
+        value='Submit'
+    >Edit this topic</button></a>
+<button id='delete-topic' type='submit' value='Submit'>Delete this topic</button>
 
 <h2>Posts</h2>
-<a href="http://localhost:3001/topic/{{topic.id}}/post/new">Create a post</a>
+<a href='http://localhost:3001/topic/{{topic.id}}/post/new'>Create a post</a>
 
-<script>
+<hr />
+
+<button id='buy'>Buy IPO</button> --}}
+
+{{! <script>
 
     const id = window.location.toString().split('/')[
-    window.location.toString().split('/').length - 1 ];
-
-async function deleteTopicHandler(event) {
-    const response = await fetch(`/api/topic/${id}`, {
-      method: 'DELETE',
-    });
-
-    if (response.ok) {
-      document.location.replace('/topic');
-    } else {
-      alert('Failed to delete topic');
-    }
-  };
-
-
-document
-  .querySelector("#delete-topic")
-  .addEventListener("click", deleteTopicHandler)
-</script> 
+    window.location.toString().split('/').length - 1 ]; async function
+    deleteTopicHandler(event) { const response = await fetch(`/api/topic/${id}`,
+    { method: 'DELETE', }); if (response.ok) {
+    document.location.replace('/topic'); } else { alert('Failed to delete
+    topic'); } }; document .querySelector("#delete-topic")
+    .addEventListener("click", deleteTopicHandler)
+</script> }}

@@ -56,6 +56,7 @@ homeRouter.get('/about', optionalAuth, async (req, res) => {
 homeRouter.get('/topic/:id', auth, async (req, res) => {
     const { id } = req.params;
     const topic = await Topic.findByPk(id);
+    const plainUser = req.user.get({ plain: true });
 
     if (!topic) {
         res.status(404).end('No such topic');
@@ -65,6 +66,7 @@ homeRouter.get('/topic/:id', auth, async (req, res) => {
     const topicSimple = topic.get({ simple: true });
 
     res.render('single-topic', {
+        user: plainUser,
         topic: topicSimple,
     });
 });
