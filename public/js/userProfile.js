@@ -27,21 +27,23 @@ const toggleProfileModal = function () {
 
 const updateProfile = async function (event) {
     event.preventDefault();
+    const updateFormData = new FormData();
+    updateFormData.append('firstName', firstName.value);
+    updateFormData.append('lastName', lastName.value);
+    updateFormData.append('bio',  bio.value);
+    updateFormData.append('email', email.value);
+    updateFormData.append('password', password.value);
+    
+    let imageEl = document.getElementById('edit-profile-avatar');
 
+    if (imageEl.value) {
+        const imageObj = imageEl.files[0];
+        updateFormData.append('avatar', imageObj, 'customProfileImage');
+    }
+    
     await fetch('/api/user', {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            firstName: firstName.value,
-            lastName: lastName.value,
-            /* username: username.value, */
-            // Changing username breaks app. TODO: discover why
-            bio: bio.value,
-            email: email.value,
-            password: password.value,
-        }),
+        body: updateFormData,ßß
     });
 
     window.location.reload();

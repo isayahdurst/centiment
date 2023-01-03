@@ -11,11 +11,14 @@ const { User } = require('./../../models');
 const usersRouter = new Router();
 
 usersRouter.put('/', auth, upload.single('avatar'), async (req, res) => {
-    //localhost:3001/api/user
     const user = req.user.get({ plain: true });
     const { firstName, lastName, username, bio, email, password } = req.body;
+    console.log(`===========req.file==============`);
+    console.log(req.file);
 
-    if (avatar !== '/images/avatar-default.jpg') {
+    if (req.file === undefined) {
+        avatar = null;
+    } else {
         const pathToAvatar = req.file.destination.concat(req.file.filename);
         avatar = await fs.readFileSync(pathToAvatar);
     }
