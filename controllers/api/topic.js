@@ -1,7 +1,8 @@
 const { Router } = require('express');
 const auth = require('../../middleware/auth');
-const { Topic } = require("./../../models");
-const { Post } = require("./../../models");
+const { Topic } = require('./../../models');
+const { Post, User } = require('./../../models');
+const Shares = require('../../models/Shares');
 
 const topicRouter = new Router();
 
@@ -24,43 +25,62 @@ topicRouter.post('/', auth, async (req, res) => {
     }
 });
 
+topicRouter.post('/buyIPO', auth, async (req, res) => {
+    const { topic_id, quantity } = req.body;
+    const topic = Topic.findByPk(topic_id);
+    const user = req.user.get({ plain: true });
+
+    try {
+        user.decreaseBalance(quantity * topic.price);
+
+        Shares.create({
+            topic_id: topic_id,
+            user_id: user.id,
+            amount: quantity,
+        });
+    } catch (error) {
+        console.log(error);
+        res.json(error.message);
+    }
+});
+
 // edit a topic
 topicRouter.put('/edit/:id', auth, async (req, res) => {
-  const { name, description, price } = req.body
-  try {
-    const topic = await Topic.update(
-      {
-        name,
-        description,
-        price,
-      },
-      {
-        where: {
-          id: req.params.id,
-        },
-      }
-    );
-    res.status(200).json(topic);
-  } catch (err) {
-    res.status(500).json(err);
-  }
+    const { name, description, price } = req.body;
+    try {
+        const topic = await Topic.update(
+            {
+                name,
+                description,
+                price,
+            },
+            {
+                where: {
+                    id: req.params.id,
+                },
+            }
+        );
+        res.status(200).json(topic);
+    } catch (err) {
+        res.status(500).json(err);
+    }
 });
 // delete a topic
 topicRouter.delete('/:id', auth, async (req, res) => {
-  try {
-    const topic = await Topic.destroy({
-      where: {
-        id: req.params.id,
-      },
-    });
-    if (!topic) {
-      res.status(404).json({ message: 'No topic found with this id!' });
-      return;
+    try {
+        const topic = await Topic.destroy({
+            where: {
+                id: req.params.id,
+            },
+        });
+        if (!topic) {
+            res.status(404).json({ message: 'No topic found with this id!' });
+            return;
+        }
+        res.status(200).json(topic);
+    } catch (err) {
+        res.status(500).json(err);
     }
-    res.status(200).json(topic);
-  } catch (err) {
-    res.status(500).json(err);
-  }
 });
 
-module.exports = topicRouter
+module.exports = topicRouter;
