@@ -19,11 +19,13 @@ homeRouter.get('/login', async (req, res) => {
 // router to display profile page
 homeRouter.get('/user/:username', auth, async (req, res) => {
     const user = req.user.get({ plain: true });
-
-    const Buffer = require('buffer').Buffer;
-
-    const imageData = Buffer.from(user.avatar).toString('base64');
-    const imageURI = `data:image/jpeg;base64,${imageData}`;
+    if (user.avatar === null) {
+        imageURI = '/images/avatar-default.jpg';
+    } else {
+        const Buffer = require('buffer').Buffer;
+        const imageData = Buffer.from(user.avatar).toString('base64');
+        imageURI = `data:image/jpeg;base64,${imageData}`;
+    }
     res.render('profile', { user, imageURI });
 });
 

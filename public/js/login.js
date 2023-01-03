@@ -83,7 +83,7 @@ const signupFormHandler = async (event) => {
             throw new Error(`(${response.status}): ${message}`);
         }
 
-        // TODO: Update this so the user is automatically logged in after signup.
+        // Navigate to profile page after signup.
         window.location.replace('/');
     } catch (error) {
         signupInfo.textContent = error;
@@ -331,9 +331,3 @@ modalSignupBtn.addEventListener('click', signupFormHandler);
 );
 
 burger.addEventListener('click', toggleMobileMenu);
-
-// function to preview uploaded avatar image
-let loadFile = function (event) {
-    var image = document.getElementById('preview');
-    image.src = URL.createObjectURL(event.target.files[0]);
-};

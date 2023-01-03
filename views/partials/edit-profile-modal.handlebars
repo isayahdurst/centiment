@@ -6,7 +6,7 @@
       <button class="delete" aria-label="close"></button>
     </header>
     <section class="modal-card-body">
-      <form action="" id="edit-profile-form">
+      <form id="edit-profile-form" enctype="multipart/form-data" action="/" method="put">
         <div class="field">
           <label class="label">First Name</label>
           <div class="control has-icons-left has-icons-right">
@@ -36,7 +36,7 @@
         <div class="field">
           <label class="label">Username</label>
           <div class="control has-icons-left has-icons-right">
-            <input class="input" name="username" id="edit-profile-username" type="text" placeholder='@{{user.username}}'>
+            <input disabled class="input" name="username" id="edit-profile-username" type="text" placeholder='@{{user.username}}'>
             <span class="icon is-small is-left">
               <i class="fas fa-user"></i>
             </span>
@@ -68,7 +68,7 @@
           </div>
           <p class="help is-danger" id="email-help"></p>
         </div>
-
+        
         <div class="field">
           <label class="label">Password</label>
           <div class="control has-icons-left has-icons-right">
@@ -86,16 +86,15 @@
         <div class="field">
           <label class='label'>Select a file:</label>
           <div class="control has-icons-left has-icons-right">
-            {{!-- <input type="file" id="avatar" name="avatar" accept=".jpg, .jpeg, .png"> --}}
+
             <label for="avatar" style="cursor: pointer;">Select a photo for your avatar</label>
             <input type="file" id="edit-profile-avatar" name="avatar" accept=".jpg, .jpeg, .png" onchange="loadFile(event)">
             <p><img id="preview" width="200"/></p>
         </div>
-
-        <div class="control">
-            <button class="button is-success" id="edit-profile-submit">Submit</button>
-        </div>
       </form>
+        <div class="control">
+        <button class="button is-success" id="edit-profile-submit">Submit</button>
+      </div>
     </section>
   </div>
 </div>
