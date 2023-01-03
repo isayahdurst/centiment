@@ -119,3 +119,9 @@ sellButton.addEventListener('click', async function () {
     console.log(ask);
     window.location.reload();
 });
+
+// function to preview uploaded avatar image
+let loadFile = function (event) {
+    var image = document.getElementById('preview');
+    image.src = URL.createObjectURL(event.target.files[0]);
+};

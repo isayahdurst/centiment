@@ -10,10 +10,15 @@ const { User } = require('./../../models');
 
 const usersRouter = new Router();
 
-usersRouter.put('/', auth, async (req, res) => {
+usersRouter.put('/', auth, upload.single('avatar'), async (req, res) => {
     //localhost:3001/api/user
     const user = req.user.get({ plain: true });
     const { firstName, lastName, username, bio, email, password } = req.body;
+
+    if (avatar !== '/images/avatar-default.jpg') {
+        const pathToAvatar = req.file.destination.concat(req.file.filename);
+        avatar = await fs.readFileSync(pathToAvatar);
+    }
 
     await User.update(
         {
@@ -23,6 +28,7 @@ usersRouter.put('/', auth, async (req, res) => {
             bio: bio || user.bio,
             email: email || user.email,
             password: password || user.password,
+            avatar: avatar,
         },
         {
             where: {
@@ -76,7 +82,6 @@ usersRouter.post('/login', async (req, res) => {
 
 usersRouter.post('/register', upload.single('avatar'), async (req, res) => {
     const { first_name, last_name, username, email, password } = req.body;
-    console.log(req.file, req.body);
 
     const user = await User.findOne({
         where: {
@@ -91,9 +96,7 @@ usersRouter.post('/register', upload.single('avatar'), async (req, res) => {
         });
         return;
     }
-    const pathToAvatar = req.file.destination.concat(req.file.filename);
-    const image = fs.readFileSync(pathToAvatar);
-
+    
     try {
         const user = await User.create({
             first_name,
@@ -101,8 +104,10 @@ usersRouter.post('/register', upload.single('avatar'), async (req, res) => {
             username,
             email,
             password,
-            avatar: image,
+            avatar: null,
         });
+        const token = jwt.sign({ id: username }, process.env.JWT_KEY);
+        res.cookie('logintoken', token, { httpOnly: true });
         res.status(200).json({ id: user.id });
     } catch (error) {
         console.log(error);
