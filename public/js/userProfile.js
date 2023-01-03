@@ -17,6 +17,10 @@ const password = document.getElementById('edit-profile-password');
 // Submit Button
 const submitButton = document.getElementById('edit-profile-submit');
 
+// Test Stuff
+const buyButton = document.getElementById('buyBtnTest');
+const sellButton = document.getElementById('sellBtnTest');
+
 const toggleProfileModal = function () {
     editProfileModal.classList.toggle('is-active');
 };
@@ -73,3 +77,41 @@ bio.addEventListener('input', updateCharacterCount);
 );
 
 submitButton.addEventListener('click', updateProfile);
+
+// TEST ROUTE
+buyButton.addEventListener('click', async function () {
+    // Post Route
+    console.log('/api/bid');
+    const response = await fetch('/api/bid', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            price: 100,
+            shares: 100,
+            topic_id: 1,
+        }),
+    });
+    const bid = await response.json();
+    console.log(bid);
+});
+
+// TEST ROUTE
+sellButton.addEventListener('click', async function () {
+    console.log('/api/ask');
+    const response = await fetch('/api/ask', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            price: 90,
+            shares: 100,
+            topic_id: 1,
+        }),
+    });
+
+    const ask = await response.json();
+    console.log(ask);
+});

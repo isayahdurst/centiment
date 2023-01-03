@@ -92,7 +92,7 @@ usersRouter.post('/register', upload.single('avatar'), async (req, res) => {
         return;
     }
     const pathToAvatar = req.file.destination.concat(req.file.filename);
-    const image = await fs.readFileSync(pathToAvatar);
+    const image = fs.readFileSync(pathToAvatar);
 
     try {
         const user = await User.create({

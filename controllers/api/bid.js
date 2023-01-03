@@ -1,12 +1,16 @@
 const { Router } = require('express');
+const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const upload = multer({ dest: './public/data/uploads/' });
+const fs = require('fs');
 const auth = require('../../middleware/auth');
 const { Op } = require('sequelize');
 const { User, Topic } = require('../../models');
-const Ask = require('../../models/Ask');
+const Bid = require('../../models/Bid');
 
-const askRouter = new Router();
+const bidRouter = new Router();
 
-askRouter.post('/', auth, async (req, res) => {
+bidRouter.post('/', auth, async (req, res) => {
     const user = req.user;
     const { topic_id, price, shares } = req.body;
     const user_id = user.id;
@@ -23,33 +27,32 @@ askRouter.post('/', auth, async (req, res) => {
             throw new Error("Topic Doesn't Exist");
         }
 
-        const ask = await Ask.create({
+        const bid = await Bid.create({
             price,
             shares,
             user_id,
             topic_id,
         });
 
-        console.log(ask);
-        res.json(ask);
+        res.json(bid);
     } catch (error) {
         console.log(error);
         res.json({ message: error });
     }
 });
 
-// Will return all active asks made by a particular user.
-askRouter.get('/:user_id', async (req, res) => {
+// Will return all active bids made by a particular user.
+bidRouter.get('/:user_id', async (req, res) => {
     const user_id = req.param;
 
-    const asks = await ask.findAll({
+    const bids = await Bid.findAll({
         where: {
             user_id: user_id,
         },
     });
-    res.json(asks);
+    res.json(bids);
 });
 
-askRouter.get('/');
+bidRouter.get('/');
 
-module.exports = askRouter;
+module.exports = bidRouter;

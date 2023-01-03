@@ -1,7 +1,21 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('./../config/connection');
+const { User } = require('../models');
 
-class Bid extends Model {}
+const Ask = require('./Ask');
+
+class Bid extends Model {
+    async cancelBid() {
+        const user = await User.findByPk(this.user_id);
+        const totalBidCost = this.price * this.shares;
+
+        user.balance += totalBidCost;
+        await user.save();
+        await this.destroy();
+    }
+
+    async fulfilBid() {}
+}
 
 Bid.init(
     {
@@ -42,10 +56,27 @@ Bid.init(
         },
         expiration_date: {
             type: DataTypes.DATE,
-            defaultValue: DataTypes.NOW, //will need to be validated to make sure this is 7 days in the future
+            defaultValue: new Date(
+                new Date().getTime() + 7 * 24 * 60 * 60 * 1000
+            ), // will need to be validated to make sure this is 7 days in the future
         },
     },
     {
+        hooks: {
+            // Deducts funds from users account before placing bid. Also ensures user has a sufficient balance.
+            async beforeCreate(bid) {
+                const user = await User.findByPk(bid.user_id);
+                const totalBidCost = bid.price * bid.shares;
+
+                await user.decreaseBalance(totalBidCost);
+            },
+            async afterCreate(bid) {
+                const bids = await Bid.findAll();
+                console.log(bids);
+
+                const possibleTrades = bids.filter(async (bid) => {});
+            },
+        },
         sequelize,
         freezeTableName: true,
         underscored: true,
