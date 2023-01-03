@@ -40,8 +40,22 @@ Topic.init(
             allowNull: false,
             defaultValue: 100000,
         },
+        initial_shares: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            defaultValue: 100000,
+        },
     },
     {
+        hooks: {
+            async beforeCreate(topic) {
+                if (topic.total_shares) {
+                    topic.initial_shares = topic.total_shares;
+                }
+
+                return topic;
+            },
+        },
         sequelize,
         freezeTableName: true,
         underscored: true,
