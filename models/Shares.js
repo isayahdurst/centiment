@@ -62,13 +62,17 @@ Shares.init(
                         );
                     }
                 }
+
                 return shares;
             },
 
             async afterCreate(shares) {
                 if (shares.ipo_shares) {
-                    //reduce ipo shares
+                    const topic = await Topic.findByPk(shares.topic_id);
+                    topic.initial_shares -= shares.amount;
+                    await topic.save();
                 }
+                return shares;
             },
         },
         sequelize,
