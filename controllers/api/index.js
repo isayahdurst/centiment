@@ -1,6 +1,5 @@
 const { Router } = require('express');
 
-const categoryRouter = require('./category');
 const commentRouter = require('./comment');
 const listingRouter = require('./listing');
 const postRouter = require('./post');

@@ -1,4 +1,3 @@
-const Category = require('./Category');
 const Comment = require('./Comment');
 const Listing = require('./Listing');
 const Mtm = require('./MTM');
@@ -86,7 +85,7 @@ User.hasMany(Transaction, {
 User.hasMany(Topic, {
     foreignKey: 'user_id',
     onDelete: 'CASCADE',
-}); */
+});
 
 // Transaction.hasOne(User, {
 //     foreignKey: 'buyer_id',
@@ -99,7 +98,6 @@ User.hasMany(Topic, {
 //done using through reference
 
 module.exports = {
-    Category,
     Comment,
     Listing,
     Mtm,

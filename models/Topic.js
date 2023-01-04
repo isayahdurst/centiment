@@ -18,13 +18,7 @@ Topic.init(
         price: {
             type: DataTypes.FLOAT,
             allowNull: false,
-        },
-        category_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'category',
-                key: 'id',
-            },
+            defaultValue: 1.00,
         },
         description: {
             type: DataTypes.TEXT,
