@@ -43,7 +43,7 @@ const updateProfile = async function (event) {
     
     await fetch('/api/user', {
         method: 'PUT',
-        body: updateFormData,ßß
+        body: updateFormData,
     });
 
     window.location.reload();

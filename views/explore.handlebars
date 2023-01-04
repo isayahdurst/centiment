@@ -1,0 +1,39 @@
+<style>
+  div.card { margin-top: 1rem; }
+</style>
+
+<div class="container">
+  <div class="columns is-mobile">
+
+    {{#each topics as |topic|}}
+      <div class="column">
+        <div class="card has-background-primary">
+
+          <div class="card-content">
+            <div class="media-content">
+              <p class="title is-5"><a
+                  href="/topic/{{topic.id}}"
+                >{{topic.topic_name}}</a></p>
+              <p class="subtitle is-6">@{{topic.user.username}}</p>
+            </div>
+          </div>
+
+          <div class="content">
+            <div class="media-content">
+              <p class="is-success">{{topic.description}}</p>
+            </div>
+          </div>
+
+          <footer class="card-footer">
+            <a href="#" class="card-footer-item">💼: {{topic.total_shares}}</a>
+            <a href="#" class="card-footer-item">💲: {{topic.price}}</a>
+          </footer>
+
+        </div>
+      </div>
+    {{/each}}
+
+  </div>
+</div>
+
+<script type="text/javascript" src="./js/explore.js"></script>

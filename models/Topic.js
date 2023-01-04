@@ -20,13 +20,6 @@ Topic.init(
             allowNull: false,
             defaultValue: 1.00,
         },
-        category_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'category',
-                key: 'id',
-            },
-        },
         description: {
             type: DataTypes.TEXT,
         },
