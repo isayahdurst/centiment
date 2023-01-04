@@ -1,20 +1,11 @@
-const Category = require('./Category');
+const Ask = require('./Ask');
+const Bid = require('./Bid');
 const Comment = require('./Comment');
-const Listing = require('./Listing');
 const Mtm = require('./MTM');
 const Post = require('./Post');
+const Shares = require('./Shares');
 const Topic = require('./Topic');
-const Transaction = require('./Transaction');
 const User = require('./User');
-
-Category.hasMany(Topic, {
-    foreignKey: 'category_id',
-    onDelete: 'CASCADE',
-});
-
-Topic.belongsTo(Category, {
-    foreignKey: 'category_id',
-});
 
 Topic.hasMany(Post, {
     foreignKey: 'topic_id',
@@ -43,68 +34,20 @@ Comment.belongsTo(User, {
     foreignKey: 'user_id',
 });
 
-/*User.hasMany(Listing, {
-    foreignKey: 'user_id',
-    onDelete: 'CASCADE',
-});
-
-Listing.belongsTo(User, {
-    foreignKey: 'user_id',
-});
-
-Listing.hasOne(Topic, {
-    foreignKey: 'topic_id',
-    onDelete: 'CASCADE',
-});
-
-Topic.belongsTo(Listing, {
-    foreignKey: 'topic_id',
-});*/
-
-Transaction.hasOne(Topic, {
-    foreignKey: 'topic_id',
-});
-
-Topic.belongsTo(Transaction, {
-    foreignKey: 'topic_id',
-    onDelete: 'CASCADE',
-});
-/*
-Transaction.hasOne(Listing, {
-    foreignKey: 'listing_id',
-});
-
-Listing.belongsTo(Transaction, {
-    foreignKey: 'listing_id',
-    onDelete: 'CASCADE',
-}); */
-
-User.hasMany(Transaction, {
-    foreignKey: 'transaction_id',
-});
-
 User.hasMany(Topic, {
     foreignKey: 'user_id',
     onDelete: 'CASCADE',
 });
 
-// Transaction.hasOne(User, {
-//     foreignKey: 'buyer_id',
-// });
-
-// Transaction.hasOne(User, {
-//     foreignKey: 'seller_id'
-// });
-
 //done using through reference
 
 module.exports = {
-    Category,
+    Ask,
+    Bid,
     Comment,
-    Listing,
     Mtm,
     Post,
+    Shares,
     Topic,
-    Transaction,
     User,
 };
