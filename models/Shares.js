@@ -30,6 +30,9 @@ Shares.init(
         amount: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            validate: {
+                isInt: true,
+            }
         },
     },
     {

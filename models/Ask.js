@@ -14,6 +14,9 @@ Ask.init(
         price: {
             type: DataTypes.FLOAT,
             allowNull: false,
+            validate: {
+                isFloat: true,
+            }
         },
         shares: {
             type: DataTypes.INTEGER,
@@ -38,10 +41,23 @@ Ask.init(
             type: DataTypes.DATE,
             allowNull: false,
             defaultValue: DataTypes.NOW,
+            validate: {
+                isDate: true,
+            },
         },
         expiration_date: {
             type: DataTypes.DATE,
-            defaultValue: DataTypes.NOW, //will need to be validated to make sure this is 7 days in the future
+            validate: {
+                isDate: true,
+            },
+            validate: {
+                expirationDateAfterAskDate() {
+                  if (this.ask_date.isAfter(this.expiration_date)) {
+                    throw new Error('Expiration date must be after the ask date.');
+                  }
+                }
+            },
+            //Object.expirationDate = Date.now() + 604800000 (7 days)
         },
     },
     {

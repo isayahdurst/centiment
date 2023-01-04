@@ -43,7 +43,7 @@ Comment.belongsTo(User, {
     foreignKey: 'user_id',
 });
 
-User.hasMany(Listing, {
+/*User.hasMany(Listing, {
     foreignKey: 'user_id',
     onDelete: 'CASCADE',
 });
@@ -59,7 +59,7 @@ Listing.hasOne(Topic, {
 
 Topic.belongsTo(Listing, {
     foreignKey: 'topic_id',
-});
+});*/
 
 Transaction.hasOne(Topic, {
     foreignKey: 'topic_id',
@@ -69,7 +69,7 @@ Topic.belongsTo(Transaction, {
     foreignKey: 'topic_id',
     onDelete: 'CASCADE',
 });
-
+/*
 Transaction.hasOne(Listing, {
     foreignKey: 'listing_id',
 });
@@ -77,7 +77,7 @@ Transaction.hasOne(Listing, {
 Listing.belongsTo(Transaction, {
     foreignKey: 'listing_id',
     onDelete: 'CASCADE',
-});
+}); */
 
 User.hasMany(Transaction, {
     foreignKey: 'transaction_id',
