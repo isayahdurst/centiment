@@ -2,6 +2,7 @@ const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 const Topic = require('./Topic');
 const User = require('./User');
+const { Op } = require('Sequelize');
 
 class Shares extends Model {}
 
@@ -41,15 +42,6 @@ Shares.init(
     {
         hooks: {
             // This hook will check to make sure there are enough IPO shares to fill an order before placing it.
-            async beforeCreate(shares) {
-                const topic = await Topic.findByPk(shares.topic_id);
-                if (!topic.initial_shares >= amount) {
-                    throw new Error(
-                        'Remaning shares insufficient to fill request.'
-                    );
-                }
-                return shares;
-            },
 
             async beforeCreate(shares) {
                 if (shares.ipo_shares) {
@@ -61,8 +53,13 @@ Shares.init(
                             "User's balance insufficient to fill request"
                         );
                     }
-                }
 
+                    if (!topic.initial_shares >= amount) {
+                        throw new Error(
+                            'Remaning shares insufficient to fill request.'
+                        );
+                    }
+                }
                 return shares;
             },
 

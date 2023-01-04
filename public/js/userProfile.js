@@ -90,7 +90,7 @@ buyButton.addEventListener('click', async function () {
         },
         body: JSON.stringify({
             price: 100,
-            shares: 100,
+            shares_requested: 1,
             topic_id: 1,
         }),
     });

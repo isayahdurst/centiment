@@ -3,6 +3,7 @@ const auth = require('../../middleware/auth');
 const { Topic } = require('./../../models');
 const { Post, User } = require('./../../models');
 const Shares = require('../../models/Shares');
+const { Sequelize, Op } = require('sequelize');
 
 const topicRouter = new Router();
 
@@ -30,20 +31,53 @@ topicRouter.post('/buyIPO', auth, async (req, res) => {
     const { topic_id, quantity } = req.body;
     const topic = await Topic.findByPk(topic_id);
     const user = await User.findByPk(req.user.id);
-    console.log(user);
+    console.log(user.id);
 
     try {
+        const shares = await Shares.findOne({
+            where: {
+                [Op.and]: [
+                    {
+                        topic_id: topic.id,
+                    },
+                    {
+                        user_id: user.id,
+                    },
+                ],
+            },
+        });
+
+        if (!shares)
+            throw new Error('No existing purchase found, creating new shares');
+
+        await shares.update({
+            amount: shares.amount + Number(quantity),
+        });
+
+        console.log(shares);
+
         await user.decreaseBalance(quantity * topic.price);
 
-        const shares = await Shares.create({
+        /* const shares = await Shares.upsert({
             topic_id: topic_id,
             user_id: user.id,
-            amount: quantity,
+            amount: Sequelize.literal('amount '),
             ipo_shares: true,
-        });
+        }); */
 
         res.json(shares);
     } catch (error) {
+        if (
+            error.message === 'No existing purchase found, creating new shares'
+        ) {
+            const shares = await Shares.create({
+                topic_id: topic_id,
+                user_id: user.id,
+                amount: quantity,
+                ipo_shares: true,
+            });
+            console.log(shares);
+        }
         console.log(error);
         res.json(error.message);
     }
