@@ -25,19 +25,24 @@ topicRouter.post('/', auth, async (req, res) => {
     }
 });
 
+// Creates shares from inital offering.
 topicRouter.post('/buyIPO', auth, async (req, res) => {
     const { topic_id, quantity } = req.body;
-    const topic = Topic.findByPk(topic_id);
-    const user = req.user.get({ plain: true });
+    const topic = await Topic.findByPk(topic_id);
+    const user = await User.findByPk(req.user.id);
+    console.log(user);
 
     try {
-        user.decreaseBalance(quantity * topic.price);
+        await user.decreaseBalance(quantity * topic.price);
 
-        Shares.create({
+        const shares = await Shares.create({
             topic_id: topic_id,
             user_id: user.id,
             amount: quantity,
+            ipo_shares: true,
         });
+
+        res.json(shares);
     } catch (error) {
         console.log(error);
         res.json(error.message);

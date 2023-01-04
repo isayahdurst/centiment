@@ -17,7 +17,7 @@ class User extends Model {
         return this.save();
     }
 
-    increaseBalance(amount) {
+    async increaseBalance(amount) {
         this.balance += amount;
         return this.save();
     }

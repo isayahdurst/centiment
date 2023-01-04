@@ -33,6 +33,10 @@ Shares.init(
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        ipo_shares: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+        },
     },
     {
         hooks: {
@@ -48,13 +52,22 @@ Shares.init(
             },
 
             async beforeCreate(shares) {
-                const topic = await Topic.findByPk(shares.topic_id);
-                const user = await User.findByPk(shares.user_id);
+                if (shares.ipo_shares) {
+                    const topic = await Topic.findByPk(shares.topic_id);
+                    const user = await User.findByPk(shares.user_id);
 
-                if (user.balance < topic.price * shares.amount) {
-                    throw new Error(
-                        "User's balance insufficient to fill request"
-                    );
+                    if (user.balance < topic.price * shares.amount) {
+                        throw new Error(
+                            "User's balance insufficient to fill request"
+                        );
+                    }
+                }
+                return shares;
+            },
+
+            async afterCreate(shares) {
+                if (shares.ipo_shares) {
+                    //reduce ipo shares
                 }
             },
         },

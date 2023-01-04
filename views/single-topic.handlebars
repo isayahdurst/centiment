@@ -20,7 +20,7 @@
                 <p class='subtitle'><span><i class='fa-solid fa-warehouse'></i>
                         {{topic.initial_shares}}
                         Initial Shares Remaining</span></p>
-                <div class='dropdown is-hoverable' id='ipo-buy-dropdown'>
+                <div class='dropdown' id='ipo-buy-dropdown'>
                     <form>
                         <div class='dropdown-trigger'>
                             <button
@@ -66,6 +66,7 @@
                                     <button
                                         class='button'
                                         id='ipo-confirm-btn'
+                                        data-topic_id='{{topic.id}}'
                                     >Confirm</button>
                                 </div>
                             </div>

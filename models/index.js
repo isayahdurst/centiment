@@ -7,7 +7,7 @@ const Topic = require('./Topic');
 const Transaction = require('./Transaction');
 const User = require('./User');
 
-Category.hasMany(Topic, {
+/* Category.hasMany(Topic, {
     foreignKey: 'category_id',
     onDelete: 'CASCADE',
 });
@@ -86,7 +86,7 @@ User.hasMany(Transaction, {
 User.hasMany(Topic, {
     foreignKey: 'user_id',
     onDelete: 'CASCADE',
-});
+}); */
 
 // Transaction.hasOne(User, {
 //     foreignKey: 'buyer_id',

@@ -16,19 +16,23 @@ ipoShareQuantity.addEventListener('input', function () {
     ipoCostLabel.textContent = `$${ipoShareQuantity.value * cost}`;
 });
 
-ipoConfirmBtn.addEventListener('click', function(event) {
+ipoConfirmBtn.addEventListener('click', async function (event) {
     event.preventDefault();
-    const response = await fetch('/topic/buyIPO', 
-    {
+    const topic_id = ipoConfirmBtn.getAttribute('data-topic_id');
+
+    const response = await fetch('/api/topic/buyIPO', {
         method: 'POST',
         headers: {
-            'Content-Type':'application/json',
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify({
             topic_id: topic_id,
-            quantity: ipoQuantity.value
-        })
-    })
-})
+            quantity: ipoShareQuantity.value,
+        }),
+    });
+
+    const shares = await response.json();
+    console.log(shares);
+});
 
 // When the user clicks on the buy button, they should be prompted to enter a quantity. If the IPO shares available are greater than or equal to the shares that the user is requesting, then deduct the appropriate amount of funds from the user's account and credit them with the corresponding number of shares. Deduct those shares from the topic's initial shares.
