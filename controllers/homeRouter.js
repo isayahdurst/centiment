@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const auth = require('../middleware/auth');
 const optionalAuth = require('../middleware/optionalAuth');
-const { Topic, Wallet } = require('../models');
+const { User, Topic } = require('../models');
 
 const homeRouter = new Router();
 
@@ -58,6 +58,7 @@ homeRouter.get('/about', optionalAuth, async (req, res) => {
 homeRouter.get('/topic/:id', auth, async (req, res) => {
     const { id } = req.params;
     const topic = await Topic.findByPk(id);
+    const plainUser = req.user.get({ plain: true });
 
     if (!topic) {
         res.status(404).end('No such topic');
@@ -67,11 +68,12 @@ homeRouter.get('/topic/:id', auth, async (req, res) => {
     const topicSimple = topic.get({ simple: true });
 
     res.render('single-topic', {
+        user: plainUser,
         topic: topicSimple,
     });
 });
 // Edit single topic
-homeRouter.get('/topic/edit/:id', async (req, res) => {
+homeRouter.get('/topic/edit/:id', auth, async (req, res) => {
     const { id } = req.params;
     const topic = await Topic.findByPk(id);
     if (!topic) {
@@ -85,7 +87,7 @@ homeRouter.get('/topic/edit/:id', async (req, res) => {
 });
 
 // Post routes
-homeRouter.get('topic/:id/post/new', async (req, res) => {
+homeRouter.get('topic/:id/post/new', auth, async (req, res) => {
     const { id } = req.params;
     const topic = await Topic.findByPk(id);
     if (!topic) {
@@ -97,5 +99,17 @@ homeRouter.get('topic/:id/post/new', async (req, res) => {
         topic: topicSimple,
     });
 });
+
+// explore page route
+homeRouter.get('/explore', auth, async(req, res) => {
+    
+const topics = await Topic.findAll({include: User});
+
+    const plainTopics = topics.map((topic) => topic.get({ plain: true }));
+    console.log (plainTopics);
+    res.render('explore', {
+        topics: plainTopics,
+    });
+})
 
 module.exports = homeRouter;

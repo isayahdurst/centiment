@@ -30,20 +30,20 @@ const updateProfile = async function (event) {
     const updateFormData = new FormData();
     updateFormData.append('firstName', firstName.value);
     updateFormData.append('lastName', lastName.value);
-    updateFormData.append('bio',  bio.value);
+    updateFormData.append('bio', bio.value);
     updateFormData.append('email', email.value);
     updateFormData.append('password', password.value);
-    
+
     let imageEl = document.getElementById('edit-profile-avatar');
 
     if (imageEl.value) {
         const imageObj = imageEl.files[0];
         updateFormData.append('avatar', imageObj, 'customProfileImage');
     }
-    
+
     await fetch('/api/user', {
         method: 'PUT',
-        body: updateFormData,ßß
+        body: updateFormData,
     });
 
     window.location.reload();
@@ -90,7 +90,7 @@ buyButton.addEventListener('click', async function () {
         },
         body: JSON.stringify({
             price: 100,
-            shares: 100,
+            shares_requested: 1,
             topic_id: 1,
         }),
     });
