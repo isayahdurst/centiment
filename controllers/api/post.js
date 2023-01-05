@@ -5,18 +5,18 @@ const { Topic } = require('../../models');
 
 const postRouter = new Router();
 
-postRouter.post('/topic/:id', auth, async (req, res) => {
-    const { name, content } = req.body;
-    try {
-        const newPost = await Post.create({
-            name,
-            content,
-            id: req.topic.id,
-        });
-        res.status(200).json({
-            id: newPost.id,
-        });
-    } catch (err) {
-        res.status(400).json(err);
+postRouter.get('/', auth, async (req, res) => {
+    const posts = await Post.findAll()
+    console.log(posts)
+    if (!posts) {
+        res.status(404).end('No such post');
+        return;
     }
-});
+    const plainPosts = posts.map((post) => post.get({ plain: true }));
+
+    console.log (plainPosts);
+    res.render('post', {
+        posts: plainPosts,
+    });
+})
+module.exports = postRouter

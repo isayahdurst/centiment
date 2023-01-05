@@ -83,6 +83,25 @@ topicRouter.post('/buyIPO', auth, async (req, res) => {
     }
 });
 
+// add a post
+topicRouter.post('/:id', auth, async (req, res) => {
+  const { post_name, contents } = req.body
+  const { id } = req.params;
+  try {
+    const newPost = await Post.create({
+      post_name,
+      contents,
+      topic_id: id
+      });
+      res.status(200).json({
+        id: newPost.id,
+      });
+      } catch (err) {
+      res.status(400).json(err);
+  }
+});
+
+
 // edit a topic
 topicRouter.put('/edit/:id', auth, async (req, res) => {
     const { name, description, price } = req.body;

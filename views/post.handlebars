@@ -1,0 +1,55 @@
+<div class="columns mt-6">
+  <div class="column"></div>
+  <div  class="column is-two-fifths">
+    <h2 class=" mb-4">
+          <p class="title is-3 is-spaced">{{post.post_name}}</p>
+          <p class="subtitle is-5">{{post.contents}}</p>
+        <a href="/topic/{{topic.id}}">
+          <span class="is-size-6">{{topic.topic_name}}</span>
+        </a>
+      </h2>
+    <form id="comment_form">
+      <div class="field mt-4">
+        <div class="control">
+          <textarea class="textarea" placeholder="Voice your opinion (this doesn't work yet)" id="comment_contents"></textarea>
+        </div>
+      </div>
+      <div class="field is-grouped">
+      <div class="control">
+        <button type="submit" value="Submit" class="button is-link">Comment</button>
+      </div>
+      </div>
+    </form>
+  </div>
+  <div class="column"></div>
+</div>
+
+
+<script>
+  async function newCommentHandler(event) {
+  event.preventDefault();
+
+  const id = window.location.toString().split('/')[
+  window.location.toString().split('/').length - 1 ];
+  const content = document.getElementById('comment_contents').value;
+
+  const res = await fetch(`/api/topic/${id}`, {
+    method: 'POST',
+    body: JSON.stringify({
+      content,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    });
+    if (res.ok) {
+        window.location.reload();
+    } else {
+        alert('Failed to add comment');
+    }
+  }
+    
+document
+  .querySelector("#comment_form")
+  .addEventListener("submit", newCommentHandler);
+</script>
