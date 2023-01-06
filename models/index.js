@@ -1,7 +1,6 @@
 
 const Comment = require('./Comment');
 const Listing = require('./Listing');
-const Mtm = require('./MTM');
 const Post = require('./Post');
 const Topic = require('./Topic');
 const Transaction = require('./Transaction');
@@ -74,15 +73,6 @@ User.hasMany(Transaction, {
     foreignKey: 'transaction_id',
 });
 
-User.hasMany(Topic, {
-    foreignKey: 'user_id',
-    onDelete: 'CASCADE',
-});
-Topic.belongsTo(User, {
-    foreignKey: 'user_id',
-    onDelete: 'CASCADE',
-});
-
 // Transaction.hasOne(User, {
 //     foreignKey: 'buyer_id',
 // });
@@ -96,7 +86,6 @@ Topic.belongsTo(User, {
 module.exports = {
     Comment,
     Listing,
-    Mtm,
     Post,
     Topic,
     Transaction,
