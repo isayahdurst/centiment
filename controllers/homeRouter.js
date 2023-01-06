@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const auth = require('../middleware/auth');
 const optionalAuth = require('../middleware/optionalAuth');
-const { User, Topic } = require('../models');
+const { User, Topic, Post } = require('../models');
 
 const homeRouter = new Router();
 
@@ -58,20 +58,31 @@ homeRouter.get('/about', optionalAuth, async (req, res) => {
 homeRouter.get('/topic/:id', auth, async (req, res) => {
     const { id } = req.params;
     const topic = await Topic.findByPk(id);
+    const posts = await Post.findAll({
+        where: {
+            topic_id: req.params.id,
+        }
+    });
     const plainUser = req.user.get({ plain: true });
 
     if (!topic) {
         res.status(404).end('No such topic');
         return;
     }
-
     const topicSimple = topic.get({ simple: true });
+    const plainPosts = posts.map((post) => post.get({ plain: true }));
+
+    console.log(plainPosts)
+    console.log(topicSimple)
 
     res.render('single-topic', {
         user: plainUser,
         topic: topicSimple,
+        posts: plainPosts,
     });
 });
+
+
 // Edit single topic
 homeRouter.get('/topic/edit/:id', auth, async (req, res) => {
     const { id } = req.params;
@@ -86,19 +97,6 @@ homeRouter.get('/topic/edit/:id', auth, async (req, res) => {
     });
 });
 
-// Post routes
-homeRouter.get('topic/:id/post/new', auth, async (req, res) => {
-    const { id } = req.params;
-    const topic = await Topic.findByPk(id);
-    if (!topic) {
-        res.status(404).end('No such topic');
-        return;
-    }
-    const topicSimple = topic.get({ simple: true });
-    res.render('new-post', {
-        topic: topicSimple,
-    });
-});
 
 // explore page route
 homeRouter.get('/explore', auth, async(req, res) => {
@@ -109,6 +107,20 @@ const topics = await Topic.findAll({include: User});
     console.log (plainTopics);
     res.render('explore', {
         topics: plainTopics,
+    });
+})
+
+// Get a single post
+homeRouter.get('/topic/:id/:id', auth, async (req, res) => {
+    const post = await Post.findOne({
+            where: {
+                id: req.params.id,
+            }
+    })
+    const postSimple = post.get({ simple: true });
+    console.log (postSimple);
+    res.render('post', {
+        post: postSimple,
     });
 })
 

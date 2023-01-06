@@ -8,7 +8,7 @@ const bidRouter = new Router();
 
 bidRouter.post('/', auth, async (req, res) => {
     const user = req.user;
-    const { topic_id, price, shares } = req.body;
+    const { topic_id, price, shares_requested } = req.body;
     const user_id = user.id;
     try {
         const topic = await Topic.findOne({
@@ -20,10 +20,11 @@ bidRouter.post('/', auth, async (req, res) => {
         if (!topic) {
             throw new Error("Topic Doesn't Exist");
         }
+        console.log(`Shares requested: ${shares_requested}`);
 
         const bid = await Bid.create({
             price,
-            shares,
+            shares_requested,
             user_id,
             topic_id,
         });

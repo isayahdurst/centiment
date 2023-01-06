@@ -14,12 +14,17 @@ class User extends Model {
 
         this.balance -= amount;
         console.log(this.balance);
+        await this.save();
+    }
+
+    async increaseBalance(amount) {
+        this.balance += amount;
         return this.save();
     }
 
-    increaseBalance(amount) {
-        this.balance += amount;
-        return this.save();
+    async refund(bidPrice, askPrice) {
+        await this.increaseBalance(bidPrice - askPrice);
+        await this.save();
     }
 }
 
@@ -41,20 +46,38 @@ User.init(
             type: DataTypes.STRING,
             unique: true,
             allowNull: false,
+            validate: {
+                allowNull: false,
+            },
+            unique: {
+                args: true,
+                msg: 'Username already in use!'
+            },
         },
         email: {
             type: DataTypes.STRING,
             unique: true,
             allowNull: false,
+            validate: {
+                isEmail: true,
+            },
+            unique: {
+                args: true,
+                msg: 'Email address already in use!'
+            }
         },
         bio: {
             type: DataTypes.STRING,
-            len: 140,
+            len: [0, 140],
             allowNull: true,
         },
         password: {
             type: DataTypes.STRING,
             allowNull: false,
+            min: 8, //password must be at least 8 chars
+            validate: {
+                is: /^[0-9a-f]{64}$/i
+            }
         },
         avatar: {
             type: DataTypes.BLOB('long'),
@@ -63,13 +86,6 @@ User.init(
         balance: {
             type: DataTypes.FLOAT,
             allowNull: true,
-        },
-        transaction_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'transaction',
-                key: 'id',
-            },
         },
     },
     {

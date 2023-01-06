@@ -14,11 +14,17 @@ Comment.init(
         content: {
             type: DataTypes.TEXT,
             allowNull: false,
+            validate: {
+                isAlphanumeric: true,
+            },
         },
         up_vote: {
             type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 0,
+            validate: {
+                isInt: true,
+            },
         },
         post_id: {
             type: DataTypes.INTEGER,
@@ -40,6 +46,9 @@ Comment.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: DataTypes.NOW,
+            validate: {
+                isDate: true,
+            },
         },
     },
     {

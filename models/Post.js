@@ -21,6 +21,9 @@ Post.init(
         },
         up_vote: {
             type: DataTypes.INTEGER,
+            validate: {
+                isInt: true,
+            }
         },
         topic_id: {
             type: DataTypes.INTEGER,
@@ -44,6 +47,9 @@ Post.init(
             type: DataTypes.DATE,
             allowNull: false,
             defaultValue: DataTypes.NOW,
+            validate: {
+                isDate: true,
+            },
         },
     },
     {

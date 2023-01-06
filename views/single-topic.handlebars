@@ -1,11 +1,32 @@
-<section class='section is-medium'>
+<section class='section'>
     <div class='container'>
         <div class='columns'>
             <div class='column'>
-                <h1 class='title is-1'>{{topic.topic_name}}</h1>
-                <p class='subtitle'>{{topic.description}}</p>
+                <p class="title is-3 is-spaced">{{topic.topic_name}}</p>
+                <p class="subtitle is-5">{{topic.description}}</p>
+                {{#if posts}}             
+                <article class="panel is-link mt-6">
+                    <p class="panel-heading">Chatter</p>
+                    {{#each posts as |post|}}
+                        <a href="/topic/{{post.topic_id}}/{{post.id}}" class="panel-block">
+                            {{!-- <span class="panel-icon">
+                                <i class="fa-solid fa-circle-small" aria-hidden="true"></i>
+                            </span> --}}
+                            {{post.post_name}}
+                        </a>
+                    {{/each}}
+                {{else}}
+                <article class="panel is-link mt-6">
+                    <p class="panel-heading">Chatter</p>
+                        <a class="panel-block">
+                            No posts yet
+                        </a>
+                </article>
+                {{/if}}
+                </article>
             </div>
-            <div class='column is-one-third'>
+            <div class='column is-one-third' style="margin-left: 50px;">
+                <h1 class='title is-4 pb-4'>About community</h1>
                 <p class='subtitle'><span><i class='fa-duotone fa-users'></i>
                         1,234 Members</span></p>
                 <p class='subtitle'><span><i
@@ -76,8 +97,50 @@
         </div>
     </div>
 </section>
+<section class=''>
+    <div class='container'>
+        <div class='columns'>
+            
+            <div class='column'>
+                {{!-- <article class="panel is-link mt-6">
+                    <p class="panel-heading">Chatter</p>
+                    {{#each posts as |post|}}
+                        <a class="panel-block">
+                            <span class="panel-icon">
+                            <i class="fa-sharp fa-solid fa-plus" aria-hidden="true"></i>
+                            </span>
+                            {{post.post_name}}
+                        </a>
+                    {{/each}}
+                </article> --}}
+            </div>
+            <div class='column is-one-third'>
+             <form id="new_post_form">
+      <div class="field">
+      <h1 class='title is-4'>Say something</h1>
+        <div class="control">
+          <input class="input" type="text" placeholder="Title" id="post_name">
+        </div>
+      </div>
+      <div class="field">
+        <div class="control">
+          <textarea class="textarea" placeholder="Text" id="post_contents"></textarea>
+        </div>
+      </div>
+      <div class="field is-grouped">
+      <div class="control">
+        <button type="submit" value="Submit" class="button is-link">Submit</button>
+      </div>
+      </div>
+    </form>
+            </div>
+        </div>
+    </div>
+</section>
 
 <script src='../js/topic-details.js'></script>
+<script src='../js/post.js'></script>
+
 
 {{!-- <a href='http://localhost:3001/topic'>Back to all topics</a>
 <br /><br />
