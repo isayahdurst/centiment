@@ -44,7 +44,6 @@ User.init(
         },
         username: {
             type: DataTypes.STRING,
-            unique: true,
             allowNull: false,
             validate: {
                 allowNull: false,
@@ -56,7 +55,6 @@ User.init(
         },
         email: {
             type: DataTypes.STRING,
-            unique: true,
             allowNull: false,
             validate: {
                 isEmail: true,
@@ -88,6 +86,7 @@ User.init(
             allowNull: true,
         },
     },
+   
     {
         hooks: {
             async beforeCreate(newUserData) {
@@ -112,7 +111,18 @@ User.init(
                 }
                 return user;
             },
+
         },
+            indexes: [
+              {
+                unique: true,
+                fields: ['email'],
+              },
+              {
+                unique: true,
+                fields: ['username'],
+              },
+            ],
         sequelize,
         useIndividualHooks: true,
         timestamps: false,

@@ -1,5 +1,5 @@
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('./../config/connection');
+const { Model, DataTypes } = require("sequelize");
+const sequelize = require("./../config/connection");
 
 class Topic extends Model {}
 
@@ -52,15 +52,20 @@ Topic.init(
                 if (topic.total_shares) {
                     topic.initial_shares = topic.total_shares;
                 }
-
-                return topic;
-            },
-        },
-        sequelize,
-        freezeTableName: true,
-        underscored: true,
-        modelName: 'topic',
-    }
+        return topic;
+      },
+    },
+    indexes: [
+      {
+        indexType: "FULLTEXT",
+        fields: ["topic_name"],
+      },
+    ],
+    sequelize,
+    freezeTableName: true,
+    underscored: true,
+    modelName: "topic",
+  }
 );
 
 module.exports = Topic;
