@@ -1,19 +1,15 @@
-const { Model, DataTypes } = require("sequelize");
-const sequelize = require("./../config/connection");
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('./../config/connection');
 
 class Topic extends Model {
-    async decreaseIPOShares(quantity) {
-        try {
-            // Gatekeep Checks:
-            if (this.initial_shares - quantity < 0) {
-                throw new Error('Not enough IPO shares to fill this request.');
-            }
-
-            this.initial_shares -= quantity;
-            await this.save();
-        } catch (error) {
-            console.error(error);
+    async decreaseIPOShares(quantity, transaction) {
+        // Gatekeep Checks:
+        if (this.initial_shares - quantity < 0) {
+            throw new Error('Not enough IPO shares to fill this request.');
         }
+
+        this.initial_shares -= quantity;
+        await this.save({ transaction: transaction });
     }
 }
 
@@ -39,9 +35,9 @@ Topic.init(
             validate: {
                 len: {
                     args: [200, 5000],
-                    msg: "Description must be at least 200 characters long but no more than 5000 characters."
-                }
-            }
+                    msg: 'Description must be at least 200 characters long but no more than 5000 characters.',
+                },
+            },
         },
         date_created: {
             type: DataTypes.DATE,
@@ -68,20 +64,20 @@ Topic.init(
                 if (topic.total_shares) {
                     topic.initial_shares = topic.total_shares;
                 }
-        return topic;
-      },
-    },
-    indexes: [
-      {
-        indexType: "FULLTEXT",
-        fields: ["topic_name"],
-      },
-    ],
-    sequelize,
-    freezeTableName: true,
-    underscored: true,
-    modelName: "topic",
-  }
+                return topic;
+            },
+        },
+        indexes: [
+            {
+                indexType: 'FULLTEXT',
+                fields: ['topic_name'],
+            },
+        ],
+        sequelize,
+        freezeTableName: true,
+        underscored: true,
+        modelName: 'topic',
+    }
 );
 
 module.exports = Topic;

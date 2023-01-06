@@ -20,22 +20,34 @@ adminRouter.get('/user/:id', async (req, res) => {
     res.json(user);
 });
 
-adminRouter.post('/user/', async (req, res) => {
-    const randomNum = Number(
-        String(Math.floor(Math.random() * 100)) +
-            String(Math.floor(Math.random() * 100))
-    );
+adminRouter.post('/user', async (req, res) => {
+    let { amount } = req.query;
 
-    const user = await User.create({
-        firstName: `test${randomNum}`,
-        lastName: `test${randomNum}`,
-        username: `test${randomNum}`,
-        password: 'test',
-        bio: 'this is a dummy account',
-        email: `test${randomNum}@test.com`,
-    });
+    const users = [];
 
-    res.json(user);
+    if (!amount) {
+        amount = 1;
+    }
+
+    for (let i = 0; i < amount; i++) {
+        const randomNum = Number(
+            String(Math.floor(Math.random() * 100)) +
+                String(Math.floor(Math.random() * 100))
+        );
+
+        const user = await User.create({
+            firstName: `test${randomNum}`,
+            lastName: `test${randomNum}`,
+            username: `test${randomNum}`,
+            password: 'test',
+            bio: 'this is a dummy account',
+            email: `test${randomNum}@test.com`,
+        });
+
+        users.push(user);
+    }
+
+    res.json(users);
 });
 
 adminRouter.get('/topics', async (req, res) => {
@@ -49,6 +61,29 @@ adminRouter.get('/topics/:id', async (req, res) => {
     res.json(topic);
 });
 
+adminRouter.post('/topics', async (req, res) => {
+    let { amount, user_id, price } = req.query;
+
+    if (!amount) {
+        amount = 1;
+    }
+
+    const topics = [];
+
+    for (let i = 0; i < amount; i++) {
+        const randomNum = Math.floor(Math.random() * 10000);
+        const topic = await Topic.create({
+            topic_name: `Test Topic (${randomNum})`,
+            price: price,
+            user_id: user_id,
+            description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
+        });
+        topics.push(topic);
+    }
+
+    res.json(topics);
+});
+
 adminRouter.get('/shares', async (req, res) => {
     const shares = await Shares.findAll();
     res.json(shares);
@@ -57,6 +92,37 @@ adminRouter.get('/shares', async (req, res) => {
 adminRouter.get('/shares/:id', async (req, res) => {
     const { id } = req.params;
     const shares = await Shares.findByPk(id);
+    res.json(shares);
+});
+
+adminRouter.post('/shares', async (req, res) => {
+    const { topic_id, quantity, user_id } = req.query;
+
+    let shares = await Shares.findOne({
+        where: {
+            [Op.and]: [
+                {
+                    user_id: user_id,
+                },
+                {
+                    topic_id: topic_id,
+                },
+            ],
+        },
+    });
+
+    if (!shares) {
+        shares = await Shares.create({
+            user_id: user_id,
+            topic_id: topic_id,
+            quantity: quantity,
+        });
+    } else {
+        await shares.update({
+            quantity: quantity,
+        });
+    }
+
     res.json(shares);
 });
 
@@ -96,12 +162,12 @@ adminRouter.put('/user/setBalance/', async (req, res) => {
 });
 
 adminRouter.post('/ask', async (req, res) => {
-    const { user_id, topic_id, price, shares } = req.query;
+    const { user_id, topic_id, price, shares_requested } = req.query;
     const ask = await Ask.create({
         user_id,
         topic_id,
         price,
-        shares,
+        shares_requested,
     });
 
     console.log(ask);
