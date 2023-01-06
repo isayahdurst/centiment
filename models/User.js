@@ -14,12 +14,17 @@ class User extends Model {
 
         this.balance -= amount;
         console.log(this.balance);
+        await this.save();
+    }
+
+    async increaseBalance(amount) {
+        this.balance += amount;
         return this.save();
     }
 
-    increaseBalance(amount) {
-        this.balance += amount;
-        return this.save();
+    async refund(bidPrice, askPrice) {
+        await this.increaseBalance(bidPrice - askPrice);
+        await this.save();
     }
 }
 

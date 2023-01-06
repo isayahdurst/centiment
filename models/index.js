@@ -1,10 +1,10 @@
-
 const Comment = require('./Comment');
 const Listing = require('./Listing');
 const Post = require('./Post');
 const Topic = require('./Topic');
 const Transaction = require('./Transaction');
 const User = require('./User');
+
 
 Topic.hasMany(Post, {
     foreignKey: 'topic_id',
@@ -71,6 +71,11 @@ Listing.belongsTo(Transaction, {
 
 User.hasMany(Transaction, {
     foreignKey: 'transaction_id',
+});
+
+User.hasMany(Topic, {
+    foreignKey: 'user_id',
+    onDelete: 'CASCADE',
 });
 
 // Transaction.hasOne(User, {
