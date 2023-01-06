@@ -3,6 +3,7 @@ const auth = require('../../middleware/auth');
 const { Op } = require('sequelize');
 const { User, Topic } = require('../../models');
 const Bid = require('../../models/Bid');
+const sequelize = require('../../config/connection');
 
 const bidRouter = new Router();
 
@@ -10,6 +11,8 @@ bidRouter.post('/', auth, async (req, res) => {
     const user = req.user;
     const { topic_id, price, shares_requested } = req.body;
     const user_id = user.id;
+    const t = await sequelize.transaction();
+
     try {
         const topic = await Topic.findOne({
             where: {
@@ -22,17 +25,23 @@ bidRouter.post('/', auth, async (req, res) => {
         }
         console.log(`Shares requested: ${shares_requested}`);
 
-        const bid = await Bid.create({
-            price,
-            shares_requested,
-            user_id,
-            topic_id,
-        });
+        const bid = await Bid.create(
+            {
+                price,
+                shares_requested,
+                user_id,
+                topic_id,
+            },
+            { transaction: t }
+        );
+
+        await t.commit();
 
         res.json(bid);
     } catch (error) {
+        await t.rollback();
         console.log(error);
-        res.send(error);
+        res.json(error);
     }
 });
 

@@ -3,13 +3,15 @@ const auth = require('../../middleware/auth');
 const { Op } = require('sequelize');
 const { User, Topic } = require('../../models');
 const Ask = require('../../models/Ask');
+const sequelize = require('../../config/connection');
 
 const askRouter = new Router();
 
 askRouter.post('/', auth, async (req, res) => {
     const user = req.user;
-    const { topic_id, price, shares } = req.body;
+    const { topic_id, price, shares_requested } = req.body;
     const user_id = user.id;
+    const transaction = await sequelize.transaction();
     try {
         const topic = await Topic.findOne({
             where: {
@@ -17,22 +19,28 @@ askRouter.post('/', auth, async (req, res) => {
             },
         });
 
-        console.log(topic);
-
         if (!topic) {
             throw new Error("Topic Doesn't Exist");
         }
+        console.log('ASK ROUTER, POST, TXXXXXXXXXXXXX');
 
-        const ask = await Ask.create({
-            price,
-            shares,
-            user_id,
-            topic_id,
-        });
+        const ask = await Ask.create(
+            {
+                price,
+                shares_requested,
+                user_id,
+                topic_id,
+            },
+            { transaction: transaction }
+        );
 
+        console.log('Ask created');
+
+        await transaction.commit();
         console.log(ask);
         res.json(ask);
     } catch (error) {
+        await transaction.rollback();
         console.log(error);
         res.json({ message: error });
     }

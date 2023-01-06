@@ -4,7 +4,50 @@ const Topic = require('./Topic');
 const User = require('./User');
 const { Op } = require('Sequelize');
 
-class Shares extends Model {}
+class Shares extends Model {
+    /**
+     * Performs an escrow transaction for a specified quantity of shares.
+     *
+     * @param {number} askQuantity - The requested quantity of shares to sell in the ask.
+     * @param {object} transaction - sequelize transaction object.
+     *
+     * @throws {Error} If there are not enough shares to support the ask.
+     *
+     */
+    async escrow(askQuantity, transaction) {
+        console.log(
+            `Shares Owned: ${this.quantity}\nRequested Sell: ${askQuantity}`
+        );
+        if (this.quantity >= askQuantity) {
+            this.quantity -= askQuantity;
+        } else {
+            throw new Error('Not enough shares to support transaction.');
+        }
+        await this.save({ transaction: transaction });
+    }
+
+    async addShares(amount, transaction) {
+        this.shares += amount;
+        await this.save({ transaction: transaction });
+    }
+
+    static async findShares(user_id, topic_id) {
+        const shares = await Shares.findOne({
+            where: {
+                [Op.and]: [
+                    {
+                        user_id: user_id,
+                    },
+                    {
+                        topic_id: topic_id,
+                    },
+                ],
+            },
+        });
+
+        return shares;
+    }
+}
 
 Shares.init(
     {
@@ -30,12 +73,12 @@ Shares.init(
                 key: 'id',
             },
         },
-        amount: {
+        quantity: {
             type: DataTypes.INTEGER,
             allowNull: false,
             validate: {
                 isInt: true,
-            }
+            },
         },
         ipo_shares: {
             type: DataTypes.BOOLEAN,
@@ -44,38 +87,12 @@ Shares.init(
     },
     {
         hooks: {
-            // This hook will check to make sure there are enough IPO shares to fill an order before placing it.
-
-            async beforeCreate(shares) {
-                if (shares.ipo_shares) {
-                    const topic = await Topic.findByPk(shares.topic_id);
-                    const user = await User.findByPk(shares.user_id);
-
-                    if (user.balance < topic.price * shares.amount) {
-                        throw new Error(
-                            "User's balance insufficient to fill request"
-                        );
-                    }
-
-                    if (!topic.initial_shares >= amount) {
-                        throw new Error(
-                            'Remaning shares insufficient to fill request.'
-                        );
-                    }
-                }
-                return shares;
-            },
-
-            async afterCreate(shares) {
-                if (shares.ipo_shares) {
-                    const topic = await Topic.findByPk(shares.topic_id);
-                    topic.initial_shares -= shares.amount;
-                    await topic.save();
-                }
-                return shares;
+            async beforeUpdate(shares) {
+                console.log(shares.quantity);
             },
         },
         sequelize,
+        useIndividualHooks: true,
         freezeTableName: true,
         underscored: true,
         modelName: 'shares',
