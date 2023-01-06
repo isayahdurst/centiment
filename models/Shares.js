@@ -33,6 +33,9 @@ Shares.init(
         amount: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            validate: {
+                isInt: true,
+            }
         },
         ipo_shares: {
             type: DataTypes.BOOLEAN,

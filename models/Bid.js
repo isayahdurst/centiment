@@ -58,13 +58,17 @@ Bid.init(
             type: DataTypes.DATE,
             allowNull: false,
             defaultValue: DataTypes.NOW,
+            validate: {
+                isDate: true,
+            },
         },
         expiration_date: {
             type: DataTypes.DATE,
-            defaultValue: new Date(
-                new Date().getTime() + 7 * 24 * 60 * 60 * 1000
-            ), // will need to be validated to make sure this is 7 days in the future
+            validate: {
+                isDate: true,
+            }
         },
+        //Object.expirationDate = Date.now() + 604800000 (7 days)
         status: {
             type: DataTypes.ENUM,
             allowNull: false,

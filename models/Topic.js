@@ -1,5 +1,5 @@
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('./../config/connection');
+const { Model, DataTypes } = require("sequelize");
+const sequelize = require("./../config/connection");
 
 class Topic extends Model {
     async decreaseIPOShares(quantity) {
@@ -36,6 +36,12 @@ Topic.init(
         },
         description: {
             type: DataTypes.TEXT,
+            validate: {
+                len: {
+                    args: [200, 5000],
+                    msg: "Description must be at least 200 characters long but no more than 5000 characters."
+                }
+            }
         },
         date_created: {
             type: DataTypes.DATE,
@@ -46,6 +52,9 @@ Topic.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 100000,
+            validate: {
+                isInt: true,
+            },
         },
         initial_shares: {
             type: DataTypes.INTEGER,
@@ -59,15 +68,20 @@ Topic.init(
                 if (topic.total_shares) {
                     topic.initial_shares = topic.total_shares;
                 }
-
-                return topic;
-            },
-        },
-        sequelize,
-        freezeTableName: true,
-        underscored: true,
-        modelName: 'topic',
-    }
+        return topic;
+      },
+    },
+    indexes: [
+      {
+        indexType: "FULLTEXT",
+        fields: ["topic_name"],
+      },
+    ],
+    sequelize,
+    freezeTableName: true,
+    underscored: true,
+    modelName: "topic",
+  }
 );
 
 module.exports = Topic;

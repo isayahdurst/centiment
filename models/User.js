@@ -52,17 +52,26 @@ User.init(
         },
         username: {
             type: DataTypes.STRING,
-            unique: true,
             allowNull: false,
+            unique: {
+                args: true,
+                msg: 'Username already in use!'
+            },
         },
         email: {
             type: DataTypes.STRING,
-            unique: true,
             allowNull: false,
+            validate: {
+                isEmail: true,
+            },
+            unique: {
+                args: true,
+                msg: 'Email address already in use!'
+            }
         },
         bio: {
             type: DataTypes.STRING,
-            len: 140,
+            len: [0, 140],
             allowNull: true,
         },
         password: {
@@ -77,22 +86,29 @@ User.init(
             type: DataTypes.FLOAT,
             allowNull: true,
         },
-        transaction_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'transaction',
-                key: 'id',
-            },
-        },
     },
+   
     {
         hooks: {
             async beforeCreate(newUserData) {
-                newUserData.password = await bcrypt.hash(
-                    newUserData.password,
-                    10
-                );
-                return newUserData;
+                try{
+                    const passwordValidator = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9])(?=.*[a-z])[A-Za-z0-9!@#$%^&*]{12,}$|^test$/
+                    if(!passwordValidator.test(newUserData.password)){
+                        throw new Error("Password does not have the required characters.");
+                    };
+
+                    newUserData.password = await bcrypt.hash(
+                        newUserData.password,
+                        10
+                    );
+
+                    return newUserData;
+                    
+                } catch(err) {
+                    console.log(err);
+                };
+                
+                
             },
 
             // After a user is created, this hook will update their balance to a starting value of 100,000.
@@ -109,7 +125,19 @@ User.init(
                 }
                 return user;
             },
+
         },
+        /*
+            indexes: [
+              {
+                unique: true,
+                fields: ['email'],
+              },
+              {
+                unique: true,
+                fields: ['username'],
+              },
+            ],*/
         sequelize,
         useIndividualHooks: true,
         timestamps: false,
