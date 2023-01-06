@@ -136,6 +136,27 @@ adminRouter.get('/asks/:id', async (req, res) => {
     const ask = await Ask.findByPk(id);
     res.json(ask);
 });
+adminRouter.post('/asks', async (req, res) => {
+    const transaction = await sequelize.transaction();
+    try {
+        const { user_id, topic_id, price, shares_requested } = req.query;
+        const ask = await Ask.create(
+            {
+                user_id,
+                topic_id,
+                price,
+                shares_requested,
+            },
+            { transaction: transaction }
+        );
+        await transaction.commit();
+        res.json(ask);
+    } catch (error) {
+        console.log(error);
+        transaction.rollback();
+        res.json(error);
+    }
+});
 
 adminRouter.get('/bids', async (req, res) => {
     const bids = await Bid.findAll();
@@ -159,19 +180,6 @@ adminRouter.put('/user/setBalance/', async (req, res) => {
     const user = await User.findByPk(user_id);
     await user.setBalance(balance);
     res.json(user);
-});
-
-adminRouter.post('/ask', async (req, res) => {
-    const { user_id, topic_id, price, shares_requested } = req.query;
-    const ask = await Ask.create({
-        user_id,
-        topic_id,
-        price,
-        shares_requested,
-    });
-
-    console.log(ask);
-    res.json(ask);
 });
 
 adminRouter.post('/bid', async (req, res) => {

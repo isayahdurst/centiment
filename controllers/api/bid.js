@@ -11,10 +11,9 @@ bidRouter.post('/', auth, async (req, res) => {
     const user = req.user;
     const { topic_id, price, shares_requested } = req.body;
     const user_id = user.id;
+    const t = await sequelize.transaction();
 
     try {
-        const t = await sequelize.transaction();
-        console.log(t);
         const topic = await Topic.findOne({
             where: {
                 id: topic_id,
@@ -36,12 +35,13 @@ bidRouter.post('/', auth, async (req, res) => {
             { transaction: t }
         );
 
-        t.commit();
+        await t.commit();
 
         res.json(bid);
     } catch (error) {
+        await t.rollback();
         console.log(error);
-        res.send(error);
+        res.json(error);
     }
 });
 

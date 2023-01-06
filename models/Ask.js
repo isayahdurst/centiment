@@ -30,7 +30,7 @@ class Ask extends Model {
             User.findByPk(this.user_id),
         ]);
 
-        await bidder.refund(bid.price, this.price);
+        await bidder.refund(bid.price, this.price, transaction);
         await bidder.save({ transaction });
 
         const bidderShares =
@@ -48,7 +48,7 @@ class Ask extends Model {
         await bidderShares.addShares(quantity, transaction);
 
         await asker.increaseBalance(quantity * this.price, transaction);
-        this.save({ transaction });
+        await this.save({ transaction });
     }
 
     /* async fulfil(bid, quantity) {
@@ -170,6 +170,8 @@ Ask.init(
                 ask.shares_remaining = ask.shares_requested;
                 return ask;
             },
+
+            async afterCreate(ask, { transaction }) {},
         },
         sequelize,
         useIndividualHooks: true,

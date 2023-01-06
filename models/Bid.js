@@ -135,9 +135,8 @@ Bid.init(
                 return bid;
             },
 
-            async afterCreate(bid, transaction) {
+            async afterCreate(bid, { transaction }) {
                 console.log('@ Bid - afterCreate: ');
-                console.log(transaction);
                 console.log('\n');
                 const asks = await Ask.findAll({
                     where: {
