@@ -54,6 +54,11 @@ User.hasMany(Topic, {
     onDelete: 'CASCADE',
 });
 
+Shares.belongsTo(Topic, {
+    foreignKey: 'topic_id',
+})
+Topic.hasMany(Shares);
+
 // Transaction.hasOne(User, {
 //     foreignKey: 'buyer_id',
 // });
