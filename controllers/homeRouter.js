@@ -100,7 +100,12 @@ homeRouter.get("/topic/edit/:id", auth, async (req, res) => {
 
 // explore page route
 homeRouter.get("/explore", auth, async (req, res) => {
-  const topics = await Topic.findAll({order:[['updated_at','DESC']]});
+  // limit 20 recent record to return by request
+  const topics = await Topic.findAll({
+    order:[['updated_at','DESC']],
+    limit: 20,
+    },
+  );
   const plainUser = req.user.get({ plain: true });
   const plainTopics = topics.map((topic) => topic.get({ plain: true }));
   res.render("explore", {

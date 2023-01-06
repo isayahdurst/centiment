@@ -147,34 +147,35 @@ topicRouter.delete('/:id', auth, async (req, res) => {
 });
 
 topicRouter.get('/search', auth, async (req, res) => {
-    try {
-        // get the search query from the request query string
-        const searchQuery = req.query.q;
+  try {
+    // get the search query from the request query string
+    const searchQuery = req.query.q;
 
-        // use Sequelize to search for topics matching the search criteria
-        let topics = await Topic.findAll({
-            where: {
-                [Op.or]: [
-                    {
-                        topic_name: {
-                            [Op.like]: '%' + searchQuery + '%',
-                        },
-                    },
-                    {
-                        description: {
-                            [Op.like]: '%' + searchQuery + '%',
-                        },
-                    },
-                ],
+
+    // use Sequelize to search for topics matching the search criteria by title and descrition
+    // return results ordered by update_at and limit 20 records
+    let topics = await Topic.findAll({
+      where: {
+        [Op.or]: [
+          {
+            topic_name: {
+              [Op.like]: "%" + searchQuery + "%",
             },
-        });
-        if (!topics) {
-            res.status(404).json({ message: 'No topic found' });
-            return;
-        }
-        res.status(200).json(topics);
-    } catch (error) {
-        console.log(error);
+          },
+          {
+            description: {
+              [Op.like]: "%" + searchQuery + "%",
+            },
+          }
+        ]
+      },
+    order: [['updated_at','DESC']],
+    limit: 20,
+    },
+    );
+    if (!topics) {
+      res.status(404).json({ message: "No topic found" });
+      return;
     }
 });
 

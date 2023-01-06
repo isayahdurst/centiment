@@ -13,31 +13,33 @@ const usersRouter = new Router();
 usersRouter.put('/', auth, upload.single('avatar'), async (req, res) => {
     const user = req.user.get({ plain: true });
     const { firstName, lastName, username, bio, email, password } = req.body;
-
-    if (req.file === undefined) {
-        avatar = null;
-    } else {
+    let userDetails = {
+        first_name: firstName || user.first_name,
+        last_name: lastName || user.last_name,
+        username: username || user.username,
+        bio: bio || user.bio,
+        email: email || user.email,
+        password: password || user.password
+    };
+    if (req.file !== undefined) {
         const pathToAvatar = req.file.destination.concat(req.file.filename);
         avatar = await fs.readFileSync(pathToAvatar);
+        userDetails.avatar = avatar;
     }
 
-    await User.update(
-        {
-            first_name: firstName || user.first_name,
-            last_name: lastName || user.last_name,
-            username: username || user.username,
-            bio: bio || user.bio,
-            email: email || user.email,
-            password: password || user.password,
-            avatar: avatar,
-        },
-        {
-            where: {
-                id: user.id,
-            },
-            individualHooks: true,
-        }
-    );
+    try {
+        await User.update(
+            userDetails,
+            {
+                where: {
+                    id: user.id,
+                },
+                individualHooks: true,
+            }
+        );
+    } catch (error) {
+        console.log(error);
+    }
 
     res.end();
 });
