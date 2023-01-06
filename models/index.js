@@ -47,32 +47,6 @@ User.hasMany(Topic, {
 Topic.belongsTo(User, {
     foreignKey: 'user_id',
     onDelete: 'CASCADE',
-}); */
-
-Topic.belongsTo(Listing, {
-    foreignKey: 'topic_id',
-});
-
-Transaction.hasOne(Topic, {
-    foreignKey: 'topic_id',
-});
-
-Topic.belongsTo(Transaction, {
-    foreignKey: 'topic_id',
-    onDelete: 'CASCADE',
-});
-
-Transaction.hasOne(Listing, {
-    foreignKey: 'listing_id',
-});
-
-Listing.belongsTo(Transaction, {
-    foreignKey: 'listing_id',
-    onDelete: 'CASCADE',
-});
-
-User.hasMany(Transaction, {
-    foreignKey: 'transaction_id',
 });
 
 User.hasMany(Topic, {

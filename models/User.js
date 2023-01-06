@@ -45,9 +45,6 @@ User.init(
         username: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: {
-                allowNull: false,
-            },
             unique: {
                 args: true,
                 msg: 'Username already in use!'
@@ -74,7 +71,7 @@ User.init(
             allowNull: false,
             min: 8, //password must be at least 8 chars
             validate: {
-                is: /^[0-9a-f]{64}$/i
+                is: /^[0-9a-fA-Z+/!#@*-+_~]/i
             }
         },
         avatar: {
