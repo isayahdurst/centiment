@@ -7,19 +7,27 @@ class User extends Model {
         return bcrypt.compareSync(loginPw, this.password);
     }
 
-    async decreaseBalance(amount) {
+    async decreaseBalance(amount, transaction) {
         if (this.balance - amount < 0) {
             throw new Error('Insufficient Balance... Getcha 🍞 up first');
         }
 
         this.balance -= amount;
         console.log(this.balance);
-        await this.save();
+        await this.save({ transaction });
     }
 
     async increaseBalance(amount) {
         this.balance += amount;
         return this.save();
+    }
+
+    async setBalance(balance) {
+        this.balance = balance;
+        console.log(
+            `${this.username}(${this.balance}): Balance set to ${this.balance}`
+        );
+        await this.save();
     }
 
     async refund(bidPrice, askPrice) {

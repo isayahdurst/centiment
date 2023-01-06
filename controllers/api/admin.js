@@ -5,8 +5,38 @@ const { User, Topic } = require('../../models');
 const Shares = require('../../models/Shares');
 const Ask = require('../../models/Ask');
 const Bid = require('../../models/Bid');
+const sequelize = require('../../config/connection');
 
 const adminRouter = new Router();
+
+adminRouter.get('/user', async (req, res) => {
+    const users = await User.findAll();
+    res.json(users);
+});
+
+adminRouter.get('/user/:id', async (req, res) => {
+    const { id } = req.params;
+    const user = await User.findByPk(id);
+    res.json(user);
+});
+
+adminRouter.post('/user/', async (req, res) => {
+    const randomNum = Number(
+        String(Math.floor(Math.random() * 100)) +
+            String(Math.floor(Math.random() * 100))
+    );
+
+    const user = await User.create({
+        firstName: `test${randomNum}`,
+        lastName: `test${randomNum}`,
+        username: `test${randomNum}`,
+        password: 'test',
+        bio: 'this is a dummy account',
+        email: `test${randomNum}@test.com`,
+    });
+
+    res.json(user);
+});
 
 adminRouter.get('/topics', async (req, res) => {
     const topics = await Topic.findAll();
@@ -49,6 +79,45 @@ adminRouter.get('/bids', async (req, res) => {
 adminRouter.get('/bids/:id', async (req, res) => {
     const { id } = req.params;
     const bid = await Bid.findByPk(id);
+    res.json(bid);
+});
+
+adminRouter.get('/tests/transaction', async (req, res) => {
+    const t = await sequelize.transaction();
+    console.log(t);
+    res.end();
+});
+
+adminRouter.put('/user/setBalance/', async (req, res) => {
+    const { user_id, balance } = req.query;
+    const user = await User.findByPk(user_id);
+    await user.setBalance(balance);
+    res.json(user);
+});
+
+adminRouter.post('/ask', async (req, res) => {
+    const { user_id, topic_id, price, shares } = req.query;
+    const ask = await Ask.create({
+        user_id,
+        topic_id,
+        price,
+        shares,
+    });
+
+    console.log(ask);
+    res.json(ask);
+});
+
+adminRouter.post('/bid', async (req, res) => {
+    const { user_id, topic_id, price, shares_requested } = req.query;
+    const bid = await Bid.create({
+        user_id,
+        topic_id,
+        price,
+        shares_requested,
+    });
+
+    console.log(bid);
     res.json(bid);
 });
 

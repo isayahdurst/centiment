@@ -6,7 +6,7 @@ const Topic = require('./Topic');
 const Transaction = require('./Transaction');
 const User = require('./User');
 
-/* Topic.hasMany(Post, {
+Topic.hasMany(Post, {
     foreignKey: 'topic_id',
     onDelete: 'CASCADE',
 });
@@ -80,7 +80,7 @@ User.hasMany(Topic, {
 Topic.belongsTo(User, {
     foreignKey: 'user_id',
     onDelete: 'CASCADE',
-}); */
+});
 
 module.exports = {
     Comment,
