@@ -13,13 +13,17 @@ class User extends Model {
         }
 
         this.balance -= amount;
-        console.log(this.balance);
         await this.save({ transaction });
     }
 
-    async increaseBalance(amount) {
+    async increaseBalance(amount, transaction) {
         this.balance += amount;
-        return this.save();
+        await this.save({ transaction: transaction });
+    }
+
+    async refund(bidPrice, askPrice, transaction) {
+        await this.increaseBalance(bidPrice - askPrice, transaction);
+        await this.save({ transaction: transaction });
     }
 
     async setBalance(balance) {
@@ -27,11 +31,6 @@ class User extends Model {
         console.log(
             `${this.username}(${this.balance}): Balance set to ${this.balance}`
         );
-        await this.save();
-    }
-
-    async refund(bidPrice, askPrice) {
-        await this.increaseBalance(bidPrice - askPrice);
         await this.save();
     }
 }
@@ -55,7 +54,7 @@ User.init(
             allowNull: false,
             unique: {
                 args: true,
-                msg: 'Username already in use!'
+                msg: 'Username already in use!',
             },
         },
         email: {
@@ -66,8 +65,8 @@ User.init(
             },
             unique: {
                 args: true,
-                msg: 'Email address already in use!'
-            }
+                msg: 'Email address already in use!',
+            },
         },
         bio: {
             type: DataTypes.STRING,
@@ -87,15 +86,18 @@ User.init(
             allowNull: true,
         },
     },
-   
+
     {
         hooks: {
             async beforeCreate(newUserData) {
-                try{
-                    const passwordValidator = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9])(?=.*[a-z])[A-Za-z0-9!@#$%^&*]{12,}$|^test$/
-                    if(!passwordValidator.test(newUserData.password)){
-                        throw new Error("Password does not have the required characters.");
-                    };
+                try {
+                    const passwordValidator =
+                        /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9])(?=.*[a-z])[A-Za-z0-9!@#$%^&*]{12,}$|^test$/;
+                    if (!passwordValidator.test(newUserData.password)) {
+                        throw new Error(
+                            'Password does not have the required characters.'
+                        );
+                    }
 
                     newUserData.password = await bcrypt.hash(
                         newUserData.password,
@@ -103,12 +105,9 @@ User.init(
                     );
 
                     return newUserData;
-                    
-                } catch(err) {
+                } catch (err) {
                     console.log(err);
-                };
-                
-                
+                }
             },
 
             // After a user is created, this hook will update their balance to a starting value of 100,000.
@@ -125,7 +124,6 @@ User.init(
                 }
                 return user;
             },
-
         },
         /*
             indexes: [

@@ -111,7 +111,7 @@ sellButton.addEventListener('click', async function () {
         },
         body: JSON.stringify({
             price: 90,
-            shares: 100,
+            shares_requested: 100,
             topic_id: 1,
         }),
     });
