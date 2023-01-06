@@ -5,7 +5,8 @@ const topicsSection = document.getElementById('topics-section');
 
 function filterTopic() {
   // Locate the card elements
-  let cards = document.querySelectorAll('.card')  // Locate the search input
+  let cards = document.querySelectorAll('.card')  
+  // Locate the search input
   let search_query = document.getElementById("searchbox").value;
   // Loop through the cards
   for (var i = 0; i < cards.length; i++) {
@@ -41,6 +42,7 @@ const searchTopic = async () => {
     }
 }
 
+// TODO(Olga in progress): render page with cards based on search results
 const showResults = async() => {
   suggestionsDropdownEl.innerHTML="";
   let searchVal = document.getElementById("searchTopicKeyword").value;
@@ -53,7 +55,6 @@ function showLastestTopics() {
 }
 
 function clearSearchInput() {
-  suggestionsDropdownEl.innerHTML="";
   document.getElementById("searchTopicKeyword").value="";
 }
 

@@ -7,10 +7,11 @@ module.exports = {
     // format large numbers with commas
     return parseInt(amount).toLocaleString();
   },
-  normilize_text: (stringVal) => {
+  normalize_text: (stringVal) => {
+    // shoren string longer than 200 chars. Used in explore cards
     let returnString;
     if (stringVal.length > 200) {
-      returnString = stringVal.substring(0, 200) + '...'
+      returnString = stringVal.substring(0, 197) + '...'
     } else {
       returnString = stringVal;
     }

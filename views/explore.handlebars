@@ -29,12 +29,13 @@
               <a href="/topic/{{topic.id}}">{{topic.topic_name}}</a></p>
             </div>
             <div class="card-content media-content">
-              <p>{{normilize_text topic.description}}</p>
+              <p>{{normalize_text topic.description}}</p>
             </div>
             <div class="card-footer">
               <p class="card-footer-item">💼: {{topic.initial_shares}}</p>
               <p class="card-footer-item">💲: {{topic.price}}</p>
-              <p class="card-footer-item">🗿: 1</p>
+              {{!-- TODO: implement how many people has shares --}}
+              <p class="card-footer-item">🗿: 0</p>
             </div>
           </div>
       </div>  
@@ -55,7 +56,17 @@
   .card{
     min-width: 25%;
     max-width: 30rem;
+    height: 25rem;
   } 
+  .card-content{
+    padding-top: 0;
+  }
+  .card-footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    z-index: 9;
+  }
   #suggestions {
     position: absolute;
     margin-top: 3rem;

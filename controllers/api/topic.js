@@ -149,7 +149,8 @@ topicRouter.get("/search", auth, async (req, res) => {
     // get the search query from the request query string
     const searchQuery = req.query.q;
 
-    // use Sequelize to search for topics matching the search criteria
+    // use Sequelize to search for topics matching the search criteria by title and descrition
+    // return results ordered by update_at and limit 20 records
     let topics = await Topic.findAll({
       where: {
         [Op.or]: [
@@ -165,7 +166,10 @@ topicRouter.get("/search", auth, async (req, res) => {
           }
         ]
       },
-    });
+    order: [['updated_at','DESC']],
+    limit: 20,
+    },
+    );
     if (!topics) {
       res.status(404).json({ message: "No topic found" });
       return;

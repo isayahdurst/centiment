@@ -27,6 +27,7 @@ const toggleProfileModal = function () {
 
 const updateProfile = async function (event) {
     event.preventDefault();
+    
     const updateFormData = new FormData();
     updateFormData.append('firstName', firstName.value);
     updateFormData.append('lastName', lastName.value);

@@ -1,6 +1,5 @@
 node_modules
 .env
-.env.EXAMPLE
 package-lock.json
 pnpm-lock.yaml
 public/data
