@@ -4,6 +4,9 @@ const { Topic } = require('./../../models');
 const { Post, User } = require('./../../models');
 const Shares = require('../../models/Shares');
 const { Sequelize, Op } = require('sequelize');
+const sequelize = require('../../config/connection');
+const e = require('express');
+const { truncate } = require('../../models/Shares');
 
 const topicRouter = new Router();
 
@@ -34,7 +37,7 @@ topicRouter.post('/buyIPO', auth, async (req, res) => {
     console.log(user.id);
 
     try {
-        const shares = await Shares.findOne({
+        let shares = await Shares.findOne({
             where: {
                 [Op.and]: [
                     {
@@ -47,37 +50,29 @@ topicRouter.post('/buyIPO', auth, async (req, res) => {
             },
         });
 
-        if (!shares)
-            throw new Error('No existing purchase found, creating new shares');
-
-        await shares.update({
-            amount: shares.amount + Number(quantity),
-        });
-
-        console.log(shares);
-
-        await user.decreaseBalance(quantity * topic.price);
-
-        /* const shares = await Shares.upsert({
-            topic_id: topic_id,
-            user_id: user.id,
-            amount: Sequelize.literal('amount '),
-            ipo_shares: true,
-        }); */
-
-        res.json(shares);
-    } catch (error) {
-        if (
-            error.message === 'No existing purchase found, creating new shares'
-        ) {
-            const shares = await Shares.create({
+        if (!shares) {
+            shares = await Shares.create({
                 topic_id: topic_id,
                 user_id: user.id,
                 amount: quantity,
                 ipo_shares: true,
             });
-            console.log(shares);
+        } else {
+            await shares.update({
+                amount: shares.amount + Number(quantity),
+                ipo_shares: true,
+            });
         }
+
+        /* await shares.update({
+            amount: shares.amount + Number(quantity),
+            ipo_shares: true,
+        }); */
+
+        await user.decreaseBalance(quantity * topic.price);
+
+        res.json(shares);
+    } catch (error) {
         console.log(error);
         res.json(error.message);
     }

@@ -107,9 +107,12 @@ Ask.init(
                     throw new Error(
                         "User doesn't own any shares of this topic"
                     );
-                if (shares.amount < ask.shares)
+                if (shares.amount < ask.shares) {
                     console.log(shares.amount, ask.shares);
-                throw new Error('Insufficient shares to place ask.');
+                    throw new Error(
+                        `Insufficient shares to place ask.\nOwned: ${shares.amount} | Required: ${ask.shares}`
+                    );
+                }
 
                 ask.shares_remaining = ask.shares;
                 return ask;

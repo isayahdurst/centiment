@@ -1,7 +1,21 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('./../config/connection');
 
-class Topic extends Model {}
+class Topic extends Model {
+    async decreaseIPOShares(quantity) {
+        try {
+            // Gatekeep Checks:
+            if (this.initial_shares - quantity < 0) {
+                throw new Error('Not enough IPO shares to fill this request.');
+            }
+
+            this.initial_shares -= quantity;
+            await this.save();
+        } catch (error) {
+            console.error(error);
+        }
+    }
+}
 
 Topic.init(
     {
@@ -18,7 +32,7 @@ Topic.init(
         price: {
             type: DataTypes.FLOAT,
             allowNull: false,
-            defaultValue: 1.00,
+            defaultValue: 1.0,
         },
         description: {
             type: DataTypes.TEXT,
