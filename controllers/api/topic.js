@@ -4,6 +4,9 @@ const { Topic } = require('./../../models');
 const { Post, User } = require('./../../models');
 const Shares = require('../../models/Shares');
 const { Sequelize, Op } = require('sequelize');
+const sequelize = require('../../config/connection');
+const e = require('express');
+const { truncate } = require('../../models/Shares');
 
 const topicRouter = new Router();
 
@@ -32,10 +35,11 @@ topicRouter.post('/buyIPO', auth, async (req, res) => {
     const { topic_id, quantity } = req.body;
     const topic = await Topic.findByPk(topic_id);
     const user = await User.findByPk(req.user.id);
-    console.log(user.id);
+
+    const t = await sequelize.transaction();
 
     try {
-        const shares = await Shares.findOne({
+        let shares = await Shares.findOne({
             where: {
                 [Op.and]: [
                     {
@@ -48,37 +52,35 @@ topicRouter.post('/buyIPO', auth, async (req, res) => {
             },
         });
 
-        if (!shares)
-            throw new Error('No existing purchase found, creating new shares');
+        if (!shares) {
+            shares = await Shares.create(
+                {
+                    topic_id: topic_id,
+                    user_id: user.id,
+                    amount: quantity,
+                    ipo_shares: true,
+                },
+                { transaction: t }
+            );
+        } else {
+            await shares.update(
+                {
+                    amount: shares.amount + Number(quantity),
+                    ipo_shares: true,
+                },
+                { transaction: t }
+            );
+        }
 
-        await shares.update({
+        /* await shares.update({
             amount: shares.amount + Number(quantity),
-        });
-
-        console.log(shares);
-
-        await user.decreaseBalance(quantity * topic.price);
-
-        /* const shares = await Shares.upsert({
-            topic_id: topic_id,
-            user_id: user.id,
-            amount: Sequelize.literal('amount '),
             ipo_shares: true,
         }); */
 
+        await user.decreaseBalance(quantity * topic.price, { transaction: t });
+
         res.json(shares);
     } catch (error) {
-        if (
-            error.message === 'No existing purchase found, creating new shares'
-        ) {
-            const shares = await Shares.create({
-                topic_id: topic_id,
-                user_id: user.id,
-                amount: quantity,
-                ipo_shares: true,
-            });
-            console.log(shares);
-        }
         console.log(error);
         res.json(error.message);
     }
