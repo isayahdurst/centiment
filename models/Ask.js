@@ -3,6 +3,13 @@ const sequelize = require('../config/connection');
 const Shares = require('./Shares');
 const User = require('./User');
 const { Op } = require('sequelize');
+const Bid = require('./Bid');
+
+const getAsks = async () => {
+    const asks = await Ask.findAll();
+    console.log(asks);
+    return asks;
+};
 
 class Ask extends Model {
     async sayHello() {
@@ -12,6 +19,8 @@ class Ask extends Model {
     async fulfil(bid, transaction) {
         // Bidder gets shares
         // Asker gets money
+
+        console.log('Ask.fulfil active...');
 
         const quantity = Math.min(bid.shares_remaining, this.shares_remaining);
 
@@ -50,23 +59,6 @@ class Ask extends Model {
         await asker.increaseBalance(quantity * this.price, transaction);
         await this.save({ transaction });
     }
-
-    /* async fulfil(bid, quantity) {
-        this.shares -= quantity;
-        bid.shares_remaining -= quantity;
-        await bid.save();
-        const bidder = await User.findByPk(bid.user_id);
-        await bidder.refund(bid.price, this.price);
-        const asker = await User.findByPk(this.user_id);
-        const creditAmount = quantity * this.price;
-        console.log(creditAmount);
-        console.log(`Asker Balance Pre-Fulfillment: ${asker.balance}`);
-
-        await asker.increaseBalance(creditAmount);
-        console.log(`Asker Balance Post-Fulfillment: ${asker.balance}`);
-        console.log('Order Fulfilled.');
-        this.save();
-    } */
 }
 
 Ask.init(
@@ -141,7 +133,6 @@ Ask.init(
             4. */
             async beforeCreate(ask, { transaction }) {
                 console.log('Ask.beforeCreate');
-                console.log(transaction);
                 const [shares, user] = await Promise.all([
                     Shares.findOne({
                         where: {
@@ -171,7 +162,55 @@ Ask.init(
                 return ask;
             },
 
-            async afterCreate(ask, { transaction }) {},
+            async afterCreate(ask, { transaction }) {
+                // Returns all bids for a topic that are still pending.
+                // Orders bids by highest price, then by date created.
+
+                console.log('Ask.afterCreate()');
+
+                const bids = await Bid.findAll({
+                    where: {
+                        [Op.and]: [
+                            {
+                                topic_id: ask.topic_id,
+                            },
+                            {
+                                price: {
+                                    [Op.gte]: ask.price,
+                                },
+                            },
+                            {
+                                status: 'pending',
+                            },
+                        ],
+                    },
+                    order: [
+                        ['price', 'ASC'],
+                        ['createdAt', 'ASC'],
+                    ],
+                });
+
+                console.log('Bids found');
+
+                for (const bid of bids) {
+                    if (!ask.shares_remaining > 0) {
+                        break;
+                    }
+
+                    await bid.fulfil(ask, transaction);
+                    console.log('Ask.afterCreated: bids filled');
+                }
+
+                return ask;
+            },
+
+            async afterUpdate(ask) {
+                if (!ask.shares_remaining > 0) {
+                    ask.status = 'complete';
+                    console.log('Ask - afterUpdate: Ask Status' + ask.status);
+                }
+                return ask;
+            },
         },
         sequelize,
         useIndividualHooks: true,
@@ -181,4 +220,4 @@ Ask.init(
     }
 );
 
-module.exports = Ask;
+module.exports = { Ask, getAsks };
