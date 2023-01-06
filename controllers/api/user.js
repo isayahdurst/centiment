@@ -13,8 +13,6 @@ const usersRouter = new Router();
 usersRouter.put('/', auth, upload.single('avatar'), async (req, res) => {
     const user = req.user.get({ plain: true });
     const { firstName, lastName, username, bio, email, password } = req.body;
-    console.log(`===========req.file==============`);
-    console.log(req.file);
 
     if (req.file === undefined) {
         avatar = null;
@@ -41,7 +39,6 @@ usersRouter.put('/', auth, upload.single('avatar'), async (req, res) => {
         }
     );
 
-    console.log(user);
     res.end();
 });
 
