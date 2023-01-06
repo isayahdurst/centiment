@@ -9,7 +9,49 @@ class Ask extends Model {
         console.log('Hi, this works');
     }
 
-    async fulfil(bid, quantity) {
+    async fulfil(bid, transaction) {
+        // Bidder gets shares
+        // Asker gets money
+
+        const quantity = Math.min(bid.shares_remaining, this.shares_remaining);
+
+        this.shares_remaining -= quantity;
+        bid.shares_remaining -= quantity;
+
+        if (this.shares_remaining < 0 || bid.shares_remaining < 0)
+            throw new Error(
+                'Bid or Ask has fallen below minimun remaning value possible. Something went wrong.'
+            );
+
+        await bid.save({ transaction });
+
+        const [bidder, asker] = await Promise.all([
+            User.findByPk(bid.user_id),
+            User.findByPk(this.user_id),
+        ]);
+
+        await bidder.refund(bid.price, this.price, transaction);
+        await bidder.save({ transaction });
+
+        const bidderShares =
+            (await Shares.findShares(bidder.id, this.topic_id)) ||
+            Shares.create(
+                {
+                    user_id: bidder.id,
+                    topic_id: this.topic_id,
+                    quantity: 0,
+                    ipo_shares: false,
+                },
+                { transaction }
+            );
+
+        await bidderShares.addShares(quantity, transaction);
+
+        await asker.increaseBalance(quantity * this.price, transaction);
+        await this.save({ transaction });
+    }
+
+    /* async fulfil(bid, quantity) {
         this.shares -= quantity;
         bid.shares_remaining -= quantity;
         await bid.save();
@@ -24,7 +66,7 @@ class Ask extends Model {
         console.log(`Asker Balance Post-Fulfillment: ${asker.balance}`);
         console.log('Order Fulfilled.');
         this.save();
-    }
+    } */
 }
 
 Ask.init(
@@ -40,9 +82,9 @@ Ask.init(
             allowNull: false,
             validate: {
                 isFloat: true,
-            }
+            },
         },
-        shares: {
+        shares_requested: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
@@ -78,16 +120,10 @@ Ask.init(
             type: DataTypes.DATE,
             validate: {
                 isDate: true,
-                expirationDateAfterAskDate() {
-                  if (this.ask_date.isAfter(this.expiration_date)) {
-                    throw new Error('Expiration date must be after the ask date.');
-                  }
-                },
             },
-            //Object.expirationDate = Date.now() + 604800000 (7 days)
             defaultValue: new Date(
                 new Date().getTime() + 7 * 24 * 60 * 60 * 1000
-            ), //will need to be validated to make sure this is 7 days in the future
+            ),
         },
         status: {
             type: DataTypes.ENUM,
@@ -103,32 +139,39 @@ Ask.init(
             2. Deduct shares from Shares where topic is this ask.topic_id and user_id: is ask.user_id
             3. Set shares_remaining equal to shares_requested
             4. */
-            async beforeCreate(ask) {
-                const asker = await User.findByPk(ask.user_id);
-                const shares = await Shares.findOne({
-                    where: {
-                        [Op.and]: [
-                            {
-                                user_id: asker.id,
-                            },
-                            {
-                                topic_id: ask.topic_id,
-                            },
-                        ],
-                    },
-                });
+            async beforeCreate(ask, { transaction }) {
+                console.log('Ask.beforeCreate');
+                console.log(transaction);
+                const [shares, user] = await Promise.all([
+                    Shares.findOne({
+                        where: {
+                            [Op.and]: [
+                                {
+                                    user_id: ask.user_id,
+                                },
+                                {
+                                    topic_id: ask.topic_id,
+                                },
+                            ],
+                        },
+                    }),
 
-                if (!shares)
-                    throw new Error(
-                        "User doesn't own any shares of this topic"
-                    );
-                if (shares.amount < ask.shares)
-                    console.log(shares.amount, ask.shares);
-                throw new Error('Insufficient shares to place ask.');
+                    User.findByPk(ask.user_id),
+                ]);
 
-                ask.shares_remaining = ask.shares;
+                if (!shares) throw new Error("User doesn't own this topic.");
+                if (!transaction)
+                    throw new Error('Transaction object is undefined');
+
+                await shares.escrow(ask.shares_requested, transaction);
+
+                console.log('Shares are escrowed...');
+
+                ask.shares_remaining = ask.shares_requested;
                 return ask;
             },
+
+            async afterCreate(ask, { transaction }) {},
         },
         sequelize,
         useIndividualHooks: true,

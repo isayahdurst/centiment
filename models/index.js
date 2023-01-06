@@ -1,4 +1,3 @@
-
 const Ask = require('./Ask');
 const Bid = require('./Bid');
 const Comment = require('./Comment');
@@ -7,7 +6,6 @@ const Post = require('./Post');
 const Shares = require('./Shares');
 const Topic = require('./Topic');
 const User = require('./User');
-
 
 Topic.hasMany(Post, {
     foreignKey: 'topic_id',
@@ -43,7 +41,6 @@ User.hasMany(Topic, {
 
 //done using through reference
 
-
 Topic.belongsTo(User, {
     foreignKey: 'user_id',
     onDelete: 'CASCADE',
@@ -59,15 +56,10 @@ Shares.belongsTo(Topic, {
 })
 Topic.hasMany(Shares);
 
-// Transaction.hasOne(User, {
-//     foreignKey: 'buyer_id',
-// });
-
-// Transaction.hasOne(User, {
-//     foreignKey: 'seller_id'
-// });
-
-//done using through reference
+Topic.belongsTo(User, {
+    foreignKey: 'user_id',
+    onDelete: 'CASCADE',
+});
 
 module.exports = {
     Ask,

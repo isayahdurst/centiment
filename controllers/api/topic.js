@@ -4,37 +4,45 @@ const { Topic } = require('./../../models');
 const { Post, User } = require('./../../models');
 const Shares = require('../../models/Shares');
 const { Sequelize, Op } = require('sequelize');
+const sequelize = require('../../config/connection');
+const e = require('express');
+const { truncate } = require('../../models/Shares');
 
 const topicRouter = new Router();
 
 // create a new topic
-topicRouter.post("/", auth, async (req, res) => {
-  const { topic_name, description, price } = req.body;
-  console.log(topic_name, description, price);
-  try {
-    const newTopic = await Topic.create({
-      topic_name,
-      description,
-      price,
-      user_id: req.user.id,
-    });
-    res.status(200).json({
-      id: newTopic.id,
-    });
-  } catch (err) {
-    res.status(400).json(err);
-  }
+topicRouter.post('/', auth, async (req, res) => {
+    const { topic_name, description, price } = req.body;
+    console.log(topic_name, description, price);
+    try {
+        const newTopic = await Topic.create({
+            topic_name,
+            description,
+            price,
+            user_id: req.user.id,
+        });
+        res.status(200).json({
+            id: newTopic.id,
+        });
+    } catch (err) {
+        res.status(400).json(err);
+        console.log(err);
+    }
 });
 
 // Creates shares from inital offering.
 topicRouter.post('/buyIPO', auth, async (req, res) => {
     const { topic_id, quantity } = req.body;
-    const topic = await Topic.findByPk(topic_id);
-    const user = await User.findByPk(req.user.id);
-    console.log(user.id);
+    console.log(topic_id, quantity);
+    const [topic, user] = await Promise.all([
+        Topic.findByPk(topic_id),
+        User.findByPk(req.user.id),
+    ]);
+
+    const t = await sequelize.transaction();
 
     try {
-        const shares = await Shares.findOne({
+        let shares = await Shares.findOne({
             where: {
                 [Op.and]: [
                     {
@@ -47,37 +55,34 @@ topicRouter.post('/buyIPO', auth, async (req, res) => {
             },
         });
 
-        if (!shares)
-            throw new Error('No existing purchase found, creating new shares');
+        if (!shares) {
+            shares = await Shares.create(
+                {
+                    topic_id: topic_id,
+                    user_id: user.id,
+                    quantity: Number(quantity),
+                    ipo_shares: true,
+                },
+                { transaction: t }
+            );
+        } else {
+            await shares.update(
+                {
+                    quantity: shares.quantity + Number(quantity),
+                    ipo_shares: true,
+                },
+                { transaction: t }
+            );
+        }
 
-        await shares.update({
-            amount: shares.amount + Number(quantity),
-        });
+        await user.decreaseBalance(quantity * topic.price, t);
+        await topic.decreaseIPOShares(quantity, t);
 
-        console.log(shares);
-
-        await user.decreaseBalance(quantity * topic.price);
-
-        /* const shares = await Shares.upsert({
-            topic_id: topic_id,
-            user_id: user.id,
-            amount: Sequelize.literal('amount '),
-            ipo_shares: true,
-        }); */
+        t.commit();
 
         res.json(shares);
     } catch (error) {
-        if (
-            error.message === 'No existing purchase found, creating new shares'
-        ) {
-            const shares = await Shares.create({
-                topic_id: topic_id,
-                user_id: user.id,
-                amount: quantity,
-                ipo_shares: true,
-            });
-            console.log(shares);
-        }
+        t.rollback();
         console.log(error);
         res.json(error.message);
     }
@@ -85,23 +90,22 @@ topicRouter.post('/buyIPO', auth, async (req, res) => {
 
 // add a post
 topicRouter.post('/:id', auth, async (req, res) => {
-  const { post_name, contents } = req.body
-  const { id } = req.params;
+    const { post_name, contents } = req.body;
+    const { id } = req.params;
 
-  try {
-    const newPost = await Post.create({
-      post_name,
-      contents,
-      topic_id: id
-      });
-      res.status(200).json({
-        id: newPost.id,
-      });
-      } catch (err) {
-      res.status(400).json(err);
-  }
+    try {
+        const newPost = await Post.create({
+            post_name,
+            contents,
+            topic_id: id,
+        });
+        res.status(200).json({
+            id: newPost.id,
+        });
+    } catch (err) {
+        res.status(400).json(err);
+    }
 });
-
 
 // edit a topic
 topicRouter.put('/edit/:id', auth, async (req, res) => {
@@ -139,15 +143,14 @@ topicRouter.delete('/:id', auth, async (req, res) => {
         res.status(200).json(topic);
     } catch (err) {
         res.status(500).json(err);
-
     }
 });
 
-
-topicRouter.get("/search", auth, async (req, res) => {
+topicRouter.get('/search', auth, async (req, res) => {
   try {
     // get the search query from the request query string
     const searchQuery = req.query.q;
+
 
     // use Sequelize to search for topics matching the search criteria by title and descrition
     // return results ordered by update_at and limit 20 records
@@ -156,12 +159,12 @@ topicRouter.get("/search", auth, async (req, res) => {
         [Op.or]: [
           {
             topic_name: {
-              [Op.like]: "%"+searchQuery+"%",
+              [Op.like]: "%" + searchQuery + "%",
             },
           },
           {
             description: {
-              [Op.like]: "%"+searchQuery+"%",
+              [Op.like]: "%" + searchQuery + "%",
             },
           }
         ]
@@ -174,11 +177,6 @@ topicRouter.get("/search", auth, async (req, res) => {
       res.status(404).json({ message: "No topic found" });
       return;
     }
-    res.status(200).json(topics);
-  } catch (error) {
-    console.log(error);
-  }
 });
-
 
 module.exports = topicRouter;

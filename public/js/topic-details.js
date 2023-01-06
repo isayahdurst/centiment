@@ -19,6 +19,7 @@ ipoShareQuantity.addEventListener('input', function () {
 ipoConfirmBtn.addEventListener('click', async function (event) {
     event.preventDefault();
     const topic_id = ipoConfirmBtn.getAttribute('data-topic_id');
+    console.log(topic_id);
 
     const response = await fetch('/api/topic/buyIPO', {
         method: 'POST',

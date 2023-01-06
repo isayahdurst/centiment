@@ -1,8 +1,8 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('./../config/connection');
-const { User } = require('../models');
 const { Op } = require('sequelize');
 const Ask = require('./Ask');
+const User = require('./User');
 
 /* const Ask = require('./Ask'); */
 
@@ -14,6 +14,48 @@ class Bid extends Model {
         user.balance += totalBidCost;
         await user.save();
         await this.destroy();
+    }
+
+    async fulfil(ask, transaction) {
+        // Bidder gets shares
+        // Asker gets money
+
+        const quantity = Math.min(ask.shares_remaining, this.shares_remaining);
+
+        this.shares_remaining -= quantity;
+        ask.shares_remaining -= quantity;
+
+        if (this.shares_remaining < 0 || ask.shares_remaining < 0)
+            throw new Error(
+                'Bid or Ask has fallen below minimun remaning value possible. Something went wrong.'
+            );
+
+        await ask.save({ transaction });
+
+        const [asker, bidder] = await Promise.all([
+            User.findByPk(ask.user_id),
+            User.findByPk(this.user_id),
+        ]);
+
+        await bidder.refund(ask.price, this.price);
+        await bidder.save({ transaction });
+
+        const bidderShares =
+            (await Shares.findShares(bidder.id, this.topic_id)) ||
+            Shares.create(
+                {
+                    user_id: bidder.id,
+                    topic_id: this.topic_id,
+                    quantity: 0,
+                    ipo_shares: false,
+                },
+                { transaction }
+            );
+
+        await bidderShares.addShares(quantity, transaction);
+
+        await asker.increaseBalance(quantity * this.price, transaction);
+        this.save({ transaction });
     }
 }
 
@@ -66,7 +108,7 @@ Bid.init(
             type: DataTypes.DATE,
             validate: {
                 isDate: true,
-            }
+            },
         },
         //Object.expirationDate = Date.now() + 604800000 (7 days)
         status: {
@@ -79,8 +121,7 @@ Bid.init(
     {
         hooks: {
             // Deducts funds from users account before placing bid. Also ensures user has a sufficient balance.
-            async beforeCreate(bid) {
-                console.log('Does this ever happen?');
+            async beforeCreate(bid, transaction) {
                 const user = await User.findByPk(bid.user_id);
                 const totalBidCost = bid.price * bid.shares_requested;
 
@@ -94,7 +135,9 @@ Bid.init(
                 return bid;
             },
 
-            async afterCreate(bid) {
+            async afterCreate(bid, { transaction }) {
+                console.log('@ Bid - afterCreate: ');
+                console.log('\n');
                 const asks = await Ask.findAll({
                     where: {
                         [Op.and]: [
@@ -123,13 +166,10 @@ Bid.init(
                         break;
                     }
 
-                    const maxOrders = Math.min(
-                        ask.shares,
-                        bid.shares_remaining
-                    );
-                    // ask.fulfil(user_id, maxOrders)
-                    await ask.fulfil(bid, maxOrders);
+                    await ask.fulfil(bid, transaction);
                 }
+
+                return bid;
             },
 
             async afterUpdate(bid) {
