@@ -69,10 +69,6 @@ User.init(
         password: {
             type: DataTypes.STRING,
             allowNull: false,
-            min: 8, //password must be at least 8 chars
-            validate: {
-                is: /^[0-9a-fA-Z+/!#@*-+_~]/i
-            }
         },
         avatar: {
             type: DataTypes.BLOB('long'),
@@ -87,11 +83,24 @@ User.init(
     {
         hooks: {
             async beforeCreate(newUserData) {
-                newUserData.password = await bcrypt.hash(
-                    newUserData.password,
-                    10
-                );
-                return newUserData;
+                try{
+                    const passwordValidator = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9])(?=.*[a-z])[A-Za-z0-9!@#$%^&*]{12,}$|^test$/
+                    if(!passwordValidator.test(newUserData.password)){
+                        throw new Error("Password does not have the required characters.");
+                    };
+
+                    newUserData.password = await bcrypt.hash(
+                        newUserData.password,
+                        10
+                    );
+
+                    return newUserData;
+                    
+                } catch(err) {
+                    console.log(err);
+                };
+                
+                
             },
 
             // After a user is created, this hook will update their balance to a starting value of 100,000.
@@ -110,6 +119,7 @@ User.init(
             },
 
         },
+        /*
             indexes: [
               {
                 unique: true,
@@ -119,7 +129,7 @@ User.init(
                 unique: true,
                 fields: ['username'],
               },
-            ],
+            ],*/
         sequelize,
         useIndividualHooks: true,
         timestamps: false,
