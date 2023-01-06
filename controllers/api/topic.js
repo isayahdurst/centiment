@@ -34,7 +34,8 @@ topicRouter.post('/buyIPO', auth, async (req, res) => {
     const { topic_id, quantity } = req.body;
     const topic = await Topic.findByPk(topic_id);
     const user = await User.findByPk(req.user.id);
-    console.log(user.id);
+
+    const t = await sequelize.transaction();
 
     try {
         let shares = await Shares.findOne({
@@ -51,17 +52,23 @@ topicRouter.post('/buyIPO', auth, async (req, res) => {
         });
 
         if (!shares) {
-            shares = await Shares.create({
-                topic_id: topic_id,
-                user_id: user.id,
-                amount: quantity,
-                ipo_shares: true,
-            });
+            shares = await Shares.create(
+                {
+                    topic_id: topic_id,
+                    user_id: user.id,
+                    amount: quantity,
+                    ipo_shares: true,
+                },
+                { transaction: t }
+            );
         } else {
-            await shares.update({
-                amount: shares.amount + Number(quantity),
-                ipo_shares: true,
-            });
+            await shares.update(
+                {
+                    amount: shares.amount + Number(quantity),
+                    ipo_shares: true,
+                },
+                { transaction: t }
+            );
         }
 
         /* await shares.update({
@@ -69,7 +76,7 @@ topicRouter.post('/buyIPO', auth, async (req, res) => {
             ipo_shares: true,
         }); */
 
-        await user.decreaseBalance(quantity * topic.price);
+        await user.decreaseBalance(quantity * topic.price, { transaction: t });
 
         res.json(shares);
     } catch (error) {
