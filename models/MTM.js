@@ -34,11 +34,14 @@ MTM.init(
         shares: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            validate: {
+                isInt: true,
+            },
         },
         watching: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
-            defaultValue: 0,
+            defaultValue: false,
         },
     },
     {

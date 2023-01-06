@@ -22,6 +22,10 @@ Topic.init(
         },
         description: {
             type: DataTypes.TEXT,
+            validate: {
+                len: [200, 5000],
+                msg: "Description must be at least 200 characters long but no more than 5000 characters."
+            }
         },
         date_created: {
             type: DataTypes.DATE,
@@ -32,6 +36,9 @@ Topic.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 100000,
+            validate: {
+                isInt: true,
+            },
         },
         initial_shares: {
             type: DataTypes.INTEGER,
