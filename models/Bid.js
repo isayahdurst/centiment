@@ -1,10 +1,8 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('./../config/connection');
 const { Op } = require('sequelize');
-const Ask = require('./Ask');
 const User = require('./User');
-
-/* const Ask = require('./Ask'); */
+const Shares = require('./Shares');
 
 class Bid extends Model {
     async cancelBid() {
@@ -31,18 +29,21 @@ class Bid extends Model {
             );
 
         await ask.save({ transaction });
+        console.log('Shares reduced from ask');
 
         const [asker, bidder] = await Promise.all([
             User.findByPk(ask.user_id),
             User.findByPk(this.user_id),
         ]);
 
-        await bidder.refund(ask.price, this.price);
+        await bidder.refund(this.price, ask.price, transaction);
         await bidder.save({ transaction });
+
+        console.log('Bidder refunded and saved');
 
         const bidderShares =
             (await Shares.findShares(bidder.id, this.topic_id)) ||
-            Shares.create(
+            (await Shares.create(
                 {
                     user_id: bidder.id,
                     topic_id: this.topic_id,
@@ -50,12 +51,15 @@ class Bid extends Model {
                     ipo_shares: false,
                 },
                 { transaction }
-            );
+            ));
+
+        console.log('bidder shares located/created');
 
         await bidderShares.addShares(quantity, transaction);
+        console.log('Shares added');
 
         await asker.increaseBalance(quantity * this.price, transaction);
-        this.save({ transaction });
+        await this.save({ transaction });
     }
 }
 
@@ -120,7 +124,6 @@ Bid.init(
     },
     {
         hooks: {
-            // Deducts funds from users account before placing bid. Also ensures user has a sufficient balance.
             async beforeCreate(bid, transaction) {
                 const user = await User.findByPk(bid.user_id);
                 const totalBidCost = bid.price * bid.shares_requested;
@@ -136,8 +139,7 @@ Bid.init(
             },
 
             async afterCreate(bid, { transaction }) {
-                console.log('@ Bid - afterCreate: ');
-                console.log('\n');
+                const Ask = require('./Ask');
                 const asks = await Ask.findAll({
                     where: {
                         [Op.and]: [

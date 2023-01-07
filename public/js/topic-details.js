@@ -5,10 +5,21 @@ const buyDropDownBtn = document.getElementById('ipo-buy-dropdown-btn');
 const ipoConfirmBtn = document.getElementById('ipo-confirm-btn');
 const ipoCostLabel = document.getElementById('ipo-total-price');
 const ipoShareQuantity = document.getElementById('ipo-share-quantity'); // Input field
+const ipoConfirmationMessage = document.getElementById('IPO-notification');
 
 buyDropDownBtn.addEventListener('click', function (event) {
     event.preventDefault();
     buyDropDown.classList.toggle('is-active');
+});
+
+document.addEventListener('click', function (event) {
+    if (buyDropDown.classList.contains('is-active')) {
+        // If the click was outside the dropdown menu
+        if (!event.target.closest('.dropdown')) {
+            // Close the dropdown menu
+            buyDropDown.classList.remove('is-active');
+        }
+    }
 });
 
 ipoShareQuantity.addEventListener('input', function () {
@@ -32,8 +43,29 @@ ipoConfirmBtn.addEventListener('click', async function (event) {
         }),
     });
 
+    buyDropDown.classList.toggle('is-active');
+
     const shares = await response.json();
+    if (response.ok) {
+        ipoConfirmationMessage.className = 'notification';
+        ipoConfirmationMessage.classList.remove('is-hidden');
+        ipoConfirmationMessage.classList.add('is-success');
+        ipoConfirmationMessage.textContent =
+            "Hooray! You've just made the greatest investment of your life. No, seriously. This topic is going to change everything. You're going to be the envy of all your friends. You'll be more popular than the person who brought the good snacks to the party. Trust us, you made the right choice. (Now go ahead and pat yourself on the back. You deserve it.)";
+    } else {
+        ipoConfirmationMessage.className = 'notification';
+        ipoConfirmationMessage.classList.remove('is-hidden');
+        ipoConfirmationMessage.classList.add('is-danger');
+        ipoConfirmationMessage.textContent =
+            shares.message || `${response.status}: Unexpected Error Occured`;
+    }
+
+    setTimeout(() => {
+        ipoConfirmationMessage.classList.add('fade-out');
+    }, 2000);
+
+    ipoConfirmationMessage.addEventListener('transitionend', function () {
+        ipoConfirmationMessage.classList.add('is-hidden');
+    });
     console.log(shares);
 });
-
-// When the user clicks on the buy button, they should be prompted to enter a quantity. If the IPO shares available are greater than or equal to the shares that the user is requesting, then deduct the appropriate amount of funds from the user's account and credit them with the corresponding number of shares. Deduct those shares from the topic's initial shares.
