@@ -1,0 +1,74 @@
+<div class='modal' id='place-order-modal' data-topicid="">
+    <div class='modal-background'></div>
+    <div class='modal-card'>
+        <header class='modal-card-head'>
+            <p class='modal-card-title'>Place Order</p>
+            <button class='delete' aria-label='close'></button>
+        </header>
+        <section class='modal-card-body'>
+            <div class="notification is-success is-hidden" id="order-modal-notification">
+                Bid placed successfully
+            </div>
+            <div class='tabs is-centered is-large'>
+                <ul>
+                    <li class='is-active' id='order-modal-tab_bid'><a>Bid</a></li>
+                    <li id='order-modal-tab_ask'><a>Ask</a></li>
+                </ul>
+            </div>
+            <div id="bid-content" class="">
+                {{#if bids}}
+                    {{#each bids as |bid|}}
+                        {{>bids}}
+                    {{/each}}
+                {{/if}}
+            </div>
+            <div id="ask-content" class="is-hidden">
+                {{#if asks}}
+                    {{#each asks as |ask|}}
+                        {{>asks}}
+                    {{/each}}
+                {{/if}}
+            </div>
+            <hr>
+            <form action="" id="order-form">
+                <div class="field">
+                    <label for="" class="label">Price:  </label>
+                    <div class="control has-icons-left">
+                        <input type="text" class="input" placeholder="$97" id="order-modal-price">
+                        <span class="icon is-small is-left">
+                            <i class="fa-solid fa-money-check-dollar"></i>
+                        </span>
+                    </div>
+                    <p class="help is-danger" id="price-help">Must be a number</p>
+                </div>
+
+                <div class="field">
+                    <label for="" class="label">Quantity:</label>
+                    <div class="control has-icons-left">
+                        <input type="text" class="input" placeholder="20" id="order-modal-quantity">
+                        <span class="icon is-small is-left">
+                            <i class="fa-solid fa-money-check-dollar"></i>
+                        </span>
+                    </div>
+                    <p class="help is-danger" id="quantity-help">Must be a number</p>
+                </div>
+
+                <hr>
+
+                <div class="mb-5">
+                    <p class="subtitle is-5"><b>Order Total:</b></p>
+                    <p class="subtitle is-5" id="order-total"></p>
+                </div>
+
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-success" id="order-modal-submit">Submit</button>
+                    </div>
+                    <div class="control">
+                        <button class="button is-danger is-light" id="order-modal-cancel">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>

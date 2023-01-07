@@ -19,7 +19,7 @@ usersRouter.put('/', auth, upload.single('avatar'), async (req, res) => {
         username: username || user.username,
         bio: bio || user.bio,
         email: email || user.email,
-        password: password || user.password
+        password: password || user.password,
     };
     if (req.file !== undefined) {
         const pathToAvatar = req.file.destination.concat(req.file.filename);
@@ -28,15 +28,12 @@ usersRouter.put('/', auth, upload.single('avatar'), async (req, res) => {
     }
 
     try {
-        await User.update(
-            userDetails,
-            {
-                where: {
-                    id: user.id,
-                },
-                individualHooks: true,
-            }
-        );
+        await User.update(userDetails, {
+            where: {
+                id: user.id,
+            },
+            individualHooks: true,
+        });
     } catch (error) {
         console.log(error);
     }
@@ -98,7 +95,7 @@ usersRouter.post('/register', upload.single('avatar'), async (req, res) => {
         });
         return;
     }
-    
+
     try {
         const user = await User.create({
             first_name,

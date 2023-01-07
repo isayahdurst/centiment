@@ -5,12 +5,6 @@ const User = require('./User');
 const { Op } = require('sequelize');
 const Bid = require('./Bid');
 
-const getAsks = async () => {
-    const asks = await Ask.findAll();
-    console.log(asks);
-    return asks;
-};
-
 class Ask extends Model {
     async sayHello() {
         console.log('Hi, this works');
@@ -220,4 +214,4 @@ Ask.init(
     }
 );
 
-module.exports = { Ask, getAsks };
+module.exports = Ask;

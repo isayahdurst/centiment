@@ -3,7 +3,7 @@ const sequelize = require('./../config/connection');
 const { Op } = require('sequelize');
 const User = require('./User');
 const Shares = require('./Shares');
-const { Ask, getAsks } = require('./Ask');
+
 class Bid extends Model {
     async cancelBid() {
         const user = await User.findByPk(this.user_id);
@@ -139,11 +139,7 @@ Bid.init(
             },
 
             async afterCreate(bid, { transaction }) {
-                console.log('nothing will happen yet');
-                await getAsks();
-                const asks = await getAsks();
-                console.log(asks);
-                /* console.log(await getAsks(bid));
+                const Ask = require('./Ask');
                 const asks = await Ask.findAll({
                     where: {
                         [Op.and]: [
@@ -175,7 +171,7 @@ Bid.init(
                     await ask.fulfil(bid, transaction);
                 }
 
-                return bid; */
+                return bid;
             },
 
             async afterUpdate(bid) {

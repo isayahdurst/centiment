@@ -24,7 +24,9 @@
                 </article>
                 {{/if}}
                 </article>
+
             </div>
+
             <div class='column is-one-third' style="margin-left: 50px;">
                 <h1 class='title is-4 pb-4'>About community</h1>
                 <p class='subtitle'><span><i class='fa-duotone fa-users'></i>
@@ -41,16 +43,16 @@
                 <p class='subtitle'><span><i class='fa-solid fa-warehouse'></i>
                         {{topic.initial_shares}}
                         Initial Shares Remaining</span></p>
-                <div class='dropdown is-hoverable' id='ipo-buy-dropdown'>
+                <div class='dropdown' id='ipo-buy-dropdown'>
                     <form>
                         <div class='dropdown-trigger'>
                             <button
-                                class='button has-background-success px-6'
+                                class='button px-6'
                                 aria-haspopup='true'
                                 aria-controls='dropdown-menu2'
                                 id='ipo-buy-dropdown-btn'
                             >
-                                <span><b>Buy</b></span>
+                                <span><b>Purchase IPO</b></span>
                                 <span class='icon is-small'>
                                     <i
                                         class='fas fa-angle-down'
@@ -94,6 +96,60 @@
                         </div>
                     </form>
                 </div>
+                <div class="notification is-success is-hidden" id="IPO-notification">
+                    
+                </div>
+                
+                <div>
+                    <h2 class="title is-4">Orderbook:</h2>
+                    <div class="box has-background-success-light">
+                        <h2 class="subtitle has-text-centered"><b>Bids</b></h2>
+
+                        <nav class="level py-0 mb-1">
+                            <div class="level-left ml-5">
+                                <div class="level-item">
+                                    <p class="subtitle is-5">
+                                        <strong>Price:</strong>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="level-right">
+                                <div class="level-item mr-5">
+                                    <p class="subtitle is-5">
+                                        <strong>Quantity:</strong>
+                                    </p>
+                                </div>
+                            </div>
+                        </nav>
+                        {{#each bids}}
+                            {{>bids}}
+                        {{/each}}
+                    </div>
+                    <div class="box has-background-danger-light">
+                        <h2 class="subtitle has-text-centered"><b>Asks</b></h2>
+
+                        {{#each asks}}
+                            {{>asks}}
+                        {{/each}}
+                        <nav class="level py-0 mb-1">
+                            <div class="level-left ml-5">
+                                <div class="level-item">
+                                    <p class="subtitle is-5">
+                                        <strong>Price:</strong>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="level-right">
+                                <div class="level-item mr-5">
+                                    <p class="subtitle is-5">
+                                        <strong>Quantity:</strong>
+                                    </p>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

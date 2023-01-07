@@ -175,13 +175,10 @@ topicRouter.get('/search', auth, async (req, res) => {
             res.status(404).json({ message: 'No topic found' });
             return;
         }
+        res.status(200).json(topics);
     } catch (error) {
         console.log(error);
     }
-    res.status(200).json(topics);
-  } catch (error) {
-    console.log(error);
-  }
 });
 
 module.exports = topicRouter;

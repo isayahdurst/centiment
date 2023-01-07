@@ -16,9 +16,9 @@
             <div class='column is-half'>
                 <p class='title'>{{user.first_name}} {{user.last_name}}</p>
                 <p class='subtitle'>@{{user.username}}</p>
-                <div class="tag is-medium"><p><strong>Balance:</strong> ${{user.balance}}</p></div>
                 <p class="subtitle">
                     {{user.bio}}</p>
+                <div class="tag is-medium"><p><strong>Balance:</strong> ${{user.balance}}</p></div>
             </div>
         </div>
         <hr />
@@ -27,112 +27,46 @@
 </section>
 
 <section class="section">
-  <div class="container">
-      <h2 class="title has-text-centered">Portfolio</h2>
-      <div class="box">
-        <div class="card is-primary">
-          <header class="card-header">
-            <p class="card-header-title">
-              Pokemon Cards
-            </p>
-            <button class="card-header-icon" aria-label="more options">
-              <span class="icon">
-                <i class="fas fa-angle-down" aria-hidden="true"></i>
-              </span>
-            </button>
-          </header>
-          <footer class="card-footer">
-            <a href="#" class="card-footer-item">Shares Owned 💼: </a>
-            <a href="#" class="card-footer-item">Price Per Share 💲: </a>
-            <a href="#" class="card-footer-item">Total Value 🤑:</a>
-            <a href="#" class="card-footer-item">P/L 💪:</a>
-          </footer>
-          <footer class="card-footer">
-            <div class="card-footer-item"><button class="button is-success mx-2">Buy</button><button class="button is-info mx-2">Go To Page</button><button class="button is-danger mx-2">Sell</button></div>
-          </footer>
-        </div>
-      </div>
+    <div class="container">
+        <h2 class="title has-text-centered">Portfolio</h2>
 
-      <div class="box">
-        <div class="card is-primary">
-          <header class="card-header">
-            <p class="card-header-title">
-              Celebrity Scandals
-            </p>
-            <button class="card-header-icon" aria-label="more options">
-              <span class="icon">
-                <i class="fas fa-angle-down" aria-hidden="true"></i>
-              </span>
-            </button>
-          </header>
-          <footer class="card-footer">
-            <a href="#" class="card-footer-item"><b>Shares Owned 💼:</b> 321</a>
-            <a href="#" class="card-footer-item"><b>Price Per Share 💲:</b> 94 Cents</a>
-            <a href="#" class="card-footer-item"><b>Total Value 🤑: </b>30,174 Cents</a>
-            <a href="#" class="card-footer-item"><b>P/L 💪: +23,543 Cents</b></a>
-          </footer>
-          <footer class="card-footer">
-            <a href="#" class="card-footer-item"><button class="button is-success mx-2 " id="buyBtnTest">Buy</button><button class="button is-info mx-2">Go To Page</button><button class="button is-danger mx-2" id="sellBtnTest">Sell</button></a>
-          </footer>
+        {{#unless topics}}
+            <div class="notification is-warning is-light">
+            Uh oh, it looks like you don't have any content to display. Don't worry, we've got your back. <a href="/explore">Head on over to our <b>Explore</b> page</a> to find some new and exciting things to fill up this empty space!
+            </div>
+        {{/unless}}
+        {{#each topics}}   
+            <div class="box">
+            <div class="card is-primary">
+            <header class="card-header">
+                <p class="card-header-title">
+                {{topic_name}}
+                </p>
+                <button class="card-header-icon" aria-label="more options">
+                <span class="icon">
+                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                </span>
+                </button>
+            </header>
+            <footer class="card-footer">
+                <a href="#" class="card-footer-item">Shares Owned 💼: {{format_amount shareDetails.quantity}}</a>
+                <a href="#" class="card-footer-item">Price Per Share 💲: {{price}}</a>
+                <a href="#" class="card-footer-item">Total Value 🤑:{{calculateValue shareDetails.quantity price}}</a>
+                <a href="#" class="card-footer-item">P/L 💪:</a>
+            </footer>
+            <footer class="card-footer">
+                <div class="card-footer-item"><button class="button is-success mx-2 main-buy-button" data-topicID="{{id}}">Buy</button><button class="button is-info mx-2">Go To Page</button><button class="button is-danger mx-2 main-sell-button" data-topicID="{{id}}">Sell</button></div>
+            </footer>
+            </div>
         </div>
-      </div>
-      <div class="box">
-        <div class="card is-primary">
-          <header class="card-header">
-            <p class="card-header-title">
-              Elon Musk
-            </p>
-            <button class="card-header-icon" aria-label="more options">
-              <span class="icon">
-                <i class="fas fa-angle-down" aria-hidden="true"></i>
-              </span>
-            </button>
-          </header>
-          <footer class="card-footer">
-            <a href="#" class="card-footer-item">Shares Owned 💼: </a>
-            <a href="#" class="card-footer-item">Price Per Share 💲: </a>
-            <a href="#" class="card-footer-item">Total Value 🤑:</a>
-            <a href="#" class="card-footer-item">P/L 💪:</a>
-          </footer>
-          <footer class="card-footer">
-            <a href="#" class="card-footer-item"><button class="button is-success mx-2">Buy</button><button class="button is-info mx-2">Go To Page</button><button class="button is-danger mx-2">Sell</button></a>
-          </footer>
-        </div>
-      </div>
-      <div class="box">
-        <div class="card is-primary">
-          <header class="card-header">
-            <p class="card-header-title">
-              ChatGPT
-            </p>
-            <button class="card-header-icon" aria-label="more options">
-              <span class="icon">
-                <i class="fas fa-angle-down" aria-hidden="true"></i>
-              </span>
-            </button>
-          </header>
-          <footer class="card-footer">
-            <a href="#" class="card-footer-item">Shares Owned 💼: </a>
-            <a href="#" class="card-footer-item">Price Per Share 💲: </a>
-            <a href="#" class="card-footer-item">Total Value 🤑:</a>
-            <a href="#" class="card-footer-item">P/L 💪:</a>
-          </footer>
-          <footer class="card-footer">
-            <a href="#" class="card-footer-item"><button class="button is-success mx-2">Buy</button><button class="button is-info mx-2">Go To Page</button><button class="button is-danger mx-2">Sell</button></a>
-          </footer>
-        </div>
-      </div>
-
-  </div>
+        {{/each}}
+    </div>
 </section>
 
-<section class='section is-large'>
-  {{#each topic as |portfolio-item|}}
-    {{>portfolio}}
-  {{/each}}
 
-</section>
+        
 
 {{>edit-profile-modal}}
+{{>place-order-modal}}
 
 <script src="../js/userProfile.js"></script>

@@ -21,13 +21,133 @@ const submitButton = document.getElementById('edit-profile-submit');
 const buyButton = document.getElementById('buyBtnTest');
 const sellButton = document.getElementById('sellBtnTest');
 
+// Bid and Ask Modal
+const orderModal = document.getElementById('place-order-modal');
+const bidTab = document.getElementById('order-modal-tab_bid');
+const askTab = document.getElementById('order-modal-tab_ask');
+const orderPrice = document.getElementById('order-modal-price');
+const orderQuantity = document.getElementById('order-modal-quantity');
+const orderNotification = document.getElementById('order-modal-notification');
+const submitOrder = document.getElementById('order-modal-submit');
+const cancelOrder = document.getElementById('order-modal-cancel');
+const bidContent = document.getElementById('bid-content');
+const askContent = document.getElementById('ask-content');
+const priceHelp = document.getElementById('price-help');
+const quantityHelp = document.getElementById('quantity-help');
+const orderTotal = document.getElementById('order-total');
+const orderForm = document.getElementById('order-form');
+
+const buyButtons = document.querySelectorAll('.main-buy-button');
+const sellButtons = document.querySelectorAll('.main-sell-button');
+
+const modalCloseBtns = document.querySelectorAll('.delete');
+
+console.log(buyButtons);
+
+const openOrderModal = function (event) {
+    orderModal.classList.toggle('is-active');
+    const button = event.currentTarget;
+    console.log(button);
+    const topic_id = button.getAttribute('data-topicid');
+    orderModal.setAttribute('data-topicid', topic_id);
+};
+
+const closeOrderModal = function () {
+    orderModal.classList.remove('is-active');
+    orderPrice.value = '';
+    orderQuantity.value = '';
+    orderTotal.value = '';
+};
+
+const placeBid = async function (price, shares_requested, topic_id) {
+    const response = await fetch('/api/bid', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            price,
+            shares_requested,
+            topic_id,
+        }),
+    });
+
+    // TODO: return updated user balance to refresh balance info without reloading the entire page.
+
+    const bid = await response.json();
+
+    if (!response.ok) {
+        orderNotification.textContent = bid?.message;
+        orderNotification.classList.remove('is-hidden');
+    } else {
+        orderNotification.classList.remove('is-hidden');
+        orderNotification.textContent = 'Bid Placed Successfully';
+    }
+
+    setTimeout(() => {
+        orderNotification.classList.add('fade-out');
+    }, 2000);
+
+    orderNotification.addEventListener('transitionend', function () {
+        orderNotification.classList.add('is-hidden');
+    });
+
+    return bid;
+};
+
+const placeAsk = async function (price, shares_requested, topic_id) {
+    const response = await fetch('/api/ask', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            price,
+            shares_requested,
+            topic_id,
+        }),
+    });
+
+    const ask = await response.json();
+
+    if (!response.ok) {
+        orderNotification.textContent = ask?.message;
+    } else {
+        orderNotification.textContent = 'Ask place successfully!';
+    }
+    return ask;
+};
+
+const placeOrder = async function () {
+    try {
+        const price = orderPrice.value;
+        const shares_requested = orderQuantity.value;
+        const topic_id = orderModal.getAttribute('data-topicid');
+
+        if (bidTab.classList.contains('is-active')) {
+            await placeBid(price, shares_requested, topic_id);
+        } else if (askTab.classList.contains('is-active')) {
+            await placeAsk(price, shares_requested, topic_id);
+        }
+    } catch (error) {
+        console.log(error);
+        if (error.message === 'Price Validation') {
+            priceHelp.classList.remove('is-hidden');
+            priceHelp.textContent = `Price must be in currency, decimal, or integer format only.`;
+        } else if (error.message === 'Quantity Validation') {
+            quantityHelp.classList.remove('is-hidden');
+            quantityHelp.textContent = 'Quantity must be an integer.';
+        }
+    }
+};
+
 const toggleProfileModal = function () {
     editProfileModal.classList.toggle('is-active');
 };
 
 const updateProfile = async function (event) {
     event.preventDefault();
-    
+
     const updateFormData = new FormData();
     updateFormData.append('firstName', firstName.value);
     updateFormData.append('lastName', lastName.value);
@@ -78,10 +198,48 @@ bio.addEventListener('input', updateCharacterCount);
     item.addEventListener('click', toggleProfileModal)
 );
 
+[...buyButtons, ...sellButtons].forEach((button) =>
+    button.addEventListener('click', openOrderModal)
+);
+
+[...modalCloseBtns].forEach((button) =>
+    button.addEventListener('click', function () {
+        if (editProfileModal.classList.contains('is-active')) {
+            editProfileModal.classList.remove('is-active');
+        } else if (orderModal.classList.contains('is-active')) {
+            orderModal.classList.remove('is-active');
+        }
+    })
+);
+
+orderForm.addEventListener('input', function () {
+    if (orderPrice.value && orderQuantity.value) {
+        orderTotal.textContent = orderPrice.value * orderQuantity || '';
+    }
+});
+
 submitButton.addEventListener('click', updateProfile);
 
+submitOrder.addEventListener('click', async function (event) {
+    event.preventDefault();
+    const button = event.currentTarget;
+    console.log(button);
+    const topic_id = button.getAttribute('data-topicid');
+    await placeOrder(topic_id);
+});
+
+askTab.addEventListener('click', function () {
+    bidTab.classList.toggle('is-active');
+    askTab.classList.toggle('is-active');
+});
+
+bidTab.addEventListener('click', function () {
+    askTab.classList.toggle('is-active');
+    bidTab.classList.toggle('is-active');
+});
+
 // TEST ROUTE
-buyButton.addEventListener('click', async function () {
+/* buyButton.addEventListener('click', async function () {
     // Post Route
     console.log('/api/bid');
     const response = await fetch('/api/bid', {
@@ -119,7 +277,7 @@ sellButton.addEventListener('click', async function () {
 
     const ask = await response.json();
     console.log(ask);
-});
+}); */
 
 // function to preview uploaded avatar image
 let loadFile = function (event) {
