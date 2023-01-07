@@ -14,8 +14,6 @@ class Ask extends Model {
         // Bidder gets shares
         // Asker gets money
 
-        console.log('Ask.fulfil active...');
-
         const quantity = Math.min(bid.shares_remaining, this.shares_remaining);
 
         this.shares_remaining -= quantity;
@@ -51,6 +49,15 @@ class Ask extends Model {
         await bidderShares.addShares(quantity, transaction);
 
         await asker.increaseBalance(quantity * this.price, transaction);
+
+        await Transaction.create(
+            {
+                topic_id: topic_id,
+                volume: quantity * this.price,
+            },
+            { transaction: transaction }
+        );
+
         await this.save({ transaction });
     }
 }

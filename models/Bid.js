@@ -59,6 +59,7 @@ class Bid extends Model {
         console.log('Shares added');
 
         await asker.increaseBalance(quantity * this.price, transaction);
+
         await this.save({ transaction });
     }
 }

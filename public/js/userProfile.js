@@ -238,47 +238,6 @@ bidTab.addEventListener('click', function () {
     bidTab.classList.toggle('is-active');
 });
 
-// TEST ROUTE
-/* buyButton.addEventListener('click', async function () {
-    // Post Route
-    console.log('/api/bid');
-    const response = await fetch('/api/bid', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            price: 100,
-            shares_requested: 1,
-            topic_id: 1,
-        }),
-    });
-
-    // TODO: return updated user balance to refresh balance info without reloading the entire page.
-
-    const bid = await response.json();
-    console.log(bid);
-});
-
-// TEST ROUTE
-sellButton.addEventListener('click', async function () {
-    console.log('/api/ask');
-    const response = await fetch('/api/ask', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            price: 90,
-            shares_requested: 100,
-            topic_id: 1,
-        }),
-    });
-
-    const ask = await response.json();
-    console.log(ask);
-}); */
-
 // function to preview uploaded avatar image
 let loadFile = function (event) {
     var image = document.getElementById('preview');
