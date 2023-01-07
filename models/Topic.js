@@ -11,6 +11,16 @@ class Topic extends Model {
         this.initial_shares -= quantity;
         await this.save({ transaction: transaction });
     }
+
+    async increaseVolume(amount, transaction) {
+        this.volume += amount;
+        await this.save({ transaction: transaction });
+    }
+
+    async updateLastTradePrice(price, transaction) {
+        this.last_traded_price = price;
+        this.save({ transaction: transaction });
+    }
 }
 
 Topic.init(
@@ -56,6 +66,25 @@ Topic.init(
             type: DataTypes.INTEGER,
             allowNull: true,
             defaultValue: 100000,
+        },
+        volume: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+            defaultValue: 0,
+        },
+        last_traded_price: {
+            type: DataTypes.FLOAT,
+            allowNull: true,
+        },
+        number_posts: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            defaultValue: 0,
+        },
+        number_comments: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
         },
     },
     {

@@ -77,6 +77,7 @@ topicRouter.post('/buyIPO', auth, async (req, res) => {
 
         await user.decreaseBalance(quantity * topic.price, t);
         await topic.decreaseIPOShares(quantity, t);
+        await topic.increaseVolume(quantity * topic.price, t);
 
         t.commit();
 

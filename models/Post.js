@@ -19,16 +19,34 @@ Post.init(
             type: DataTypes.TEXT,
             allowNull: false,
         },
-        up_vote: {
+        up_votes: {
             type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
             validate: {
                 isInt: true,
-            }
+            },
+        },
+        down_votes: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
+            validate: {
+                isInt: true,
+            },
         },
         topic_id: {
             type: DataTypes.INTEGER,
             references: {
                 model: 'topic',
+                key: 'id',
+            },
+        },
+        user_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'user',
                 key: 'id',
             },
         },

@@ -3,6 +3,7 @@ const sequelize = require('./../config/connection');
 const { Op } = require('sequelize');
 const User = require('./User');
 const Shares = require('./Shares');
+const Topic = require('./Topic');
 
 class Bid extends Model {
     async cancelBid() {
@@ -31,9 +32,10 @@ class Bid extends Model {
         await ask.save({ transaction });
         console.log('Shares reduced from ask');
 
-        const [asker, bidder] = await Promise.all([
+        const [asker, bidder, topic] = await Promise.all([
             User.findByPk(ask.user_id),
             User.findByPk(this.user_id),
+            Topic.findByPk(ask.topic_id),
         ]);
 
         await bidder.refund(this.price, ask.price, transaction);
@@ -56,9 +58,9 @@ class Bid extends Model {
         console.log('bidder shares located/created');
 
         await bidderShares.addShares(quantity, transaction);
-        console.log('Shares added');
-
         await asker.increaseBalance(quantity * this.price, transaction);
+        await topic.increaseVolume(quantity * this.price, transaction);
+        await topic.updateLastTradePrice(this.price, transaction);
 
         await this.save({ transaction });
     }
@@ -176,9 +178,10 @@ Bid.init(
             },
 
             async afterUpdate(bid) {
-                if (!bid.shares_remaining > 0) {
+                if (bid.shares_remaining == 0) {
                     bid.status = 'complete';
                     console.log(`\nafterUpdate: \nBid status: ${bid.status}\n`);
+                    await bid.save();
                 }
                 return bid;
             },

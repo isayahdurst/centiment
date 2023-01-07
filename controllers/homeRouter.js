@@ -9,9 +9,28 @@ const Ask = require('../models/Ask');
 const homeRouter = new Router();
 
 homeRouter.get('/', auth, async (req, res) => {
+    const user = req.user;
     const plainUser = req.user.get({ plain: true });
+
+    const topTopics = await Topic.findAll({
+        order: [['volume', 'DESC']],
+        limit: 10,
+    });
+
+    // TODO: Only display topics that have at least 1 post.
+    const newTopics = await Topic.findAll({
+        where: {
+            user_id: user.id,
+        },
+        order: [['updatedAt', 'DESC']],
+        limit: 3,
+    });
+
+    const plainTopTopics = topTopics.map((topic) => topic.get({ plain: true }));
+
     res.render('home', {
         user: plainUser,
+        topTopics: plainTopTopics,
     });
 });
 
@@ -96,13 +115,18 @@ homeRouter.get('/topic/:id', auth, async (req, res) => {
         Ask.findAll({
             where: {
                 topic_id: id,
+                status: 'pending',
             },
             limit: 10,
+            order: [['price', 'ASC']],
         }),
         Bid.findAll({
             where: {
                 topic_id: id,
+                status: 'pending',
             },
+            limit: 10,
+            order: [['price', 'DESC']],
         }),
     ]);
 
