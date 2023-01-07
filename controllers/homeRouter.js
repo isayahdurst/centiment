@@ -1,7 +1,8 @@
 const { Router } = require('express');
 const auth = require('../middleware/auth');
 const optionalAuth = require('../middleware/optionalAuth');
-const { User, Topic, Post } = require('../models');
+const { User, Topic, Post, Shares } = require('../models');
+const sequelize = require('sequelize');
 
 const homeRouter = new Router();
 
@@ -100,12 +101,25 @@ homeRouter.get("/topic/edit/:id", auth, async (req, res) => {
 
 // explore page route
 homeRouter.get("/explore", auth, async (req, res) => {
-  // limit 20 recent record to return by request
+  // query onclude count of shares for each topic
   const topics = await Topic.findAll({
-    order:[['updated_at','DESC']],
-    limit: 20,
-    },
-  );
+    attributes: [
+      'id', 
+      'topic_name', 
+      'description',
+      'price', 
+      'initial_shares', 
+      'updated_at', 
+      [sequelize.fn('COUNT', sequelize.col('shares.id')), 
+      'sharesCount']],
+    include: [{
+      model: Shares,
+      attributes: []
+    }],
+    group: ['Topic.id'],
+    order: [['updated_at', 'DESC']]
+  });
+
   const plainUser = req.user.get({ plain: true });
   const plainTopics = topics.map((topic) => topic.get({ plain: true }));
   res.render("explore", {

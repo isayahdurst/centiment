@@ -178,6 +178,10 @@ topicRouter.get('/search', auth, async (req, res) => {
     } catch (error) {
         console.log(error);
     }
+    res.status(200).json(topics);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 module.exports = topicRouter;
