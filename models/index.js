@@ -53,7 +53,7 @@ User.hasMany(Topic, {
 
 Shares.belongsTo(Topic, {
     foreignKey: 'topic_id',
-})
+});
 Topic.hasMany(Shares);
 
 Topic.belongsTo(User, {

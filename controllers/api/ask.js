@@ -37,6 +37,7 @@ askRouter.post('/', auth, async (req, res) => {
         console.log('Ask created');
 
         await transaction.commit();
+
         console.log(ask);
         res.json(ask);
     } catch (error) {

@@ -4,6 +4,7 @@ const Shares = require('./Shares');
 const User = require('./User');
 const { Op } = require('sequelize');
 const Bid = require('./Bid');
+const Topic = require('./Topic');
 
 class Ask extends Model {
     async sayHello() {
@@ -14,12 +15,16 @@ class Ask extends Model {
         // Bidder gets shares
         // Asker gets money
 
-        console.log('Ask.fulfil active...');
-
         const quantity = Math.min(bid.shares_remaining, this.shares_remaining);
 
         this.shares_remaining -= quantity;
+        if (this.shares_remaining === 0) {
+            this.status = 'complete';
+        }
         bid.shares_remaining -= quantity;
+        if (bid.shares_remaining === 0) {
+            bid.status = 'complete';
+        }
 
         if (this.shares_remaining < 0 || bid.shares_remaining < 0)
             throw new Error(
@@ -28,9 +33,10 @@ class Ask extends Model {
 
         await bid.save({ transaction });
 
-        const [bidder, asker] = await Promise.all([
+        const [bidder, asker, topic] = await Promise.all([
             User.findByPk(bid.user_id),
             User.findByPk(this.user_id),
+            Topic.findByPk(bid.topic_id),
         ]);
 
         await bidder.refund(bid.price, this.price, transaction);
@@ -49,8 +55,10 @@ class Ask extends Model {
             );
 
         await bidderShares.addShares(quantity, transaction);
-
         await asker.increaseBalance(quantity * this.price, transaction);
+        await topic.increaseVolume(quantity * this.price, transaction);
+        await topic.updateLastTradePrice(this.price, transaction);
+
         await this.save({ transaction });
     }
 }
@@ -199,8 +207,9 @@ Ask.init(
             },
 
             async afterUpdate(ask) {
-                if (!ask.shares_remaining > 0) {
+                if (ask.shares_remaining == 0) {
                     ask.status = 'complete';
+                    await ask.save();
                     console.log('Ask - afterUpdate: Ask Status' + ask.status);
                 }
                 return ask;
