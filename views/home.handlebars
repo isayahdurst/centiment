@@ -19,86 +19,22 @@
                 </tr>
             </div>
             <div class="tbody">
+                {{#each topTopics as |topic|}}
                 <tr class="is-selected">
-                    <th>1</th>
-                    <td><a>Pokemon Cards</a></td>
-                    <td>45 Cents</td>
-                    <td>3,459 Cents</td>
-                    <td>10,000 Cents</td>
-                    <td>52,345</td>
+                    <th>{{addToIndex @index}}</th>
+                    <td><a>{{topic.topic_name}}</a></td>
+                    <td>{{#if topic.last_traded_price}}
+                            {{topic.last_traded_price}}
+                        {{/if}}
+                        {{#unless topic.last_traded_price}}
+                            {{topic.price}}
+                        {{/unless}}
+                    </td>
+                    <td>??</td>
+                    <td>{{topic.volume}}</td>
+                    <td>{{topic.number_posts}}</td>
                 </tr>
-                <tr>
-                    <th>2</th>
-                    <td><a>Cars</a></td>
-                    <td>45 Cents</td>
-                    <td>3,459 Cents</td>
-                    <td>10,000 Cents</td>
-                    <td>52,345</td>
-                </tr>
-                <tr>
-                    <th>3</th>
-                    <td><a>Elon Musk</a></td>
-                    <td>45 Cents</td>
-                    <td>3,459 Cents</td>
-                    <td>10,000 Cents</td>
-                    <td>52,345</td>
-                </tr>
-                <tr>
-                    <th>4</th>
-                    <td><a>Taylor Schwifty</a></td>
-                    <td>45 Cents</td>
-                    <td>3,459 Cents</td>
-                    <td>10,000 Cents</td>
-                    <td>52,345</td>
-                </tr>
-                <tr>
-                    <th>5</th>
-                    <td><a>ChatGPT</a></td>
-                    <td>45 Cents</td>
-                    <td>3,459 Cents</td>
-                    <td>10,000 Cents</td>
-                    <td>52,345</td>
-                </tr>
-                <tr>
-                    <th>6</th>
-                    <td><a>UCB</a></td>
-                    <td>45 Cents</td>
-                    <td>3,459 Cents</td>
-                    <td>10,000 Cents</td>
-                    <td>52,345</td>
-                </tr>
-                <tr>
-                    <th>7</th>
-                    <td><a>Long Lists</a></td>
-                    <td>45 Cents</td>
-                    <td>3,459 Cents</td>
-                    <td>10,000 Cents</td>
-                    <td>52,345</td>
-                </tr>
-                <tr>
-                    <th>8</th>
-                    <td><a>Why Lorem exists...</a></td>
-                    <td>45 Cents</td>
-                    <td>3,459 Cents</td>
-                    <td>10,000 Cents</td>
-                    <td>52,345</td>
-                </tr>
-                <tr>
-                    <th>9</th>
-                    <td><a>I don't want to make any more lists, geez</a></td>
-                    <td>45 Cents</td>
-                    <td>3,459 Cents</td>
-                    <td>10,000 Cents</td>
-                    <td>52,345</td>
-                </tr>
-                <tr>
-                    <th>10</th>
-                    <td><a>Avatar: The Way of Water</a></td>
-                    <td>45 Cents</td>
-                    <td>3,459 Cents</td>
-                    <td>10,000 Cents</td>
-                    <td>52,345</td>
-                </tr>
+                {{/each}}
             </div>
         </table>
         </div>

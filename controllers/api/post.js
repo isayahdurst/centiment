@@ -37,7 +37,7 @@ postRouter.post('/upvote', auth, async (req, res) => {
 });
 
 postRouter.post('/downvote', auth, async (req, res) => {
-    const id = req.body;
+    const { id } = req.body;
     const user = req.user;
 
     const post = await Post.findByPk(id);
