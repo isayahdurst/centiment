@@ -13,11 +13,15 @@ homeRouter.get('/', auth, async (req, res) => {
     const plainUser = req.user.get({ plain: true });
 
     const topTopics = await Topic.findAll({
-        order: [['volume', 'DESC']],
+        order: [
+            ['volume', 'DESC'],
+            ['createdAt', 'ASC'],
+        ],
         limit: 10,
     });
 
     // TODO: Only display topics that have at least 1 post.
+
     const newTopics = await Topic.findAll({
         where: {
             user_id: user.id,

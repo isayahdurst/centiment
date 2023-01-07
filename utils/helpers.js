@@ -49,4 +49,7 @@ module.exports = {
         }
         return Math.floor(seconds) + 's';
     },
+    addToIndex: (index) => {
+        return index + 1;
+    },
 };
