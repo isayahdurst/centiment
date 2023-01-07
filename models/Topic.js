@@ -19,7 +19,17 @@ class Topic extends Model {
 
     async updateLastTradePrice(price, transaction) {
         this.last_traded_price = price;
-        this.save({ transaction: transaction });
+        await this.save({ transaction: transaction });
+    }
+
+    async increaseNumPosts() {
+        this.number_posts += 1;
+        await this.save();
+    }
+
+    async decreaseNumPosts() {
+        this.number_posts -= 1;
+        await this.save();
     }
 }
 

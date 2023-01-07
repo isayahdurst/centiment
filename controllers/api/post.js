@@ -22,6 +22,34 @@ postRouter.get('/', auth, async (req, res) => {
     });
 });
 
+postRouter.post('/upvote', auth, async (req, res) => {
+    const { id } = req.body;
+    const user = req.user;
+
+    const post = await Post.findByPk(id);
+
+    try {
+        await post.upvote(user.id);
+        res.json({ message: 'upvote successful' });
+    } catch (error) {
+        res.status(500).json({ message: 'unexpected error occured' });
+    }
+});
+
+postRouter.post('/downvote', auth, async (req, res) => {
+    const id = req.body;
+    const user = req.user;
+
+    const post = await Post.findByPk(id);
+
+    try {
+        await post.upvote(user.id);
+        res.json({ message: 'downvote successful' });
+    } catch (error) {
+        res.status(500).json({ message: 'unexpected error occured' });
+    }
+});
+
 postRouter.post('/', auth, async (req, res) => {
     const user = req.body;
     const { post_name, contents, topic_id } = req.body;
@@ -44,13 +72,17 @@ postRouter.post('/', auth, async (req, res) => {
 
         if (!shares) throw new Error('User not Authorized.');
 
-        Post.create({
+        const post = await Post.create({
             post_name,
             contents,
+            topic_id,
+            user_id: user.id,
         });
+
+        res.json({ message: 'Post Created Successfully' });
     } catch (error) {
         if (error.message === 'User not Authorized') {
-            res.status(403).json({
+            res.status(401).json({
                 message: "Can't create post. User does not own topic",
             });
         }
