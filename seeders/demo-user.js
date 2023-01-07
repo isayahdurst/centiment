@@ -22,7 +22,7 @@ module.exports = {
             username: 'firstname.lastname',
             email: 'test@centiment.com',
             bio: "I am a fake account. But that's okay, check me out anyway!",
-            avatar: 
+            avatar: null,
             password: 'test',
         });
     },
