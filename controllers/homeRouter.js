@@ -103,18 +103,13 @@ homeRouter.get('/about', optionalAuth, async (req, res) => {
 // Get single topic
 homeRouter.get('/topic/:id', auth, async (req, res) => {
     const { id } = req.params;
-    /* const topic = await Topic.findByPk(id);
-    const posts = await Post.findAll({
-        where: {
-            topic_id: req.params.id,
-        }
-    }); */
     const [topic, posts, asks, bids] = await Promise.all([
         Topic.findByPk(id),
         Post.findAll({
             where: {
                 topic_id: req.params.id,
             },
+            include: [User]
         }),
         Ask.findAll({
             where: {
