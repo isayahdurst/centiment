@@ -1,26 +1,29 @@
-<section class="section">
-  <div class="columns is-centered field has-addons">
-  <div class="control mr-3"><input class="input" type="search" oninput="filterTopic()" id="searchbox" placeholder="Filter topics"></div>
-  
-  <div class="field has-addons">
-    <div class="control is-expanded">    
-      <input class="input" type="text" placeholder="Find topic" id="searchTopicKeyword" onkeydown="searchTopic()" onblur="clearSearchInput()">
-    </div>
-    <div class="control" style="display: none">
-      <a class="button is-info" id="search-topics">Search</a>
-    </div>
-  </div>
-  <div class="dropdown-content" id="suggestions"></div>
-
-  <div class="control">
-    <a class="button ml-3 is-info" id="clear-results">
-      Clear Results
-    </a>
-  </div>
-</div>
-</section>
-<section class="section">
+<section class="section" id="research-section">
   <div class="container is-fluid">
+    <div class="columns is-mobile">
+      <div class="column is-full-mobile is-half-tablet is-one-third-desktop is-one-third-widescreen is-one-third-fullhd">
+          <div class="control is-expanded">    
+            <input class="input" type="text" placeholder="Search topic" id="search-topic-keyword" onkeydown="searchTopic()">
+          </div>
+        <div class="dropdown-content" id="suggestions"></div>
+      </div>
+      <div class="column is-full-mobile is-half-tablet is-one-third-desktop is-one-third-widescreen is-one-third-fullhd">
+        <input class="input" type="search" oninput="filterTopic()" id="filter-topic-keyword" placeholder="Filter topics">
+      </div>
+      <div class="column is-full-mobile is-half-tablet is-one-third-desktop is-one-third-widescreen is-one-third-fullhd">  
+        <div class="button is-primary" id="add-topic-button">Add New Topic</div>
+      </div>
+    </div>  
+  </div>
+</section>
+
+<section class="section" id="cards-section">
+  <div class="container is-fluid">
+    <div class="notification is-size-5">
+      <p>Explore page allow to see the most recent post. This page shows the recent 20 posted topics that was discussed.</p>
+      <p>If you want to refine topics on the page you may use 'Filter'.</p>
+      <p>Use search to query by keyword in title or description of the topic. Create a new topic, if you don't see topic you want to discuss.</p>
+    </div> 
     <div class="columns is-mobile">
       {{#each topics as |topic|}}
         <div class="column is-full-mobile is-half-tablet is-one-third-desktop is-one-quarter-widescreen is-one-fifth-fullhd">
@@ -42,7 +45,7 @@
       {{/each}}
     </div>
   </div>
-
+  {{>add-topic-modal}}
 </section>
 <script type="text/javascript" src="./js/explore.js"></script>
 
@@ -53,23 +56,34 @@
     flex-wrap: wrap;
     justify-content: center;
   }
-  .card{
+  .cards-section {
+    max-width: 120rem;
+  }
+  .card {
     min-width: 25%;
-    max-width: 30rem;
+    max-width: 20rem;
     height: 25rem;
   } 
-  .card-content{
+  .card-content {
     padding-top: 0;
   }
-  .card-footer{
+  .card-footer {
     position: absolute;
     bottom: 0;
     width: 100%;
     z-index: 9;
   }
+  .section{
+    max-width: 120rem;
+  }
+  #add-topic-button {
+    position: absolute;
+    margin-top: 0rem;
+    z-index: 8;
+  }
   #suggestions {
     position: absolute;
-    margin-top: 3rem;
+    margin-top: 0rem;
     z-index: 9;
   }
 </style>
