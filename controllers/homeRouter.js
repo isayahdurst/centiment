@@ -115,6 +115,7 @@ homeRouter.get('/topic/:id', auth, async (req, res) => {
             where: {
                 topic_id: req.params.id,
             },
+            include: [User],
         }),
         Ask.findAll({
             where: {
