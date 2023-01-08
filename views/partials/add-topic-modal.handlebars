@@ -1,0 +1,45 @@
+<div class="modal" id="add-topic-modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Add Topic</p>
+      <button class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+      <p id="notification"></p>
+      <form id="add-topic-form">
+        <div class="field">
+          <label class="label">Title</label>
+          <div class="control has-icons-right">
+            <input class="input" name="topic_name" id="topic_name" type="text" placeholder="Title of the topic">
+          </div>
+          <p class="help is-danger" id="check-name"></p>
+        </div>
+
+        <div class="field">
+          <label class="label">Price</label>
+          <div class="control has-icons-left has-icons-right">
+            <input class="input" name="price" id="price" type="number" min="1" placeholder="Price per share">
+            <span class="icon is-small is-left">
+              <i class="fas">$</i>
+            </span>
+          </div>
+          <p class="help is-danger" id="check-price"></p>
+        </div>
+
+        <div class="field">
+            <label for="descrition" class="label">Description</label>
+            <div class="control has-icons-left has-icons-right">
+                <textarea id="description" name="description" class="textarea" placeholder="Describe your thoughts... Description must be at least 200 characters long but no more than 5000 characters." maxlength="5000"></textarea>
+            </div>
+            <p class="help has-text-right" id="description-character-count">0/5000</p>
+            <p class="help is-danger" id="check-desc"></p>
+        </div>
+
+      </form>
+        <div class="control">
+        <button class="button is-success" id="create-topic-button">Create topic</button>
+      </div>
+    </section>
+  </div>
+</div>
