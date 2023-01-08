@@ -92,6 +92,7 @@ topicRouter.post('/buyIPO', auth, async (req, res) => {
 // add a post
 topicRouter.post('/:id', auth, async (req, res) => {
     const { post_name, contents } = req.body;
+    const user = await User.findByPk(req.user.id);
     const { id } = req.params;
 
     try {
@@ -99,6 +100,7 @@ topicRouter.post('/:id', auth, async (req, res) => {
             post_name,
             contents,
             topic_id: id,
+            user_id: user.id,
         });
         res.status(200).json({
             id: newPost.id,
