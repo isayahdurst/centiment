@@ -13,7 +13,7 @@ class Topic extends Model {
     }
 
     async increaseVolume(amount, transaction) {
-        this.volume += amount;
+        this.volume += Number(amount);
         await this.save({ transaction: transaction });
     }
 

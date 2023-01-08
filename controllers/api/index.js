@@ -4,7 +4,6 @@ const commentRouter = require('./comment');
 const listingRouter = require('./listing');
 const postRouter = require('./post');
 const topicRouter = require('./topic');
-const transactionRouter = require('./transaction');
 const userRouter = require('./user');
 const askRouter = require('./ask');
 const bidRouter = require('./bid');

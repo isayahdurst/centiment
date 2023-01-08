@@ -7,31 +7,31 @@
         <h2 class="title mb-6 pb-6">Welcome Back, {{user.first_name}} 😀</h2>
         <h2 class="title has-text-centered">Top Topics Today 🔥</h2>
         <div class="box is-flex is-justify-content-center">
-        <table class="table">
+        <table class="table" style="width: 100%;">
             <div class="thead">
                 <tr>
                     <th>Rank</th>
                     <th>Community</th>
                     <th>Price</th>
-                    <th>24h volume</th>
+                    <th>{{!-- 24h volume --}}</th>
                     <th>Total volume</th>
-                    <th>Comments</th>
+                    <th>Posts</th>
                 </tr>
             </div>
             <div class="tbody">
                 {{#each topTopics as |topic|}}
-                <tr class="is-selected">
+                <tr {{#if @first}}class="is-selected"{{/if}}>
                     <th>{{addToIndex @index}}</th>
-                    <td><a>{{topic.topic_name}}</a></td>
+                    <td><a href="/topic/{{topic.id}}">{{topic.topic_name}} {{#if @first}}🏆🔥🔥🔥{{/if}}</a></td>
                     <td>{{#if topic.last_traded_price}}
-                            {{topic.last_traded_price}}
+                            ${{topic.last_traded_price}}
                         {{/if}}
                         {{#unless topic.last_traded_price}}
-                            {{topic.price}}
+                            ${{topic.price}}
                         {{/unless}}
                     </td>
-                    <td>??</td>
-                    <td>{{topic.volume}}</td>
+                    <td></td>
+                    <td>${{format_amount topic.volume}}</td>
                     <td>{{topic.number_posts}}</td>
                 </tr>
                 {{/each}}
