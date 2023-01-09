@@ -38,6 +38,23 @@
                                 {{post.contents}}
                             </p>
                         </div>
+                        <div class='comment-display'>
+                            <div class='new-comments message is-small'></div>
+                            <div class='field'>
+                                <div class='control'>
+                                    <textarea class='textarea is-small' id='comment-field' placeholder='Type comment here.'></textarea>
+                                </div>                                
+                            </div>
+                            <div class='field is-grouped is-grouped-right'>
+                                <div class='control'>
+                                    <button class='button is-link is-small' id='comment-button'>Post Comment</button>
+                                </div>
+                                
+                            </div>
+
+                        </div>
+                        
+                        
                         <nav class='level is-mobile'>
                             <div class='level-left'>
                                 <div class="level-item">
@@ -205,6 +222,7 @@
 
 <script src='../js/topic-details.js'></script>
 <script src='../js/post.js'></script>
+<script src='../js/comment.js'></script>
 
 
 {{!-- <a href='http://localhost:3001/topic'>Back to all topics</a>

@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const auth = require('../middleware/auth');
 const optionalAuth = require('../middleware/optionalAuth');
-const { User, Topic, Post, Shares } = require('../models');
+const { User, Topic, Post, Shares, Comment } = require('../models');
 const sequelize = require('sequelize');
 const Bid = require('../models/Bid');
 const Ask = require('../models/Ask');
@@ -109,13 +109,13 @@ homeRouter.get('/topic/:id', auth, async (req, res) => {
             topic_id: req.params.id,
         }
     }); */
-    const [topic, posts, asks, bids] = await Promise.all([
+    const [topic, posts, asks, bids, comments] = await Promise.all([
         Topic.findByPk(id),
         Post.findAll({
             where: {
                 topic_id: req.params.id,
             },
-            include: [User],
+            include: [User, Comment],
         }),
         Ask.findAll({
             where: {
@@ -133,6 +133,11 @@ homeRouter.get('/topic/:id', auth, async (req, res) => {
             limit: 10,
             order: [['price', 'DESC']],
         }),
+        Comment.findAll({
+            include: [User, Post],
+            limit:5,
+            order: [['id','DESC']],
+        })
     ]);
 
     const plainUser = req.user.get({ plain: true });
@@ -143,9 +148,10 @@ homeRouter.get('/topic/:id', auth, async (req, res) => {
     }
     const topicSimple = topic.get({ simple: true });
     const plainPosts = posts.map((post) => post.get({ plain: true }));
-
+    
     const asksPlain = asks.map((ask) => ask.get({ plain: true }));
     const bidsPlain = bids.map((bid) => bid.get({ plain: true }));
+
 
     res.render('single-topic', {
         user: plainUser,
@@ -214,5 +220,9 @@ homeRouter.get('/topic/:id/:id', auth, async (req, res) => {
         post: postSimple,
     });
 });
+
+
+
+
 
 module.exports = homeRouter;

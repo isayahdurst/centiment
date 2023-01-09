@@ -52,4 +52,8 @@ module.exports = {
     addToIndex: (index) => {
         return index + 1;
     },
+
+    ifEquals: (var1, var2) => {
+        return var1 === var2;
+    },
 };
