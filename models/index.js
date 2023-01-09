@@ -5,6 +5,7 @@ const Post = require('./Post');
 const Shares = require('./Shares');
 const Topic = require('./Topic');
 const User = require('./User');
+const Mtm = require('./Mtm')
 
 Topic.hasMany(Post, {
     foreignKey: 'topic_id',
