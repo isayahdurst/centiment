@@ -201,6 +201,9 @@ homeRouter.get('/topic/edit/:id', auth, async (req, res) => {
 
 // explore page route
 homeRouter.get('/explore', auth, async (req, res) => {
+    const limit = 20;
+    const page = 1;
+
     // query onclude count of shares for each topic
     const topics = await Topic.findAll({
         attributes: [
@@ -220,13 +223,22 @@ homeRouter.get('/explore', auth, async (req, res) => {
         ],
         group: ['Topic.id'],
         order: [['updated_at', 'DESC']],
+        offset:((page-1)*limit),
+        limit : limit,
+        subQuery:false
+
     });
 
+    const topicsOnPage = topics.length;
+    const topicsAll = await Topic.findAll();
+    const topicsTotal = topicsAll.length;
     const plainUser = req.user.get({ plain: true });
     const plainTopics = topics.map((topic) => topic.get({ plain: true }));
     res.render('explore', {
         topics: plainTopics,
         user: plainUser,
+        topicsOnPage: topicsOnPage,
+        topicsTotal: topicsTotal,
     });
 });
 
