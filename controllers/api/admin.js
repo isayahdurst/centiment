@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const auth = require('../../middleware/auth');
 const { Op } = require('sequelize');
-const { User, Topic } = require('../../models');
+const { User, Topic, Post } = require('../../models');
 const Shares = require('../../models/Shares');
 const Ask = require('../../models/Ask');
 const Bid = require('../../models/Bid');
@@ -193,6 +193,33 @@ adminRouter.post('/bid', async (req, res) => {
 
     console.log(bid);
     res.json(bid);
+});
+
+adminRouter.get('/post', async (req, res) => {
+    const posts = await Post.findAll();
+
+    res.json(posts);
+});
+
+adminRouter.get('/post/votes/:id', async (req, res) => {
+    const { id } = req.params;
+    console.log(id);
+    const post = await Post.findByPk(id);
+    console.log(post);
+    if (!post) res.status(404).json({ message: 'post not found' });
+
+    res.json({ upvoters: post.up_voters, downvoters: post.down_voters });
+});
+
+adminRouter.post('/post/reset-votes/:id', async (req, res) => {
+    const { id } = req.params;
+    const post = await Post.findByPk(id);
+    post.up_voters = '';
+    post.down_voters = '';
+    post.up_votes = 0;
+    post.down_votes = 0;
+    await post.save();
+    res.json(post);
 });
 
 module.exports = adminRouter;

@@ -116,6 +116,7 @@ homeRouter.get('/topic/:id', auth, async (req, res) => {
                 topic_id: req.params.id,
             },
             include: [User, Comment],
+            order: [['createdAt', 'DESC']],
         }),
         Ask.findAll({
             where: {
@@ -135,9 +136,9 @@ homeRouter.get('/topic/:id', auth, async (req, res) => {
         }),
         Comment.findAll({
             include: [User, Post],
-            limit:5,
-            order: [['id','DESC']],
-        })
+            limit: 5,
+            order: [['id', 'DESC']],
+        }),
     ]);
 
     const plainUser = req.user.get({ plain: true });
@@ -148,10 +149,9 @@ homeRouter.get('/topic/:id', auth, async (req, res) => {
     }
     const topicSimple = topic.get({ simple: true });
     const plainPosts = posts.map((post) => post.get({ plain: true }));
-    
+
     const asksPlain = asks.map((ask) => ask.get({ plain: true }));
     const bidsPlain = bids.map((bid) => bid.get({ plain: true }));
-
 
     res.render('single-topic', {
         user: plainUser,
@@ -220,9 +220,5 @@ homeRouter.get('/topic/:id/:id', auth, async (req, res) => {
         post: postSimple,
     });
 });
-
-
-
-
 
 module.exports = homeRouter;

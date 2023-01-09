@@ -17,7 +17,6 @@ console.log(upvoteButtons);
 console.log(upvoteCounts);
 
 const upvotePost = async function (event) {
-    console.log('button clicked');
     const button = event.currentTarget;
     const post_id = button.getAttribute('data-postid');
 
@@ -31,21 +30,60 @@ const upvotePost = async function (event) {
         }),
     });
 
-    const upvoteCount = upvoteCounts.filter(
+    const upvoteCountsArr = Array.from(upvoteCounts);
+    const downvoteCountsArr = Array.from(downvoteCounts);
+
+    const upvoteCount = upvoteCountsArr.filter(
         (label) => label.getAttribute('data-postid') === post_id
     );
-    const downvoteCount = downvoteCounts.filter(
+
+    const downvoteCount = downvoteCountsArr.filter(
         (label) => label.getAttribute('data-postid') === post_id
     );
 
     const newVotes = await response.json();
     if (response.ok) {
-        upvoteCount.textContent = newVotes.upvotes;
-        downvoteCount.textContent = newVotes.downvotes;
+        upvoteCount[0].textContent = newVotes.upvotes;
+        downvoteCount[0].textContent = newVotes.downvotes;
+    }
+};
+
+const downvotePost = async function (event) {
+    const button = event.currentTarget;
+    const post_id = button.getAttribute('data-postid');
+
+    const response = await fetch('/api/post/downvote', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            id: post_id,
+        }),
+    });
+
+    const upvoteCountsArr = Array.from(upvoteCounts);
+    const downvoteCountsArr = Array.from(downvoteCounts);
+
+    const upvoteCount = upvoteCountsArr.filter(
+        (label) => label.getAttribute('data-postid') === post_id
+    );
+
+    const downvoteCount = downvoteCountsArr.filter(
+        (label) => label.getAttribute('data-postid') === post_id
+    );
+
+    const newVotes = await response.json();
+    if (response.ok) {
+        upvoteCount[0].textContent = newVotes.upvotes;
+        downvoteCount[0].textContent = newVotes.downvotes;
     }
 };
 
 upvoteButtons.forEach((button) => button.addEventListener('click', upvotePost));
+downvoteButtons.forEach((button) =>
+    button.addEventListener('click', downvotePost)
+);
 
 buyDropDownBtn.addEventListener('click', function (event) {
     event.preventDefault();
