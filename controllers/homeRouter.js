@@ -68,10 +68,33 @@ homeRouter.get('/user/:username', auth, async (req, res) => {
         topics.push(plainTopic);
     }
 
+    const posts = await Post.findAll({
+      where: {
+        user_id: user.id,
+      },
+      include: [Topic],
+  
+    });
+
+    const comments = await Comment.findAll({
+      where: {
+        user_id: user.id,
+      },
+      include: [Post],
+  
+    });
+
+    const plainPosts = posts.map((post) => post.get({ plain: true }));
+    const plainComments = comments.map((comment) => comment.get({ plain: true }));
+
+    console.log(plainComments)
+
     res.render('profile', {
         user: user,
         imageURI: imageURI,
         topics: topics,
+        posts: plainPosts,
+        comments: plainComments,
     });
 });
 
