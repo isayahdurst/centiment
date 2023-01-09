@@ -1,8 +1,7 @@
-
 const loadCommentsButtons = document.querySelectorAll('.comment-btn');
 const postCommentButtons = document.querySelectorAll('.post-comment-button');
 const numCommentsFigures = document.querySelectorAll('.num-comments');
-const commentField = document.getElementById('comment-field');
+const commentFields = document.querySelectorAll('.comment-field');
 
 
 // Load the next X number of comments in a post
@@ -12,11 +11,9 @@ const loadNextComments = async function(event) {
     // Pull next 5 comments and then track that 5 comments have been pulled
     const res = await fetch(`/api/comment/post/next5/${parseInt(button.dataset.commentspulled)}/${button.dataset.postid}`);
     const commentData = await res.json();
-    console.log(commentData);
     button.dataset.commentspulled = parseInt(button.dataset.commentspulled) + 5;
 
     const allCommentContainer = button.parentNode.parentNode.parentNode.parentNode.children[1];
-    console.log(allCommentContainer);
 
     // Update DOM with all new comments that were pulled
     commentData.forEach(async (comment) => {
@@ -29,18 +26,22 @@ const loadNextComments = async function(event) {
         newCommentBody.classList.add('message-body');
         newCommentContainer.append(newCommentBody);
 
-        const newCommentUser = document.createElement('p');
+        const newCommentUser = document.createElement('a');
         newCommentUser.classList.add('has-text-weight-bold');
-        newCommentUser.innerHTML = `${comment.user.username}<br>`;
+        newCommentUser.innerHTML = `@${comment.user.username}<br>`;
+        newCommentUser.href = `/user/${comment.user.username}`
         newCommentBody.append(newCommentUser);
 
         const newCommentContent = document.createElement('p');
         newCommentContent.innerHTML = `${comment.content}<br><br>`;
         newCommentBody.append(newCommentContent);
 
+        const smallDate = document.createElement('small');
+        newCommentBody.append(smallDate);
+
         const newCommentDate = document.createElement('p');
         newCommentDate.innerHTML = new Date(comment.date_created).toLocaleDateString();
-        newCommentBody.append(newCommentDate);    
+        smallDate.append(newCommentDate);    
     });
 };
 
@@ -49,7 +50,8 @@ const postComment = async function(event) {
     event.preventDefault();
     const currentTopic = event.currentTarget.parentNode.parentNode.parentNode;
     const button = event.currentTarget;
-    const content = document.getElementById('comment-field').value;
+    const textbox = currentTopic.children[1].children[0].children[1];
+    const content = textbox.value;
     
     // Exit the function if comment box is blank
     if (!content){
@@ -78,7 +80,7 @@ const postComment = async function(event) {
     const newCommentData = await newCommentRes.json();
    
     // Update DOM with new comment
-    document.getElementById('comment-field').value = '';
+    textbox.value = '';
 
     const newCommentContainer = document.createElement('div');
     newCommentContainer.classList.add('message', 'is-small');
@@ -88,18 +90,24 @@ const postComment = async function(event) {
     newCommentBody.classList.add('message-body');
     newCommentContainer.append(newCommentBody);
 
-    const newCommentUser = document.createElement('p');
+    const newCommentUser = document.createElement('a');
     newCommentUser.classList.add('has-text-weight-bold');
-    newCommentUser.innerHTML = `${newCommentData.user.username}<br>`;
+    newCommentUser.innerHTML = `@${newCommentData.user.username}<br>`;
+    newCommentUser.href = `/user/${newCommentData.user.username}`
     newCommentBody.append(newCommentUser);
 
     const newCommentContent = document.createElement('p');
     newCommentContent.innerHTML = `${content}<br><br>`;
     newCommentBody.append(newCommentContent);
 
+    const smallDate = document.createElement('small');
+    newCommentBody.append(smallDate);
+
     const newCommentDate = document.createElement('p');
     newCommentDate.innerHTML = new Date(newCommentData.date_created).toLocaleDateString();
-    newCommentBody.append(newCommentDate);    
+    smallDate.append(newCommentDate);     
+
+    refreshData();
 };
 
 // Get a count of all comments for a given post_id
@@ -125,11 +133,22 @@ const getCommentCount = async function(post_id) {
 });
 
 // Assign each post a button you can use to post comments
+[...commentFields].forEach((button) => {
+    button.addEventListener("click", postComment)
+});
+
+// Assign each post a button you can use to post comments
 [...numCommentsFigures].forEach(async (figure) => {
     figure.innerHTML = await getCommentCount(figure.dataset.postid);
 });
 
 
+const refreshData = async function() {
+    // Assign each post a button you can use to post comments
+    [...numCommentsFigures].forEach(async (figure) => {
+        figure.innerHTML = await getCommentCount(figure.dataset.postid);
+    });
+};
 
 
 
