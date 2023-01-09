@@ -49,6 +49,14 @@ Topic.init(
             type: DataTypes.FLOAT,
             allowNull: false,
             defaultValue: 1.0,
+            validate: {
+                isNumeric: true,
+                isPositive(value) {
+                    if (value <= 0) {
+                        throw new Error('Value must be greater than zero.');
+                    }
+                },
+            },
         },
         description: {
             type: DataTypes.TEXT,
