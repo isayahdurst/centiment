@@ -31,3 +31,8 @@ body {
 .like-button:active + .like-count {
     transform: translateY(-100%);
 }
+
+a#report-an-issue {
+    /* removes link style from navbar item*/
+    text-decoration: none;
+}
