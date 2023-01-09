@@ -17,5 +17,6 @@ apiRouter.use('/topic', topicRouter);
 apiRouter.use('/ask', askRouter);
 apiRouter.use('/bid', bidRouter);
 apiRouter.use('/admin', adminRouter);
+apiRouter.use('/comment', commentRouter);
 
 module.exports = apiRouter;

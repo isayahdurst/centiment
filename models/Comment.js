@@ -14,9 +14,9 @@ Comment.init(
         content: {
             type: DataTypes.TEXT,
             allowNull: false,
-            validate: {
+            /*validate: {
                 isAlphanumeric: true,
-            },
+            },*/
         },
         up_vote: {
             type: DataTypes.INTEGER,
@@ -43,7 +43,7 @@ Comment.init(
             },
         },
         date_created: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.DATE,
             allowNull: false,
             defaultValue: DataTypes.NOW,
             validate: {
