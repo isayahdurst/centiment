@@ -23,6 +23,7 @@ const sellButton = document.getElementById('sellBtnTest');
 
 // Bid and Ask Modal
 const orderModal = document.getElementById('place-order-modal');
+const orderModalOverlay = document.getElementById('overlay-order-modal');
 const bidTab = document.getElementById('order-modal-tab_bid');
 const askTab = document.getElementById('order-modal-tab_ask');
 const orderPrice = document.getElementById('order-modal-price');
@@ -47,8 +48,14 @@ console.log(buyButtons);
 const openOrderModal = function (event) {
     orderModal.classList.toggle('is-active');
     const button = event.currentTarget;
-    console.log(button);
     const topic_id = button.getAttribute('data-topicid');
+    if (button.classList.contains('main-sell-button')) {
+        askTab.classList.add('is-active');
+        bidTab.classList.remove('is-active');
+    } else {
+        bidTab.classList.add('is-active');
+        askTab.classList.remove('is-active');
+    }
     orderModal.setAttribute('data-topicid', topic_id);
 };
 
@@ -236,6 +243,10 @@ askTab.addEventListener('click', function () {
 bidTab.addEventListener('click', function () {
     askTab.classList.toggle('is-active');
     bidTab.classList.toggle('is-active');
+});
+
+orderModalOverlay.addEventListener('click', function () {
+    orderModal.classList.toggle('is-active');
 });
 
 // function to preview uploaded avatar image
