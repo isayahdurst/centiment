@@ -4,7 +4,9 @@
             <div class='column'>
                 <p class="title is-3 is-spaced">{{topic.topic_name}}</p>
                 <p class="subtitle is-5">{{topic.description}}</p>
-                <form id="new_post_form" style='margin:50px 0'>
+                <button class="button is-info" id="new-post-button"><i class="fa-solid fa-plus" style="margin-right: 10px"></i>New Post</button>
+                <div class="box mt-5 has-background-light is-hidden" id="new-post-form">
+                <form id="new_post_form">
                     <div class="field">
                         <div class="control">
                             <input class="input" type="text" placeholder="Title" id="post_name">
@@ -17,10 +19,13 @@
                     </div>
                     <div class="field is-grouped">
                         <div class="control">
-                            <button type="submit" value="Submit" class="button is-light">Submit a post</button>
+                            <button type="submit" value="Submit" class="button is-info">Submit a post</button>
                         </div>
                     </div>
                 </form>
+                </div>
+                <div style="margin-top: 30px">
+                    <h2 class="title">Posts:</h2>
                 {{#each posts as |post|}}
                   <article class='media'>
                     {{!-- <figure class='media-left'>
@@ -81,6 +86,7 @@
                     </div>
                 </article>
                 {{/each}}
+                </div>
             </div>
 
             <div class='column is-one-third' style="margin-left: 50px;">
@@ -103,7 +109,7 @@
                     <form>
                         <div class='dropdown-trigger'>
                             <button
-                                class='button px-6'
+                                class='button px-6 is-info'
                                 aria-haspopup='true'
                                 aria-controls='dropdown-menu2'
                                 id='ipo-buy-dropdown-btn'
@@ -159,7 +165,7 @@
                 <div>
                     <h2 class="title is-4">Orderbook:</h2>
                     <div class="box has-background-success-light">
-                        <h2 class="subtitle has-text-centered"><b>Bids</b></h2>
+                        <h2 class="subtitle has-text-centered"><b>Open Bids</b></h2>
 
                         <nav class="level py-0 mb-1">
                             <div class="level-left ml-5">
@@ -182,7 +188,7 @@
                         {{/each}}
                     </div>
                     <div class="box has-background-danger-light">
-                        <h2 class="subtitle has-text-centered"><b>Asks</b></h2>
+                        <h2 class="subtitle has-text-centered"><b>Open Asks</b></h2>
 
                         {{#each asks}}
                             {{>asks}}
