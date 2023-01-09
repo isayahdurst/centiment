@@ -243,3 +243,17 @@ let loadFile = function (event) {
     var image = document.getElementById('preview');
     image.src = URL.createObjectURL(event.target.files[0]);
 };
+
+const openTab = (event, tabName) => {
+    let i, x, tablinks;
+    x = document.getElementsByClassName("content-tab");
+    for (i = 0; i < x.length; i++) {
+        x[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tab");
+    for (i = 0; i < x.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" is-active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    event.currentTarget.className += " is-active ";
+  }
