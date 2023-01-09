@@ -30,8 +30,12 @@ postRouter.post('/upvote', auth, async (req, res) => {
 
     try {
         await post.upvote(user.id);
-        res.json({ message: 'upvote successful' });
+        res.json({
+            upvotes: post.up_votes,
+            downvotes: post.down_votes,
+        });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'unexpected error occured' });
     }
 });

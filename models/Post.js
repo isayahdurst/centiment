@@ -7,19 +7,25 @@ class Post extends Model {
 
     async upvote(user_id) {
         const up_voters = this.up_voters.split(';');
+        console.log(up_voters);
+        console.log(user_id);
         const down_voters = this.down_voters.split(';');
         // checks if user has already upvoted
 
-        if (up_voters.contains(user_id)) {
+        if (up_voters.includes(user_id)) {
             await this.removeUpvote();
             return;
         }
 
-        if (down_voters.contains(user_id)) {
+        if (down_voters.includes(user_id)) {
             await this.removeDownvote();
         }
 
-        this.up_voters = up_voters.push(user_id).join(';');
+        up_voters.push(user_id);
+        console.log(up_voters);
+        console.log(up_voters.join(';'));
+
+        this.up_voters = up_voters.join(';');
         this.up_votes += 1;
         await this.save();
     }
@@ -37,12 +43,12 @@ class Post extends Model {
         const up_voters = this.up_voters.split(';');
         const down_voters = this.down_voters.split(';');
 
-        if (down_voters.contains(user_id)) {
+        if (down_voters.includes(user_id)) {
             await this.removeDownvote();
             return;
         }
 
-        if (up_voters.contains(user_id)) {
+        if (up_voters.includes(user_id)) {
             await this.removeUpvote();
         }
 
@@ -95,11 +101,13 @@ Post.init(
         },
         up_voters: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false,
+            defaultValue: '',
         },
         down_voters: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false,
+            defaultValue: '',
         },
         topic_id: {
             type: DataTypes.INTEGER,

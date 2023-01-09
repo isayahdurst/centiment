@@ -7,6 +7,46 @@ const ipoCostLabel = document.getElementById('ipo-total-price');
 const ipoShareQuantity = document.getElementById('ipo-share-quantity'); // Input field
 const ipoConfirmationMessage = document.getElementById('IPO-notification');
 
+// Post - features
+const upvoteButtons = document.querySelectorAll('.upvote-btn');
+const downvoteButtons = document.querySelectorAll('.downvote-btn');
+const upvoteCounts = document.querySelectorAll('.upvote-count');
+const downvoteCounts = document.querySelectorAll('.downvote-count');
+
+console.log(upvoteButtons);
+console.log(upvoteCounts);
+
+const upvotePost = async function (event) {
+    console.log('button clicked');
+    const button = event.currentTarget;
+    const post_id = button.getAttribute('data-postid');
+
+    const response = await fetch('/api/post/upvote', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            id: post_id,
+        }),
+    });
+
+    const upvoteCount = upvoteCounts.filter(
+        (label) => label.getAttribute('data-postid') === post_id
+    );
+    const downvoteCount = downvoteCounts.filter(
+        (label) => label.getAttribute('data-postid') === post_id
+    );
+
+    const newVotes = await response.json();
+    if (response.ok) {
+        upvoteCount.textContent = newVotes.upvotes;
+        downvoteCount.textContent = newVotes.downvotes;
+    }
+};
+
+upvoteButtons.forEach((button) => button.addEventListener('click', upvotePost));
+
 buyDropDownBtn.addEventListener('click', function (event) {
     event.preventDefault();
     buyDropDown.classList.toggle('is-active');
