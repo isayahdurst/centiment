@@ -31,6 +31,32 @@ commentRouter.post("/:post_id", auth, async (req, res) => {
 });
 
 
+// Get number of comments for a Post
+commentRouter.get("/post/countof/:post_id", auth, async (req, res) => {
+    try {
+      // get the search query from the request query string
+      const { post_id } = req.params;
+  
+    // use Sequelize to search for the latest 10 comments of a post
+        let comments = await Comment.count({
+            where: {
+                post_id: post_id,
+            }
+        });
+
+        if (!comments) {
+            res.status(404).json({ message: "No comment found" });
+            return;
+        }
+
+        res.status(200).json(comments);
+
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+
 // Get all comments for a Post
 commentRouter.get("/post/:post_id", auth, async (req, res) => {
     try {

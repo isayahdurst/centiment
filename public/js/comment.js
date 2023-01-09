@@ -1,6 +1,7 @@
 
 const loadCommentsButtons = document.querySelectorAll('.comment-btn');
 const postCommentButtons = document.querySelectorAll('.post-comment-button');
+const numCommentsFigures = document.querySelectorAll('.num-comments');
 const commentField = document.getElementById('comment-field');
 
 
@@ -12,7 +13,7 @@ const loadNextComments = async function(event) {
     const res = await fetch(`/api/comment/post/next5/${parseInt(button.dataset.commentspulled)}/${button.dataset.postid}`);
     const commentData = await res.json();
     console.log(commentData);
-    button.dataset.commentsPulled = parseInt(button.dataset.commentsPulled) + 5;
+    button.dataset.commentspulled = parseInt(button.dataset.commentspulled) + 5;
 
     const allCommentContainer = button.parentNode.parentNode.parentNode.parentNode.children[1];
     console.log(allCommentContainer);
@@ -101,6 +102,16 @@ const postComment = async function(event) {
     newCommentBody.append(newCommentDate);    
 };
 
+// Get a count of all comments for a given post_id
+const getCommentCount = async function(post_id) {
+    const res = await fetch(`/api/comment/post/countof/${post_id}`);
+    const count = await res.json();
+    const parsed = parseInt(count);
+    return parsed;
+};
+
+
+
 
 // Assign each post a comment button that you can click to see more comments
 [...loadCommentsButtons].forEach((button) => {
@@ -112,6 +123,13 @@ const postComment = async function(event) {
 [...postCommentButtons].forEach((button) => {
     button.addEventListener("click", postComment)
 });
+
+// Assign each post a button you can use to post comments
+[...numCommentsFigures].forEach(async (figure) => {
+    figure.innerHTML = await getCommentCount(figure.dataset.postid);
+});
+
+
 
 
 
