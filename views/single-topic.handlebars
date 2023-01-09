@@ -29,7 +29,7 @@
                             <img src='{{imageURI}}' alt='Profile Picture' />
                         </p>
                     </figure> --}}
-                    <div class='media-content'style='background-color: #fff;border-radius: 6px;box-shadow: 0 .5em 1em -.125em rgba(10,10,10,.1),0 0 0 1px rgba(10,10,10,.02);color: #4a4a4a;display: block;padding: 1.25rem;'>
+                    <div class='media-content box' data.style='background-color: #fff;border-radius: 6px;box-shadow: 0 .5em 1em -.125em rgba(10,10,10,.1),0 0 0 1px rgba(10,10,10,.02);color: #4a4a4a;display: block;padding: 1.25rem;'>
                         <div class='content'>
                             <p>
                                 <small><a href='/user/{{user.username}}'>@{{user.username}}</a></small>
@@ -39,15 +39,16 @@
                             </p>
                         </div>
                         <div class='comment-display'>
-                            <div class='new-comments message is-small'></div>
+                            <div class='new-comments'></div>
                             <div class='field'>
                                 <div class='control'>
+                                    <br>
                                     <textarea class='textarea is-small' id='comment-field' placeholder='Type comment here.'></textarea>
                                 </div>                                
                             </div>
                             <div class='field is-grouped is-grouped-right'>
                                 <div class='control'>
-                                    <button class='button is-link is-small' id='comment-button'>Post Comment</button>
+                                    <button class='button is-link is-small post-comment-button' data-postid="{{post.id}}">Post Comment</button>
                                 </div>
                                 
                             </div>
@@ -67,13 +68,13 @@
                                     <a class="downvote-btn" data-postid="{{post.id}}"><i class="fa-regular fa-angle-down"></i></a>
                                 </div>
                                 <div class="level-item">
-                                    <p><small class="downvote-count" data-postid="{{post.id}}">{{post.down_votes}}</small></p>
+                                    <p><small class="downvote-count" data-postid="{{post.id}}" data-commentspulled="0">{{post.down_votes}}</small></p>
                                 </div>
                                 <div class="level-item">
-                                    <a class="comment-btn" data-postid="{{post.id}}"><i class="fa-light fa-comment"></i></a>
+                                    <a class="comment-btn" data-postid="{{post.id}}" data-commentspulled="0"><i class="fa-light fa-comment"></i></a>
                                 </div>
                                 <div class="level-item">
-                                    <p><small>0</small></p>
+                                    <p><small class="num-comments" data-postid="{{post.id}}">0</small></p>
                                 </div>
                             </div>
                         </nav>
