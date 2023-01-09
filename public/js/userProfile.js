@@ -23,6 +23,7 @@ const sellButton = document.getElementById('sellBtnTest');
 
 // Bid and Ask Modal
 const orderModal = document.getElementById('place-order-modal');
+const orderModalOverlay = document.getElementById('overlay-order-modal');
 const bidTab = document.getElementById('order-modal-tab_bid');
 const askTab = document.getElementById('order-modal-tab_ask');
 const orderPrice = document.getElementById('order-modal-price');
@@ -47,8 +48,14 @@ console.log(buyButtons);
 const openOrderModal = function (event) {
     orderModal.classList.toggle('is-active');
     const button = event.currentTarget;
-    console.log(button);
     const topic_id = button.getAttribute('data-topicid');
+    if (button.classList.contains('main-sell-button')) {
+        askTab.classList.add('is-active');
+        bidTab.classList.remove('is-active');
+    } else {
+        bidTab.classList.add('is-active');
+        askTab.classList.remove('is-active');
+    }
     orderModal.setAttribute('data-topicid', topic_id);
 };
 
@@ -90,6 +97,7 @@ const placeBid = async function (price, shares_requested, topic_id) {
 
     orderNotification.addEventListener('transitionend', function () {
         orderNotification.classList.add('is-hidden');
+        orderNotification.classList.remove('fade-out');
     });
 
     return bid;
@@ -111,10 +119,27 @@ const placeAsk = async function (price, shares_requested, topic_id) {
     const ask = await response.json();
 
     if (!response.ok) {
+        orderNotification.textContent = ask.message;
+        orderNotification.classList.remove('is-hidden');
+    } else {
+        orderNotification.classList.remove('is-hidden');
+        orderNotification.textContent = 'Ask Placed Successfully';
+    }
+
+    setTimeout(() => {
+        orderNotification.classList.add('fade-out');
+    }, 2000);
+
+    orderNotification.addEventListener('transitionend', function () {
+        orderNotification.classList.add('is-hidden');
+        orderNotification.classList.remove('fade-out');
+    });
+
+    /* if (!response.ok) {
         orderNotification.textContent = ask?.message;
     } else {
         orderNotification.textContent = 'Ask place successfully!';
-    }
+    } */
     return ask;
 };
 
@@ -123,6 +148,24 @@ const placeOrder = async function () {
         const price = orderPrice.value;
         const shares_requested = orderQuantity.value;
         const topic_id = orderModal.getAttribute('data-topicid');
+        orderNotification.classList.remove('fade-out');
+        orderNotification.classList.add('is-hidden');
+        priceHelp.textContent = '';
+        quantityHelp.textContent = '';
+        orderPrice.value = '';
+        orderQuantity.value = '';
+
+        if (isNaN(price)) {
+            throw new Error('Price Validation');
+        } else if (price <= 0) {
+            throw new Error('Invalid Price');
+        }
+
+        if (isNaN(shares_requested)) {
+            throw new Error('Quantity Validation');
+        } else if (shares_requested <= 0) {
+            throw new Error('Invalid Quantity');
+        }
 
         if (bidTab.classList.contains('is-active')) {
             await placeBid(price, shares_requested, topic_id);
@@ -133,10 +176,18 @@ const placeOrder = async function () {
         console.log(error);
         if (error.message === 'Price Validation') {
             priceHelp.classList.remove('is-hidden');
-            priceHelp.textContent = `Price must be in currency, decimal, or integer format only.`;
-        } else if (error.message === 'Quantity Validation') {
+            priceHelp.textContent = `Price must be in decimal or integer format only.`;
+        } else if (error.message === 'Invalid Price') {
+            priceHelp.classList.remove('is-hidden');
+            priceHelp.textContent = 'Price must be greater than zero';
+        }
+
+        if (error.message === 'Quantity Validation') {
             quantityHelp.classList.remove('is-hidden');
-            quantityHelp.textContent = 'Quantity must be an integer.';
+            quantityHelp.textContent = 'Quantity must be a number';
+        } else if (error.message === 'Invalid Quantity') {
+            quantityHelp.classList.remove('is-hidden');
+            quantityHelp.textContent = 'Quantity must be greater than zero';
         }
     }
 };
@@ -238,8 +289,26 @@ bidTab.addEventListener('click', function () {
     bidTab.classList.toggle('is-active');
 });
 
+orderModalOverlay.addEventListener('click', function () {
+    orderModal.classList.toggle('is-active');
+});
+
 // function to preview uploaded avatar image
 let loadFile = function (event) {
     var image = document.getElementById('preview');
     image.src = URL.createObjectURL(event.target.files[0]);
+};
+
+const openTab = (event, tabName) => {
+    let i, x, tablinks;
+    x = document.getElementsByClassName('content-tab');
+    for (i = 0; i < x.length; i++) {
+        x[i].style.display = 'none';
+    }
+    tablinks = document.getElementsByClassName('tab');
+    for (i = 0; i < x.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(' is-active', '');
+    }
+    document.getElementById(tabName).style.display = 'block';
+    event.currentTarget.className += ' is-active ';
 };

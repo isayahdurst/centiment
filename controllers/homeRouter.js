@@ -3,6 +3,7 @@ const auth = require('../middleware/auth');
 const optionalAuth = require('../middleware/optionalAuth');
 const { User, Topic, Post, Shares, Comment } = require('../models');
 const sequelize = require('sequelize');
+const { Op } = require('sequelize');
 const Bid = require('../models/Bid');
 const Ask = require('../models/Ask');
 
@@ -30,11 +31,27 @@ homeRouter.get('/', auth, async (req, res) => {
         limit: 3,
     });
 
+    let newComments = await Comment.findAll({
+        where:{
+            id: {
+                [Op.in]: [sequelize.literal(`(select max(id) from comment group by post_id)`)]
+            },
+        },
+        include:{ all: true, nested: true},
+        order: [['date_created','DESC']],
+        limit: 3
+    });
+
+    const plainComments = newComments.map((comment) => comment.get({plain: true}));
     const plainTopTopics = topTopics.map((topic) => topic.get({ plain: true }));
+
+    console.log(plainComments);
+    console.log(plainTopTopics);
 
     res.render('home', {
         user: plainUser,
         topTopics: plainTopTopics,
+        recentComments: plainComments
     });
 });
 
@@ -68,10 +85,31 @@ homeRouter.get('/user/:username', auth, async (req, res) => {
         topics.push(plainTopic);
     }
 
+    const posts = await Post.findAll({
+        where: {
+            user_id: user.id,
+        },
+        include: [Topic],
+    });
+
+    const comments = await Comment.findAll({
+        where: {
+            user_id: user.id,
+        },
+        include: [Post],
+    });
+
+    const plainPosts = posts.map((post) => post.get({ plain: true }));
+    const plainComments = comments.map((comment) =>
+        comment.get({ plain: true })
+    );
+
     res.render('profile', {
         user: user,
         imageURI: imageURI,
         topics: topics,
+        posts: plainPosts,
+        comments: plainComments,
     });
 });
 
@@ -178,6 +216,9 @@ homeRouter.get('/topic/edit/:id', auth, async (req, res) => {
 
 // explore page route
 homeRouter.get('/explore', auth, async (req, res) => {
+    const limit = 20;
+    const page = 1;
+
     // query onclude count of shares for each topic
     const topics = await Topic.findAll({
         attributes: [
@@ -197,13 +238,22 @@ homeRouter.get('/explore', auth, async (req, res) => {
         ],
         group: ['Topic.id'],
         order: [['updated_at', 'DESC']],
+        offset:((page-1)*limit),
+        limit : limit,
+        subQuery:false
+
     });
 
+    const topicsOnPage = topics.length;
+    const topicsAll = await Topic.findAll();
+    const topicsTotal = topicsAll.length;
     const plainUser = req.user.get({ plain: true });
     const plainTopics = topics.map((topic) => topic.get({ plain: true }));
     res.render('explore', {
         topics: plainTopics,
         user: plainUser,
+        topicsOnPage: topicsOnPage,
+        topicsTotal: topicsTotal,
     });
 });
 
