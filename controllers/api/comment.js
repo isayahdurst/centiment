@@ -45,7 +45,7 @@ commentRouter.get("/post/countof/:post_id", auth, async (req, res) => {
         });
 
         if (!comments) {
-            res.status(404).json({ message: "No comment found" });
+            res.status(404).json({ message: "No post found" });
             return;
         }
 
