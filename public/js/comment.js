@@ -115,6 +115,11 @@ const getCommentCount = async function(post_id) {
     const res = await fetch(`/api/comment/post/countof/${post_id}`);
     const count = await res.json();
     const parsed = parseInt(count);
+
+    if(isNaN(parsed)){
+        parsed = 0;
+    }
+
     return parsed;
 };
 
