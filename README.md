@@ -21,7 +21,7 @@ With Centiment, you can discover and join communities that align with your inter
 
 <a name="Install"></a>
 ## Install
-npm init, inquirer, mysql, dotenv, express, jwt, handlerbars, bcrypt, sequelize
+npm init, inquirer, mysql, dotenv, express, jwt, handlerbars, bcrypt, sequelize, multer
 
 <a name="Usage"></a>
 ## Usage
