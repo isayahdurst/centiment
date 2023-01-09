@@ -24,6 +24,8 @@
       <p>If you want to narrow down the topics on the page, you can use the 'Filter' feature.</p>
       <p>You can also use the search function to look for specific keywords in the title or description of a topic. If you can't find the topic you want to discuss, you can create a new one.</p>
     </div> 
+    <p class="has-text-centered">Showed {{topicsOnPage}} of {{topicsTotal}} topics</p>
+    <br>
     <div class="columns is-mobile">
       {{#each topics as |topic|}}
         <div class="column is-full-mobile is-half-tablet is-one-third-desktop is-one-quarter-widescreen is-one-fifth-fullhd">
@@ -37,13 +39,13 @@
             <div class="card-footer has-background-primary">
               <p class="card-footer-item">💼: {{topic.initial_shares}}</p>
               <p class="card-footer-item">💲: {{topic.price}}</p>
-              {{!-- TODO: implement how many people has shares --}}
               <p class="card-footer-item">🗿: {{topic.sharesCount}}</p>
             </div>
           </div>
       </div>  
       {{/each}}
     </div>
+    <p class="has-text-centered">Showed {{topicsOnPage}} of {{topicsTotal}} topics</p>
   </div>
   {{>add-topic-modal}}
 </section>
