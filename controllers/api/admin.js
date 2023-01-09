@@ -211,6 +211,7 @@ adminRouter.get('/post/votes/:id', async (req, res) => {
     res.json({ upvoters: post.up_voters, downvoters: post.down_voters });
 });
 
+// For test purposes only.
 adminRouter.post('/post/reset-votes/:id', async (req, res) => {
     const { id } = req.params;
     const post = await Post.findByPk(id);
