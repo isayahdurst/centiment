@@ -1,9 +1,7 @@
-
-const loadCommentsButtons = document.querySelectorAll(".load-comments-button");
-const postCommentButton = document.getElementById('comment-button');
-const commentField = document.getElementById('comment-field');
-
-const topicId = window.location.toString().split('/')[window.location.toString().split('/').length - 1];
+const loadCommentsButtons = document.querySelectorAll('.comment-btn');
+const postCommentButtons = document.querySelectorAll('.post-comment-button');
+const numCommentsFigures = document.querySelectorAll('.num-comments');
+const commentFields = document.querySelectorAll('.comment-field');
 
 
 // Load the next X number of comments in a post
@@ -11,13 +9,11 @@ const loadNextComments = async function(event) {
     const button = event.currentTarget;
 
     // Pull next 5 comments and then track that 5 comments have been pulled
-    const res = await fetch(`/api/comment/post/next5/${parseInt(button.dataset.commentsPulled)}/${topicId}`);
+    const res = await fetch(`/api/comment/post/next5/${parseInt(button.dataset.commentspulled)}/${button.dataset.postid}`);
     const commentData = await res.json();
-    console.log(commentData);
-    button.dataset.commentsPulled = parseInt(button.dataset.commentsPulled) + 5;
+    button.dataset.commentspulled = parseInt(button.dataset.commentspulled) + 5;
 
     const allCommentContainer = button.parentNode.parentNode.parentNode.parentNode.children[1];
-    console.log(allCommentContainer);
 
     // Update DOM with all new comments that were pulled
     commentData.forEach(async (comment) => {
@@ -30,18 +26,22 @@ const loadNextComments = async function(event) {
         newCommentBody.classList.add('message-body');
         newCommentContainer.append(newCommentBody);
 
-        const newCommentUser = document.createElement('p');
+        const newCommentUser = document.createElement('a');
         newCommentUser.classList.add('has-text-weight-bold');
-        newCommentUser.innerHTML = `${comment.user.username}<br>`;
+        newCommentUser.innerHTML = `@${comment.user.username}<br>`;
+        newCommentUser.href = `/user/${comment.user.username}`
         newCommentBody.append(newCommentUser);
 
         const newCommentContent = document.createElement('p');
         newCommentContent.innerHTML = `${comment.content}<br><br>`;
         newCommentBody.append(newCommentContent);
 
+        const smallDate = document.createElement('small');
+        newCommentBody.append(smallDate);
+
         const newCommentDate = document.createElement('p');
         newCommentDate.innerHTML = new Date(comment.date_created).toLocaleDateString();
-        newCommentBody.append(newCommentDate);    
+        smallDate.append(newCommentDate);    
     });
 };
 
@@ -49,11 +49,17 @@ const loadNextComments = async function(event) {
 const postComment = async function(event) {
     event.preventDefault();
     const currentTopic = event.currentTarget.parentNode.parentNode.parentNode;
-
-    const content = document.getElementById('comment-field').value;
+    const button = event.currentTarget;
+    const textbox = currentTopic.children[1].children[0].children[1];
+    const content = textbox.value;
+    
+    // Exit the function if comment box is blank
+    if (!content){
+        return;
+    };
 
     
-    const res = await fetch(`/api/comment/${topicId}`, {
+    const res = await fetch(`/api/comment/${button.dataset.postid}`, {
         method: 'POST',
         body: JSON.stringify({
             content,
@@ -74,33 +80,75 @@ const postComment = async function(event) {
     const newCommentData = await newCommentRes.json();
    
     // Update DOM with new comment
-    document.getElementById('comment-field').value = '';
+    textbox.value = '';
+
+    const newCommentContainer = document.createElement('div');
+    newCommentContainer.classList.add('message', 'is-small');
+    currentTopic.children[currentTopic.children.length - 3].append(newCommentContainer);
 
     const newCommentBody = document.createElement('div');
     newCommentBody.classList.add('message-body');
-    currentTopic.children[currentTopic.children.length - 3].append(newCommentBody);
+    newCommentContainer.append(newCommentBody);
 
-    const newCommentUser = document.createElement('p');
+    const newCommentUser = document.createElement('a');
     newCommentUser.classList.add('has-text-weight-bold');
-    newCommentUser.innerHTML = `${newCommentData.user.username}<br>`;
+    newCommentUser.innerHTML = `@${newCommentData.user.username}<br>`;
+    newCommentUser.href = `/user/${newCommentData.user.username}`
     newCommentBody.append(newCommentUser);
 
     const newCommentContent = document.createElement('p');
     newCommentContent.innerHTML = `${content}<br><br>`;
     newCommentBody.append(newCommentContent);
 
+    const smallDate = document.createElement('small');
+    newCommentBody.append(smallDate);
+
     const newCommentDate = document.createElement('p');
     newCommentDate.innerHTML = new Date(newCommentData.date_created).toLocaleDateString();
-    newCommentBody.append(newCommentDate);    
+    smallDate.append(newCommentDate);     
+
+    refreshData();
+};
+
+// Get a count of all comments for a given post_id
+const getCommentCount = async function(post_id) {
+    const res = await fetch(`/api/comment/post/countof/${post_id}`);
+    const count = await res.json();
+    const parsed = parseInt(count);
+    return parsed;
 };
 
 
-// Assign each topic a comment button that you can click to see more comments
+
+
+// Assign each post a comment button that you can click to see more comments
 [...loadCommentsButtons].forEach((button) => {
     button.addEventListener("click", loadNextComments);
 });
 
-postCommentButton.addEventListener("click", postComment);
+
+// Assign each post a button you can use to post comments
+[...postCommentButtons].forEach((button) => {
+    button.addEventListener("click", postComment)
+});
+
+// Assign each post a button you can use to post comments
+[...commentFields].forEach((button) => {
+    button.addEventListener("click", postComment)
+});
+
+// Assign each post a button you can use to post comments
+[...numCommentsFigures].forEach(async (figure) => {
+    figure.innerHTML = await getCommentCount(figure.dataset.postid);
+});
+
+
+const refreshData = async function() {
+    // Assign each post a button you can use to post comments
+    [...numCommentsFigures].forEach(async (figure) => {
+        figure.innerHTML = await getCommentCount(figure.dataset.postid);
+    });
+};
 
 
 
