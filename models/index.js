@@ -1,7 +1,6 @@
 const Ask = require('./Ask');
 const Bid = require('./Bid');
 const Comment = require('./Comment');
-const Mtm = require('./MTM');
 const Post = require('./Post');
 const Shares = require('./Shares');
 const Topic = require('./Topic');
