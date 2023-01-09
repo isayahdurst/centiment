@@ -6,20 +6,22 @@ class Post extends Model {
     async parseVoters() {}
 
     async upvote(user_id) {
-        const up_voters = this.up_voters.split(';');
-        const down_voters = this.down_voters.split(';');
+        const up_voters = this.up_voters.split(';').map((id) => Number(id));
+        const down_voters = this.down_voters.split(';').map((id) => Number(id));
         // checks if user has already upvoted
 
-        if (up_voters.contains(user_id)) {
-            await this.removeUpvote();
+        if (up_voters.includes(user_id)) {
+            await this.removeUpvote(user_id);
             return;
         }
 
-        if (down_voters.contains(user_id)) {
-            await this.removeDownvote();
+        if (down_voters.includes(user_id)) {
+            await this.removeDownvote(user_id);
         }
 
-        this.up_voters = up_voters.push(user_id).join(';');
+        up_voters.push(user_id);
+
+        this.up_voters = up_voters.join(';');
         this.up_votes += 1;
         await this.save();
     }
@@ -27,6 +29,7 @@ class Post extends Model {
     async removeUpvote(user_id) {
         this.up_voters = this.up_voters
             .split(';')
+            .map((id) => Number(id))
             .filter((voterID) => voterID != user_id)
             .join(';');
         this.up_votes -= 1;
@@ -34,27 +37,30 @@ class Post extends Model {
     }
 
     async downvote(user_id) {
-        const up_voters = this.up_voters.split(';');
-        const down_voters = this.down_voters.split(';');
+        const up_voters = this.up_voters.split(';').map((id) => Number(id));
+        const down_voters = this.down_voters.split(';').map((id) => Number(id));
 
-        if (down_voters.contains(user_id)) {
-            await this.removeDownvote();
+        if (down_voters.includes(user_id)) {
+            await this.removeDownvote(user_id);
             return;
         }
 
-        if (up_voters.contains(user_id)) {
-            await this.removeUpvote();
+        if (up_voters.includes(user_id)) {
+            await this.removeUpvote(user_id);
         }
 
-        this.down_voters = down_voters.push(user_id).join(';');
+        down_voters.push(user_id);
+
+        this.down_voters = down_voters.join(';');
         this.down_votes += 1;
         await this.save();
     }
 
-    async removeDownvote() {
+    async removeDownvote(user_id) {
         this.down_voters = this.down_voters
             .split(';')
-            .filter((voterID) => voterID != user_i)
+            .map((id) => Number(id))
+            .filter((voterID) => voterID != user_id)
             .join(';');
         this.down_votes -= 1;
         await this.save();
@@ -95,11 +101,13 @@ Post.init(
         },
         up_voters: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false,
+            defaultValue: '',
         },
         down_voters: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false,
+            defaultValue: '',
         },
         topic_id: {
             type: DataTypes.INTEGER,

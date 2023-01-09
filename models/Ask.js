@@ -76,11 +76,25 @@ Ask.init(
             allowNull: false,
             validate: {
                 isFloat: true,
+                isPositive(value) {
+                    if (value <= 0) {
+                        throw new Error('Price must be a positive value.');
+                    }
+                },
             },
         },
         shares_requested: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            validate: {
+                isPositive(value) {
+                    if (value <= 0) {
+                        throw new Error(
+                            'Shares requested must be greater than zero.'
+                        );
+                    }
+                },
+            },
         },
         shares_remaining: {
             type: DataTypes.INTEGER,

@@ -30,8 +30,12 @@ postRouter.post('/upvote', auth, async (req, res) => {
 
     try {
         await post.upvote(user.id);
-        res.json({ message: 'upvote successful' });
+        res.json({
+            upvotes: post.up_votes,
+            downvotes: post.down_votes,
+        });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'unexpected error occured' });
     }
 });
@@ -41,11 +45,16 @@ postRouter.post('/downvote', auth, async (req, res) => {
     const user = req.user;
 
     const post = await Post.findByPk(id);
+    console.log('/downvote user id: ' + user.id);
 
     try {
-        await post.upvote(user.id);
-        res.json({ message: 'downvote successful' });
+        await post.downvote(user.id);
+        res.json({
+            upvotes: post.up_votes,
+            downvotes: post.down_votes,
+        });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'unexpected error occured' });
     }
 });

@@ -6,3 +6,28 @@
 body {
     font-family: 'Roboto', sans-serif;
 }
+
+.like-container {
+    /* Set the height of the container to the height of the like count element */
+    height: 1.5em; /* Adjust this value as necessary */
+
+    /* Set the overflow of the container to hidden to clip the like count element when it's outside of the container */
+    overflow: hidden;
+}
+
+.like-count {
+    /* Display the like count as a block element */
+    display: block;
+
+    /* Position the like count at the bottom of the container */
+    position: absolute;
+    bottom: 0;
+
+    /* Animate the like count so that it appears to scroll up and disappear */
+    transition: transform 0.5s;
+}
+
+/* When the like button is clicked, animate the new like count so that it appears to scroll up from the bottom */
+.like-button:active + .like-count {
+    transform: translateY(-100%);
+}

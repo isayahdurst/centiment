@@ -42,6 +42,9 @@ topicRouter.post('/buyIPO', auth, async (req, res) => {
     const t = await sequelize.transaction();
 
     try {
+        if (quantity < 0) {
+            throw new Error('Quantity must be a postivive number.');
+        }
         let shares = await Shares.findOne({
             where: {
                 [Op.and]: [
@@ -85,7 +88,11 @@ topicRouter.post('/buyIPO', auth, async (req, res) => {
     } catch (error) {
         t.rollback();
         console.log(error);
-        res.json(error.message);
+        if (error.message === 'Quantity must be a postivive number.') {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(500).json({ message: error.message });
+        }
     }
 });
 

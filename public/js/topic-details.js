@@ -7,6 +7,84 @@ const ipoCostLabel = document.getElementById('ipo-total-price');
 const ipoShareQuantity = document.getElementById('ipo-share-quantity'); // Input field
 const ipoConfirmationMessage = document.getElementById('IPO-notification');
 
+// Post - features
+const upvoteButtons = document.querySelectorAll('.upvote-btn');
+const downvoteButtons = document.querySelectorAll('.downvote-btn');
+const upvoteCounts = document.querySelectorAll('.upvote-count');
+const downvoteCounts = document.querySelectorAll('.downvote-count');
+
+console.log(upvoteButtons);
+console.log(upvoteCounts);
+
+const upvotePost = async function (event) {
+    const button = event.currentTarget;
+    const post_id = button.getAttribute('data-postid');
+
+    const response = await fetch('/api/post/upvote', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            id: post_id,
+        }),
+    });
+
+    const upvoteCountsArr = Array.from(upvoteCounts);
+    const downvoteCountsArr = Array.from(downvoteCounts);
+
+    const upvoteCount = upvoteCountsArr.filter(
+        (label) => label.getAttribute('data-postid') === post_id
+    );
+
+    const downvoteCount = downvoteCountsArr.filter(
+        (label) => label.getAttribute('data-postid') === post_id
+    );
+
+    const newVotes = await response.json();
+    if (response.ok) {
+        upvoteCount[0].textContent = newVotes.upvotes;
+        downvoteCount[0].textContent = newVotes.downvotes;
+    }
+};
+
+const downvotePost = async function (event) {
+    const button = event.currentTarget;
+    const post_id = button.getAttribute('data-postid');
+
+    const response = await fetch('/api/post/downvote', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            id: post_id,
+        }),
+    });
+
+    const upvoteCountsArr = Array.from(upvoteCounts);
+    const downvoteCountsArr = Array.from(downvoteCounts);
+
+    const upvoteCount = upvoteCountsArr.filter(
+        (label) => label.getAttribute('data-postid') === post_id
+    );
+
+    const downvoteCount = downvoteCountsArr.filter(
+        (label) => label.getAttribute('data-postid') === post_id
+    );
+
+    const newVotes = await response.json();
+    if (response.ok) {
+        upvoteCount[0].textContent = newVotes.upvotes;
+        downvoteCount[0].textContent = newVotes.downvotes;
+    }
+};
+
+upvoteButtons.forEach((button) => button.addEventListener('click', upvotePost));
+downvoteButtons.forEach((button) =>
+    button.addEventListener('click', downvotePost)
+);
+
 buyDropDownBtn.addEventListener('click', function (event) {
     event.preventDefault();
     buyDropDown.classList.toggle('is-active');

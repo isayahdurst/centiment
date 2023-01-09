@@ -77,10 +77,22 @@ Bid.init(
         price: {
             type: DataTypes.FLOAT,
             allowNull: false,
+            isPositive(value) {
+                if (value <= 0) {
+                    throw new Error('Price must be a positive value.');
+                }
+            },
         },
         shares_requested: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            isPositive(value) {
+                if (value <= 0) {
+                    throw new Error(
+                        'Shares requested must be a positive value.'
+                    );
+                }
+            },
         },
         shares_remaining: {
             type: DataTypes.INTEGER,

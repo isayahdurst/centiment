@@ -49,14 +49,15 @@
             </header>
             <footer class="card-footer">
                 <a href="#" class="card-footer-item">Shares Owned 💼: {{format_amount shareDetails.quantity}}</a>
-                <a href="#" class="card-footer-item">Price Per Share 💲: ${{last_traded_price}}</a>
-                <a href="#" class="card-footer-item">Total Value 🤑: ${{calculateValue shareDetails.quantity last_traded_price}}</a>
+                <a href="#" class="card-footer-item">Price Per Share 💲: {{#if last_traded_price}}${{last_traded_price}}{{/if}}{{#unless last_traded_price}}${{price}}{{/unless}}</a>
+                <a href="#" class="card-footer-item">Total Value 🤑: {{#if last_traded_price}}${{calculateValue shareDetails.quantity last_traded_price}}{{/if}}{{#unless last_traded_price}}${{calculateValue shareDetails.quantity price}}{{/unless}}</a>
                 <a href="#" class="card-footer-item">Total Volume 📊: ${{format_amount volume}}</a>
             </footer>
             <footer class="card-footer">
                 <div class="card-footer-item"><button class="button is-success mx-2 main-buy-button" data-topicID="{{id}}">Buy</button><button class="button is-danger mx-2 main-sell-button" data-topicID="{{id}}">Sell</button></div>
             </footer>
             </div>
+            <hr>
         {{/each}}
     </div>
 </section>
