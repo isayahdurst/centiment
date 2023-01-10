@@ -46,7 +46,7 @@ usersRouter.get('/logout', async (req, res) => {
     res.status(200)
         .clearCookie('logintoken', {
             path: '/',
-            domain: 'localhost',
+            domain: process.env.DOMAIN || 'localhost',
             expires: new Date(1),
         })
         .redirect('/login');
