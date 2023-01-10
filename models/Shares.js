@@ -2,7 +2,7 @@ const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 const Topic = require('./Topic');
 const User = require('./User');
-const { Op } = require('Sequelize');
+const { Op } = require('sequelize');
 
 class Shares extends Model {
     /**

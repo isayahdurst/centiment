@@ -37,7 +37,19 @@ homeRouter.get('/', auth, async (req, res) => {
                 [Op.in]: [sequelize.literal(`(select max(id) from comment group by post_id)`)]
             },
         },
-        include:{ all: true, nested: true},
+        include:[{ 
+            model: Post, 
+            include: {
+                model: Topic,
+                include: {
+                    model: Shares
+                }
+            },
+            
+        },
+        {
+            model: User
+        }],            
         order: [['date_created','DESC']],
         limit: 3
     });
@@ -45,8 +57,16 @@ homeRouter.get('/', auth, async (req, res) => {
     const plainComments = newComments.map((comment) => comment.get({plain: true}));
     const plainTopTopics = topTopics.map((topic) => topic.get({ plain: true }));
 
-    console.log(plainComments);
-    console.log(plainTopTopics);
+    plainComments.forEach((comment) => {
+        if (comment.user.avatar === null) {
+            comment.user.avatar = '/images/avatar-default.jpg';
+        } else {
+            const Buffer = require('buffer').Buffer;
+            const imageData = Buffer.from(comment.user.avatar).toString('base64');
+            comment.user.avatar = `data:image/jpeg;base64,${imageData}`;
+        }
+    });
+    
 
     res.render('home', {
         user: plainUser,

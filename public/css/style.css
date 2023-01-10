@@ -6,3 +6,123 @@
 body {
     font-family: 'Roboto', sans-serif;
 }
+
+.like-container {
+    /* Set the height of the container to the height of the like count element */
+    height: 1.5em; /* Adjust this value as necessary */
+
+    /* Set the overflow of the container to hidden to clip the like count element when it's outside of the container */
+    overflow: hidden;
+}
+
+.like-count {
+    /* Display the like count as a block element */
+    display: block;
+
+    /* Position the like count at the bottom of the container */
+    position: absolute;
+    bottom: 0;
+
+    /* Animate the like count so that it appears to scroll up and disappear */
+    transition: transform 0.5s;
+}
+
+/* When the like button is clicked, animate the new like count so that it appears to scroll up from the bottom */
+.like-button:active + .like-count {
+    transform: translateY(-100%);
+}
+
+a#report-an-issue {
+    /* removes link style from navbar item*/
+    text-decoration: none;
+}
+
+/* homepage / hero / right and left column layout */
+.row{
+    height:100%;
+    margin:auto;
+  }
+  .left-heading{
+    font-weight:700;
+    color:#273342;
+    font-size: 3.75rem;
+    line-height: 1.15;
+  }
+  .left-paragraph{
+    color:gray;
+    padding-left:10px;
+    margin-top:20px;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+  .left-column{
+    background-color:#fff;
+    float: left;
+    width: 50%;
+    padding: 25px;
+    align-items:center;
+    vertical-align:center;
+    height: 100%; 
+    padding-top: 10%;
+    padding-left: 10%;
+  }
+  .right-column {
+    background-position:50% 50%;
+    float: left;
+    width: 45%;
+    padding: 100px;
+    padding-top: 5%;
+  
+    align-items:center;
+    vertical-align:center;
+  }
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  .btn {
+    width:200px;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    font-size: 19px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-block;
+    margin-top:20px;
+    margin-left:10px;
+    border-radius: 0.375rem;
+    border:none;
+  }
+  .get-started {
+    background-color: rgb(79 70 229);
+    color: white; 
+    box-shadow: 2px 4px 6px 8px rgb(79 70 229/0.10);
+    margin-right:20px;
+  }
+  
+    @media screen and (max-width: 600px) {
+    .left-column{
+      width: 100%;
+      height:auto;
+    }
+    .right-column {
+      width:97%;
+      margin:0 20px 0 10px;
+      border-radius:20px;
+    }
+    .get-started {
+    background-color: rgb(79 70 229);
+    color: white; 
+    box-shadow: 2px 4px 6px 8px rgb(79 70 229/0.10);
+    margin-right:2px;
+  }
+    .btn {
+    width:150px;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    }
+  }
+

@@ -26,6 +26,27 @@ const loadNextComments = async function(event) {
         newCommentBody.classList.add('message-body');
         newCommentContainer.append(newCommentBody);
 
+        const newAvatarContainer = document.createElement('figure');
+        newAvatarContainer.classList.add('media-left');
+        newCommentBody.append(newAvatarContainer);
+
+        const newAvatarContainer2 = document.createElement('figure');
+        newAvatarContainer2.classList.add('image', 'is-32x32');
+        newAvatarContainer.append(newAvatarContainer2);
+
+        const newAvatar = document.createElement('img');
+        
+        if (comment.user.avatar === null) {
+            comment.user.avatar = '/images/avatar-default.jpg';
+        } else {
+                const Buffer = require('buffer').Buffer;
+                const imageData = Buffer.from(comment.user.avatar).toString('base64');
+                comment.user.avatar = `data:image/jpeg;base64,${imageData}`;
+        };
+
+        newAvatar.src = comment.user.avatar;
+        newAvatarContainer2.append(newAvatar);
+
         const newCommentUser = document.createElement('a');
         newCommentUser.classList.add('has-text-weight-bold');
         newCommentUser.innerHTML = `@${comment.user.username}<br>`;
