@@ -1,11 +1,11 @@
 const Ask = require('./Ask');
 const Bid = require('./Bid');
 const Comment = require('./Comment');
-const Mtm = require('./MTM');
 const Post = require('./Post');
 const Shares = require('./Shares');
 const Topic = require('./Topic');
 const User = require('./User');
+const Mtm = require('./MTM')
 
 Topic.hasMany(Post, {
     foreignKey: 'topic_id',

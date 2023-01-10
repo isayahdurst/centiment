@@ -45,9 +45,6 @@ homeRouter.get('/', auth, async (req, res) => {
     const plainComments = newComments.map((comment) => comment.get({plain: true}));
     const plainTopTopics = topTopics.map((topic) => topic.get({ plain: true }));
 
-    console.log(plainComments);
-    console.log(plainTopTopics);
-
     res.render('home', {
         user: plainUser,
         topTopics: plainTopTopics,
