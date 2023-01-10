@@ -3,7 +3,6 @@ const signUpButton = document.getElementById('nav_sign-up'); // navbar signup bu
 
 const modalSignupBtn = document.getElementById('submit-signup');
 const modalLoginBtn = document.getElementById('submit-login');
-const getStartedBtn = document.getElementById('get-started-button');
 
 const loginModal = document.getElementById('login-modal');
 const signupModal = document.getElementById('signup-modal');
@@ -21,12 +20,12 @@ const email = document.getElementById('email_signup');
 const password = document.getElementById('password_signup');
 
 // Mobile Menu
-const mobileBurger = document.querySelector('.navbar-burger');
+const burger = document.querySelector('.navbar-burger');
 const mobileMenu = document.querySelector('.navbar-menu');
 
 const toggleMobileMenu = function () {
-    // mobileBurger.classList.toggle('is-active');
-    // mobileMenu.classList.toggle('is-active');
+    burger.classList.toggle('is-active');
+    mobileMenu.classList.toggle('is-active');
 };
 
 const loginFormHander = async (event) => {
@@ -318,12 +317,9 @@ const closeModal = function () {
 
 loginButton.addEventListener('click', showLoginModal);
 signUpButton.addEventListener('click', showSignupModal);
-getStartedBtn.addEventListener('click', showSignupModal);
-
 
 modalLoginBtn.addEventListener('click', loginFormHander);
 modalSignupBtn.addEventListener('click', signupFormHandler);
-
 
 // Selects all close, cancel, or out-of-bounds elements on both signup and login modals and allows the modals to be closed.
 [...modalCloseBtns, ...modalCancelBtns, ...modalOverlays].forEach((button) => {
@@ -334,4 +330,4 @@ modalSignupBtn.addEventListener('click', signupFormHandler);
     field.addEventListener('input', validateForm)
 );
 
-mobileBurger.addEventListener('click', toggleMobileMenu);
+burger.addEventListener('click', toggleMobileMenu);
