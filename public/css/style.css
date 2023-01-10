@@ -72,7 +72,6 @@ a#report-an-issue {
     width: 45%;
     padding: 100px;
     padding-top: 5%;
-  
     align-items:center;
     vertical-align:center;
   }
@@ -91,7 +90,7 @@ a#report-an-issue {
     font-weight: 500;
     cursor: pointer;
     display: inline-block;
-    margin-top:20px;
+    margin-top:25px;
     margin-left:10px;
     border-radius: 0.375rem;
     border:none;
@@ -103,13 +102,14 @@ a#report-an-issue {
     margin-right:20px;
   }
   
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: 900px) {
+
     .left-column{
       width: 100%;
       height:auto;
     }
     .right-column {
-      width:97%;
+      width:100%;
       margin:0 20px 0 10px;
       border-radius:20px;
     }
