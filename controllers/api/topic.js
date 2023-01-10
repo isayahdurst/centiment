@@ -113,7 +113,14 @@ topicRouter.post('/:id', auth, async (req, res) => {
             id: newPost.id,
         });
     } catch (err) {
-        res.status(400).json(err);
+        if (err.message === 'Unauthorized Request') {
+            res.status(401).json({
+                message:
+                    'Insufficient shares owned to perform this action.\nYou must purchase shares first.',
+            });
+        } else {
+            res.status(400).json({ message: err });
+        }
     }
 });
 

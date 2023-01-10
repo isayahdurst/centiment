@@ -1,6 +1,8 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('./../config/connection');
 const Topic = require('./Topic');
+const Shares = require('./Shares');
+const { Op } = require('sequelize');
 
 class Post extends Model {
     async parseVoters() {}
@@ -127,6 +129,27 @@ Post.init(
     },
     {
         hooks: {
+            async beforeCreate(post) {
+                const shares = await Shares.findOne({
+                    where: {
+                        [Op.and]: [
+                            {
+                                user_id: post.user_id,
+                            },
+                            {
+                                topic_id: post.topic_id,
+                            },
+                        ],
+                    },
+                });
+
+                if (!shares) {
+                    throw new Error('Unauthorized Request');
+                }
+
+                return post;
+            },
+
             async afterCreate(post) {
                 const topic = await Topic.findByPk(post.topic_id);
                 await topic.increaseNumPosts();
