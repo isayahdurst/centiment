@@ -220,13 +220,11 @@ Ask.init(
                 return ask;
             },
 
-            async afterUpdate(ask) {
-                if (ask.shares_remaining == 0) {
+            async beforeUpdate(ask) {
+                if (ask.shares_remaining == 0 && ask.status === 'pending') {
                     ask.status = 'complete';
-                    await ask.save();
                     console.log('Ask - afterUpdate: Ask Status' + ask.status);
                 }
-                return ask;
             },
         },
         sequelize,

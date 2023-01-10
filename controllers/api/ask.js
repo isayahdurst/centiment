@@ -43,7 +43,7 @@ askRouter.post('/', auth, async (req, res) => {
     } catch (error) {
         await transaction.rollback();
         console.log(error);
-        res.json({ message: error });
+        res.json({ message: error.message });
     }
 });
 

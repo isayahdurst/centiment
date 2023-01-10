@@ -21,46 +21,99 @@
                 <div class="tag is-medium"><p><strong>Balance:</strong> ${{user.balance}}</p></div>
             </div>
         </div>
-        <hr />
+        <div class="tabs is-left">
+            <ul>
+                <li class="tab is-active" onclick="openTab(event,'portfolio')"><a>Portfolio</a></li>
+                <li class="tab" onclick="openTab(event,'posts')"><a>Posts</a></li>
+                <li class="tab" onclick="openTab(event,'comments')"><a>Comments</a></li>
+            </ul>
+        </div>
     </div>
 
 </section>
 
-<section class="section">
-    <div class="container">
-        <h2 class="title has-text-centered">Portfolio</h2>
+<div class="content-tab" id="portfolio" style="margin-top: -50px;">
+    <section class="section">
+        <div class="container">
+            {{#unless topics}}
+                <div class="notification is-warning is-light">
+                Uh oh, it looks like you don't have any content to display. Don't worry, we've got your back. <a href="/explore">Head on over to our <b>Explore</b> page</a> to find some new and exciting things to fill up this empty space!
+                </div>
+            {{/unless}}
+            {{#each topics}}   
+                <div class="card is-primary">
+                <header class="card-header">
+                    <p class="card-header-title">
+                    <a href="/topic/{{id}}">{{topic_name}}</a>
+                    </p>
+                    <button class="card-header-icon" aria-label="more options">
+                    <span class="icon">
+                        <i class="fas fa-angle-down" aria-hidden="true"></i>
+                    </span>
+                    </button>
+                </header>
+                <footer class="card-footer">
+                    <a href="#" class="card-footer-item">Shares Owned 💼: {{format_amount shareDetails.quantity}}</a>
+                    <a href="#" class="card-footer-item">Price Per Share 💲: {{#if last_traded_price}}${{last_traded_price}}{{/if}}{{#unless last_traded_price}}${{price}}{{/unless}}</a>
+                    <a href="#" class="card-footer-item">Total Value 🤑: {{#if last_traded_price}}${{calculateValue shareDetails.quantity last_traded_price}}{{/if}}{{#unless last_traded_price}}${{calculateValue shareDetails.quantity price}}{{/unless}}</a>
+                    <a href="#" class="card-footer-item">Total Volume 📊: ${{format_amount volume}}</a>
+                </footer>
+                <footer class="card-footer">
+                    <div class="card-footer-item"><button class="button is-success mx-2 main-buy-button" data-topicID="{{id}}">Buy</button><button class="button is-danger mx-2 main-sell-button" data-topicID="{{id}}">Sell</button></div>
+                </footer>
+                </div>
+                <hr>
+            {{/each}}
+        </div>
+    </section>
+</div>
 
-        {{#unless topics}}
-            <div class="notification is-warning is-light">
-            Uh oh, it looks like you don't have any content to display. Don't worry, we've got your back. <a href="/explore">Head on over to our <b>Explore</b> page</a> to find some new and exciting things to fill up this empty space!
-            </div>
-        {{/unless}}
-        {{#each topics}}   
-            <div class="card is-primary">
-            <header class="card-header">
-                <p class="card-header-title">
-                <a href="/topic/{{id}}">{{topic_name}}</a>
-                </p>
-                <button class="card-header-icon" aria-label="more options">
-                <span class="icon">
-                    <i class="fas fa-angle-down" aria-hidden="true"></i>
-                </span>
-                </button>
-            </header>
-            <footer class="card-footer">
-                <a href="#" class="card-footer-item">Shares Owned 💼: {{format_amount shareDetails.quantity}}</a>
-                <a href="#" class="card-footer-item">Price Per Share 💲: {{#if last_traded_price}}${{last_traded_price}}{{/if}}{{#unless last_traded_price}}${{price}}{{/unless}}</a>
-                <a href="#" class="card-footer-item">Total Value 🤑: {{#if last_traded_price}}${{calculateValue shareDetails.quantity last_traded_price}}{{/if}}{{#unless last_traded_price}}${{calculateValue shareDetails.quantity price}}{{/unless}}</a>
-                <a href="#" class="card-footer-item">Total Volume 📊: ${{format_amount volume}}</a>
-            </footer>
-            <footer class="card-footer">
-                <div class="card-footer-item"><button class="button is-success mx-2 main-buy-button" data-topicID="{{id}}">Buy</button><button class="button is-danger mx-2 main-sell-button" data-topicID="{{id}}">Sell</button></div>
-            </footer>
-            </div>
-            <hr>
-        {{/each}}
-    </div>
-</section>
+<div class="content-tab" id="posts" style="display:none;margin-top: -50px;">
+    <section class="section">
+        <div class="container">
+            {{#if posts}}
+                {{#each posts as |post|}}
+                    <article class='media'>
+                        <div class='media-content'style='background-color: #fff;border-radius: 6px;box-shadow: 0 .5em 1em -.125em rgba(10,10,10,.1),0 0 0 1px rgba(10,10,10,.02);color: #4a4a4a;display: block;padding: 1.25rem;'>
+                            <div class='content'>
+                                <p>
+                                    <span class='is-size-6 has-text-weight-semibold'>{{post.post_name}}</span><br>
+                                    {{post.contents}}
+                                    <div class='is-size-6 has-text-grey has-text-weight-normal'>Posted in <a href="/topic/{{topic.id}}">{{topic.topic_name}}</a></div>
+                                </p>
+                            </div>
+                        </div>
+                    </article>
+                {{/each}}
+            {{else}}
+            <p>No posts yet</p>
+            {{/if}}
+        </div>
+    </section>
+</div>
+
+<div class="content-tab" id="comments" style="display:none;margin-top: -50px;">
+    <section class="section">
+        <div class="container">
+            {{#if comments}}
+                {{#each comments as |comment|}}
+                    <article class='media'>
+                        <div class='media-content'style='background-color: #fff;border-radius: 6px;box-shadow: 0 .5em 1em -.125em rgba(10,10,10,.1),0 0 0 1px rgba(10,10,10,.02);color: #4a4a4a;display: block;padding: 1.25rem;'>
+                            <div class='content'>
+                                <p>
+                                    <span class='is-size-6 has-text-weight-normal'>{{comment.content}}</span><br>
+                                    <div class='is-size-6 has-text-grey has-text-weight-normal'>Commented in {{post.post_name}} <a href="/topic/{{topic.id}}">{{topic.topic_name}}</a></div>
+                                </p>
+                            </div>
+                        </div>
+                    </article>
+                {{/each}}
+            {{else}}
+            <p>No comments yet</p>
+            {{/if}}
+        </div>
+    </section>
+</div>
 
 
         
@@ -69,3 +122,6 @@
 {{>place-order-modal}}
 
 <script src="../js/userProfile.js"></script>
+<script>
+
+</script>

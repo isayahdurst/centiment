@@ -1,3 +1,20 @@
+<style>
+      a:link {
+         color: black;
+         background-color: transparent;
+         text-decoration: none;
+      }
+      a:visited {
+         color: black;
+         background-color: transparent;
+         text-decoration: none;
+      }
+      a:active {
+         color: black;
+         background-color: transparent;
+      }
+</style>
+
 <section class="section is-small has-background-light pt-6">
     <div class="container">
         <div class="notification is-warning">
@@ -43,9 +60,37 @@
 
 <section class='section is-small has-background-primary pt-6'>
     <div class='container'>
-        <h2 class='title has-text-centered'>
+        <h2 class='title has-text-centered news-container'>
             New From Topics You Follow 📰
         </h2>
+
+        {{#each recentComments as |recentComment|}}
+            <div class='box'>
+                
+                <h3 class="subtitle"><strong><a href='/topic/{{recentComment.post.topic_id}}'>/{{recentComment.post.topic.topic_name}}</a></strong></h3>
+                <div class='box'>
+                    <article class='media'>
+                        <figure class='media-left'>
+                            <figure class='image is-64x64'>
+                                <img src='/images/avatar-default.jpg' alt='Profile Picture' />
+                            </figure>
+                        </figure>
+                        <div class='media-content'>
+                            <div class='content'>
+                                <p>
+                                    <strong><a href='/user/{{recentComment.user_id}}'>{{recentComment.user.first_name}} {{recentComment.user.last_name}}</a></strong>
+                                    <small>@<a href='/user/{{recentComment.user_id}}'>{{recentComment.user.username}}</a></small>
+                                    <small>&nbsp;&nbsp;&nbsp;&nbsp;{{format_date recentComment.date_created}}</small><br>
+                                    {{recentComment.content}}
+                                </p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        {{/each}}
+
+        {{!--
         <div class="box">
             <h3 class="subtitle"><strong>/Pokemon Cards</strong></h3>
             <div class='box'>
@@ -317,10 +362,12 @@
         </div>
         <div class="has-text-centered"><button class="button is-small is-light">See All...</button></div>
     </div>
+
 </section>
 
 <section class="section is-small has-background-primary">
 
 </section>
+
 
 {{!-- <script src='./js/logout.js'></script> --}}

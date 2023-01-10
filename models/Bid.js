@@ -18,6 +18,8 @@ class Bid extends Model {
     async fulfil(ask, transaction) {
         // Bidder gets shares
         // Asker gets money
+        console.log(ask);
+        console.log('Make it to bid');
 
         const quantity = Math.min(ask.shares_remaining, this.shares_remaining);
 
@@ -28,8 +30,8 @@ class Bid extends Model {
             throw new Error(
                 'Bid or Ask has fallen below minimun remaning value possible. Something went wrong.'
             );
-
-        await ask.save({ transaction });
+        console.log('pre-ask.save()');
+        await ask.save({ transaction: transaction });
         console.log('Shares reduced from ask');
 
         const [asker, bidder, topic] = await Promise.all([
@@ -189,13 +191,11 @@ Bid.init(
                 return bid;
             },
 
-            async afterUpdate(bid) {
+            async beforeUpdate(bid) {
                 if (bid.shares_remaining == 0) {
                     bid.status = 'complete';
                     console.log(`\nafterUpdate: \nBid status: ${bid.status}\n`);
-                    await bid.save();
                 }
-                return bid;
             },
         },
         sequelize,

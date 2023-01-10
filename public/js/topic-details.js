@@ -6,8 +6,12 @@ const ipoConfirmBtn = document.getElementById('ipo-confirm-btn');
 const ipoCostLabel = document.getElementById('ipo-total-price');
 const ipoShareQuantity = document.getElementById('ipo-share-quantity'); // Input field
 const ipoConfirmationMessage = document.getElementById('IPO-notification');
+const numUsers = document.getElementById('num-users');
+
 
 // Post - features
+const newPostButton = document.getElementById('new-post-button');
+const newPostForm = document.getElementById('new-post-form');
 const upvoteButtons = document.querySelectorAll('.upvote-btn');
 const downvoteButtons = document.querySelectorAll('.downvote-btn');
 const upvoteCounts = document.querySelectorAll('.upvote-count');
@@ -15,6 +19,10 @@ const downvoteCounts = document.querySelectorAll('.downvote-count');
 
 console.log(upvoteButtons);
 console.log(upvoteCounts);
+
+const togglePostForm = function () {
+    newPostForm.classList.toggle('is-hidden');
+};
 
 const upvotePost = async function (event) {
     const button = event.currentTarget;
@@ -80,6 +88,8 @@ const downvotePost = async function (event) {
     }
 };
 
+newPostButton.addEventListener('click', togglePostForm);
+
 upvoteButtons.forEach((button) => button.addEventListener('click', upvotePost));
 downvoteButtons.forEach((button) =>
     button.addEventListener('click', downvotePost)
@@ -130,6 +140,7 @@ ipoConfirmBtn.addEventListener('click', async function (event) {
         ipoConfirmationMessage.classList.add('is-success');
         ipoConfirmationMessage.textContent =
             "Hooray! You've just made the greatest investment of your life. No, seriously. This topic is going to change everything. You're going to be the envy of all your friends. You'll be more popular than the person who brought the good snacks to the party. Trust us, you made the right choice. (Now go ahead and pat yourself on the back. You deserve it.)";
+        displayNumMembers(parseInt(numUsers.dataset.topicid));    
     } else {
         ipoConfirmationMessage.className = 'notification';
         ipoConfirmationMessage.classList.remove('is-hidden');
@@ -147,3 +158,21 @@ ipoConfirmBtn.addEventListener('click', async function (event) {
     });
     console.log(shares);
 });
+
+
+// Display number of members in a topic
+const displayNumMembers = async function(topic_id) {
+    const res = await fetch(`/api/shares/${topic_id}`);
+    const numMembers = await res.json();
+    let parsedNumMembers = parseInt(numMembers);
+
+    // If no members, set to 0
+    if(isNaN(parsedNumMembers)){
+        parsedNumMembers = 0;
+    }
+    numUsers.textContent = ` ${parsedNumMembers} Members`;
+};
+
+
+// Initialize page with number of members
+displayNumMembers(parseInt(numUsers.dataset.topicid));
