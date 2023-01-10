@@ -6,3 +6,4 @@ public/data
 fake_topics.txt
 config.json
 config/config.json
+.env.EXAMPLE

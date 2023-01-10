@@ -3,6 +3,7 @@ const auth = require('../middleware/auth');
 const optionalAuth = require('../middleware/optionalAuth');
 const { User, Topic, Post, Shares, Comment } = require('../models');
 const sequelize = require('sequelize');
+const { Op } = require('sequelize');
 const Bid = require('../models/Bid');
 const Ask = require('../models/Ask');
 
@@ -30,11 +31,24 @@ homeRouter.get('/', auth, async (req, res) => {
         limit: 3,
     });
 
+    let newComments = await Comment.findAll({
+        where:{
+            id: {
+                [Op.in]: [sequelize.literal(`(select max(id) from comment group by post_id)`)]
+            },
+        },
+        include:{ all: true, nested: true},
+        order: [['date_created','DESC']],
+        limit: 3
+    });
+
+    const plainComments = newComments.map((comment) => comment.get({plain: true}));
     const plainTopTopics = topTopics.map((topic) => topic.get({ plain: true }));
 
     res.render('home', {
         user: plainUser,
         topTopics: plainTopTopics,
+        recentComments: plainComments
     });
 });
 
@@ -69,25 +83,23 @@ homeRouter.get('/user/:username', auth, async (req, res) => {
     }
 
     const posts = await Post.findAll({
-      where: {
-        user_id: user.id,
-      },
-      include: [Topic],
-  
+        where: {
+            user_id: user.id,
+        },
+        include: [Topic],
     });
 
     const comments = await Comment.findAll({
-      where: {
-        user_id: user.id,
-      },
-      include: [Post],
-  
+        where: {
+            user_id: user.id,
+        },
+        include: [Post],
     });
 
     const plainPosts = posts.map((post) => post.get({ plain: true }));
-    const plainComments = comments.map((comment) => comment.get({ plain: true }));
-
-    console.log(plainComments)
+    const plainComments = comments.map((comment) =>
+        comment.get({ plain: true })
+    );
 
     res.render('profile', {
         user: user,

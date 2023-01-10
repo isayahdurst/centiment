@@ -10,6 +10,8 @@ const numUsers = document.getElementById('num-users');
 
 
 // Post - features
+const newPostButton = document.getElementById('new-post-button');
+const newPostForm = document.getElementById('new-post-form');
 const upvoteButtons = document.querySelectorAll('.upvote-btn');
 const downvoteButtons = document.querySelectorAll('.downvote-btn');
 const upvoteCounts = document.querySelectorAll('.upvote-count');
@@ -17,6 +19,10 @@ const downvoteCounts = document.querySelectorAll('.downvote-count');
 
 console.log(upvoteButtons);
 console.log(upvoteCounts);
+
+const togglePostForm = function () {
+    newPostForm.classList.toggle('is-hidden');
+};
 
 const upvotePost = async function (event) {
     const button = event.currentTarget;
@@ -81,6 +87,8 @@ const downvotePost = async function (event) {
         downvoteCount[0].textContent = newVotes.downvotes;
     }
 };
+
+newPostButton.addEventListener('click', togglePostForm);
 
 upvoteButtons.forEach((button) => button.addEventListener('click', upvotePost));
 downvoteButtons.forEach((button) =>

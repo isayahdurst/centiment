@@ -31,6 +31,43 @@ commentRouter.post("/:post_id", auth, async (req, res) => {
 });
 
 
+// For 3 topics, get the 2 most recent comments in each topic. 
+commentRouter.get("/recent6", auth, async (req, res) => {
+    try {
+
+    // use Sequelize to search for the latest 10 comments of a post
+        let comments = await Comment.findAll({
+            where:{
+                id: {
+                    [Op.in]: [Sequelize.literal(`(select max(id) from comment group by post_id)`)]
+                },
+            },
+            include:{ all: true, nested: true},
+            order: [['date_created','DESC']],
+            limit: 3
+        });
+
+        /*//console.log(comments.comment.user);
+        comments.forEach((comment) => {
+            console.log(comment.user.dataValues.posts.dataValues);
+        }) */
+
+        //let comments = await Sequelize.literal(`select max(id) from comment group by post_id`);
+        
+
+        if (!comments) {
+            res.status(404).json({ message: "No comment found" });
+            return;
+        }
+
+        res.status(200).json(comments);
+
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+
 // Get number of comments for a Post
 commentRouter.get("/post/countof/:post_id", auth, async (req, res) => {
     try {
@@ -45,7 +82,7 @@ commentRouter.get("/post/countof/:post_id", auth, async (req, res) => {
         });
 
         if (!comments) {
-            res.status(404).json({ message: "No comment found" });
+            res.status(404).json({ message: "No post found" });
             return;
         }
 

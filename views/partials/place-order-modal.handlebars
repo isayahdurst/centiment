@@ -1,5 +1,5 @@
 <div class='modal' id='place-order-modal' data-topicid="">
-    <div class='modal-background'></div>
+    <div class='modal-background' id="overlay-order-modal"></div>
     <div class='modal-card'>
         <header class='modal-card-head'>
             <p class='modal-card-title'>Place Order</p>
@@ -39,7 +39,7 @@
                             <i class="fa-solid fa-money-check-dollar"></i>
                         </span>
                     </div>
-                    <p class="help is-danger" id="price-help">Must be a number</p>
+                    <p class="help is-danger is-hidden" id="price-help">Must be a number</p>
                 </div>
 
                 <div class="field">
@@ -50,7 +50,7 @@
                             <i class="fa-solid fa-money-check-dollar"></i>
                         </span>
                     </div>
-                    <p class="help is-danger" id="quantity-help">Must be a number</p>
+                    <p class="help is-danger is-hidden" id="quantity-help">Must be a number</p>
                 </div>
 
                 <hr>
