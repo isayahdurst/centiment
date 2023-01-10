@@ -32,7 +32,7 @@ commentRouter.post("/:post_id", auth, async (req, res) => {
 
 
 // For 3 topics, get the 2 most recent comments in each topic. 
-commentRouter.get("/recent6", auth, async (req, res) => {
+commentRouter.get("/recent", auth, async (req, res) => {
     try {
 
     // use Sequelize to search for the latest 10 comments of a post
@@ -42,7 +42,19 @@ commentRouter.get("/recent6", auth, async (req, res) => {
                     [Op.in]: [Sequelize.literal(`(select max(id) from comment group by post_id)`)]
                 },
             },
-            include:{ all: true, nested: true},
+            include:[{ 
+                model: Post, 
+                include: {
+                    model: Topic,
+                    include: {
+                        model: Shares
+                    }
+                },
+                
+            },
+            {
+                model: User
+            }],            
             order: [['date_created','DESC']],
             limit: 3
         });
