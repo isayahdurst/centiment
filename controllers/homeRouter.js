@@ -57,6 +57,17 @@ homeRouter.get('/', auth, async (req, res) => {
     const plainComments = newComments.map((comment) => comment.get({plain: true}));
     const plainTopTopics = topTopics.map((topic) => topic.get({ plain: true }));
 
+    plainComments.forEach((comment) => {
+        if (comment.user.avatar === null) {
+            comment.user.avatar = '/images/avatar-default.jpg';
+        } else {
+            const Buffer = require('buffer').Buffer;
+            const imageData = Buffer.from(comment.user.avatar).toString('base64');
+            comment.user.avatar = `data:image/jpeg;base64,${imageData}`;
+        }
+    });
+    
+
     res.render('home', {
         user: plainUser,
         topTopics: plainTopTopics,
