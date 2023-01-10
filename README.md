@@ -21,7 +21,25 @@ With Centiment, you can discover and join communities that align with your inter
 
 <a name="Install"></a>
 ## Install
-npm init, inquirer, mysql, dotenv, express, jwt, handlerbars, bcrypt, sequelize, multer
+
+  1. Download source code
+  2. Update environment variables: `.env`
+  3. install dependencies `npm install`
+  4. create db from `db\schema.sql`
+  *** optional: you may seed DB with example data `npm seed`
+  4. run application `npm start`
+  
+    Note:
+      - if you observe the connection error, check the version of `node`
+      - connection details should be updated: 
+        - rename `.env.EXAMPLE` to `.env`
+        - Update user-specific data:        
+          {
+           host: "localhost",
+           user: "root",
+           password: "",
+           ...
+          }
 
 <a name="Usage"></a>
 ## Usage
@@ -31,11 +49,24 @@ We wanted to build a better Twitter that lets you see not only how many people a
 
 <a name="License"></a>
 ## License
-MIT
+
+  ![License badge](https://img.shields.io/static/v1?label=license&message=MIT&color=green)
+
+  This application is available under the license: MIT. 
+  
+  See the LICENSE file for more info. Full details available by link https://choosealicense.com/licenses/mit/. 
+    
 
 <a name="Contribute"></a>
 ## Contribute
-none
+
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
+  
+  - Fork the Project  
+  - Create your Feature Branch   
+  - Commit your Changes   
+  - Push to the Branch   
+  - Open Pull Request
 
 <a name="Tests"></a>
 ## Tests
@@ -56,4 +87,8 @@ none
 
 <a name="Link"></a>
 ## Link to Live Site
-[Centiment](https://tranquil-caverns-96400.herokuapp.com/)
+
+[Centiment](https://centiment-inc.herokuapp.com/login)
+
+[Centiment presentation](https://docs.google.com/presentation/d/1doXjq0lNEc2gZnXsCwHHFu_WMamtz0i4vEbb8kiA63M/edit?usp=sharing)
+
