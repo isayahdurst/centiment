@@ -37,7 +37,19 @@ homeRouter.get('/', auth, async (req, res) => {
                 [Op.in]: [sequelize.literal(`(select max(id) from comment group by post_id)`)]
             },
         },
-        include:{ all: true, nested: true},
+        include:[{ 
+            model: Post, 
+            include: {
+                model: Topic,
+                include: {
+                    model: Shares
+                }
+            },
+            
+        },
+        {
+            model: User
+        }],            
         order: [['date_created','DESC']],
         limit: 3
     });
