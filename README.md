@@ -4,7 +4,7 @@
 
 ## Table of Contents
 
--   [Project-Screenshot](#Project-Preview)
+-   [Project Preview](#Project-Preview)
 -   [Description](#Description)
 -   [Install](#Install)
 -   [Usage](#Usage)
