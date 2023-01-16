@@ -4,7 +4,7 @@
 
 ## Table of Contents
 
--   [Project-Screenshot](#Preview)
+-   [Project-Screenshot](#Project-Preview)
 -   [Description](#Description)
 -   [Install](#Install)
 -   [Usage](#Usage)
@@ -16,7 +16,7 @@
 
 <a name="Description"></a>
 
-## Preview
+## Project Preview
 
 ![Centiment-Preview](/public/images/centiment-preview.JPG)
 
