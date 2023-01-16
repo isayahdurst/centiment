@@ -2,10 +2,9 @@
 
 ![Centiment](/public/images/favicon.png)
 
-![Centiment-Preview](/public/images/centiment-preview.JPG)
-
 ## Table of Contents
 
+-   [Project-Screenshot](#Preview)
 -   [Description](#Description)
 -   [Install](#Install)
 -   [Usage](#Usage)
@@ -16,6 +15,10 @@
 -   [Link to Site](#Link)
 
 <a name="Description"></a>
+
+## Preview
+
+![Centiment-Preview](/public/images/centiment-preview.JPG)
 
 ## Description
 
