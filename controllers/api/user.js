@@ -43,13 +43,7 @@ usersRouter.put('/', auth, upload.single('avatar'), async (req, res) => {
 
 usersRouter.get('/logout', async (req, res) => {
     console.log(req.cookies);
-    res.status(200)
-        .clearCookie('logintoken', {
-            path: '/',
-            domain: process.env.DOMAIN || 'localhost',
-            expires: new Date(1),
-        })
-        .redirect('/login');
+    res.status(200).clearCookie('logintoken').redirect('/login');
 });
 
 usersRouter.post('/login', async (req, res) => {
